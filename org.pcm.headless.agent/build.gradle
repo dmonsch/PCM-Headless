@@ -1,0 +1,33 @@
+plugins {
+    id 'java'
+    id 'application'
+}
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+	compile group: 'org.javassist', name: 'javassist', version: '3.25.0-GA'
+	
+}
+
+mainClassName='org.pcm.headless.agent.core.EclipsePluginTransformerAgent'
+
+jar {
+    archiveName = "agent.jar"
+    manifest {
+        attributes (
+        'Premain-Class': 'ManipulationAgent.Agent',
+        'Agent-Class': 'ManipulationAgent.Agent',
+        'Can-Set-Native-Method-Prefix' : 'true',
+        'Can-Redefine-Classes': 'true',
+        'Can-Retransform-Classes': 'true',
+        'Implementation-Title': "Java Agent Bootstrapper"
+        )
+    }
+    
+    from {
+        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
