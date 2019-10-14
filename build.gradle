@@ -4,7 +4,19 @@ repositories {
 }
 
 allprojects {
-	dependencies {
-		
+	apply plugin: 'java'
+	
+	repositories {
+    	jcenter()
+   		maven {url project.rootDir.toString() + "/mvn-supplemental/mvn-repo"}
 	}
+
+	dependencies {
+		// https://projectlombok.org
+    	compileOnly 'org.projectlombok:lombok:1.18.4'
+    	annotationProcessor 'org.projectlombok:lombok:1.18.4'
+	}
+	
+	sourceCompatibility = 1.11
+	targetCompatibility = 1.11
 }

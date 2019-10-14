@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata>
+  <groupId>extra</groupId>
+  <artifactId>org.eclipse.emf.common.ui</artifactId>
+  <versioning>
+    <release>2.18.0.v20190507-0402</release>
+    <versions>
+      <version>2.18.0.v20190507-0402</version>
+    </versions>
+    <lastUpdated>20191003223538</lastUpdated>
+  </versioning>
+</metadata>
