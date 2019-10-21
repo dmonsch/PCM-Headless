@@ -13,7 +13,6 @@ import org.palladiosimulator.edp2.dao.exception.DataNotAccessibleException;
 import org.palladiosimulator.edp2.impl.RepositoryManager;
 import org.palladiosimulator.edp2.models.Repository.LocalMemoryRepository;
 import org.palladiosimulator.edp2.models.Repository.RepositoryFactory;
-import org.palladiosimulator.monitorrepository.MonitorRepository;
 import org.palladiosimulator.recorderframework.edp2.config.AbstractEDP2RecorderConfigurationFactory;
 import org.palladiosimulator.simulizar.access.ModelAccess;
 import org.palladiosimulator.simulizar.runconfig.SimuLizarWorkflowConfiguration;
@@ -21,8 +20,9 @@ import org.palladiosimulator.simulizar.runtimestate.SimuLizarRuntimeState;
 import org.palladiosimulator.simulizar.runtimestate.SimulationCancelationDelegate;
 import org.pcm.headless.core.config.HeadlessModelConfig;
 import org.pcm.headless.core.config.HeadlessSimulationConfig;
+import org.pcm.headless.core.data.InMemoryRepositoryReader;
+import org.pcm.headless.core.data.results.InMemoryResultRepository;
 import org.pcm.headless.core.proxy.ResourceContainerFactoryProxy;
-import org.pcm.headless.core.util.ModelUtil;
 import org.pcm.headless.core.util.PCMUtil;
 
 import com.google.common.collect.Lists;
@@ -36,24 +36,28 @@ public class HeadlessPalladioSimulator {
 
 	private static boolean PCM_INITIALIZED = false;
 
+	private InMemoryRepositoryReader repositoryReader;
+
 	public HeadlessPalladioSimulator() {
 		if (!PCM_INITIALIZED) {
 			log.info("Initializing packages and loading PCM default models.");
 			PCMUtil.loadPCMModels();
 			PCM_INITIALIZED = true;
 		}
+		repositoryReader = new InMemoryRepositoryReader();
 	}
 
-	public void triggerSimulation(HeadlessModelConfig modelConfig, HeadlessSimulationConfig simulationConfig) {
+	public InMemoryResultRepository triggerSimulation(HeadlessModelConfig modelConfig,
+			HeadlessSimulationConfig simulationConfig) {
 		LocalMemoryRepository results = triggerSimulationRaw(modelConfig, simulationConfig);
 
-		MonitorRepository monitorRepo = ModelUtil.readFromFile(modelConfig.getMonitorRepository().getAbsolutePath(),
-				MonitorRepository.class);
-		if (monitorRepo != null) {
-			// TODO create mapping
-		}
+		// parse results
+		InMemoryResultRepository outResults = repositoryReader.converRepository(results);
 
 		cleanUp(results);
+
+		// return it
+		return outResults;
 	}
 
 	/**

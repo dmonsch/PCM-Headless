@@ -18,8 +18,8 @@ jar {
     archiveName = "agent.jar"
     manifest {
         attributes (
-        'Premain-Class': 'ManipulationAgent.Agent',
-        'Agent-Class': 'ManipulationAgent.Agent',
+        'Premain-Class': 'org.pcm.headless.agent.core.EclipsePluginTransformerAgent',
+        'Agent-Class': 'org.pcm.headless.agent.core.EclipsePluginTransformerAgent',
         'Can-Set-Native-Method-Prefix' : 'true',
         'Can-Redefine-Classes': 'true',
         'Can-Retransform-Classes': 'true',
