@@ -7,8 +7,14 @@ repositories {
 }
 
 dependencies {
-	compile project(":org.pcm.headless.core")
+	compile(project(":org.pcm.headless.core")) {
+  		exclude group: 'extra', module: 'org.slf4j.impl.log4j12'
+ 	}
 
 	// https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-web
 	compile group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: '2.1.9.RELEASE'
+	
+	// https://mvnrepository.com/artifact/commons-io/commons-io
+	compile group: 'commons-io', name: 'commons-io', version: '2.6'
+	
 }

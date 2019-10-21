@@ -22,6 +22,7 @@ import org.pcm.headless.core.config.HeadlessModelConfig;
 import org.pcm.headless.core.config.HeadlessSimulationConfig;
 import org.pcm.headless.core.data.InMemoryRepositoryReader;
 import org.pcm.headless.core.data.results.InMemoryResultRepository;
+import org.pcm.headless.core.progress.ISimulationProgressListener;
 import org.pcm.headless.core.proxy.ResourceContainerFactoryProxy;
 import org.pcm.headless.core.util.PCMUtil;
 
@@ -49,12 +50,23 @@ public class HeadlessPalladioSimulator {
 
 	public InMemoryResultRepository triggerSimulation(HeadlessModelConfig modelConfig,
 			HeadlessSimulationConfig simulationConfig) {
-		LocalMemoryRepository results = triggerSimulationRaw(modelConfig, simulationConfig);
+		return this.triggerSimulation(modelConfig, simulationConfig, null);
+	}
+
+	public InMemoryResultRepository triggerSimulation(HeadlessModelConfig modelConfig,
+			HeadlessSimulationConfig simulationConfig, List<ISimulationProgressListener> listeners) {
+		LocalMemoryRepository results = triggerSimulationRaw(modelConfig, simulationConfig, listeners, true);
 
 		// parse results
 		InMemoryResultRepository outResults = repositoryReader.converRepository(results);
 
 		cleanUp(results);
+
+		if (listeners != null) {
+			listeners.forEach(l -> {
+				l.processed();
+			});
+		}
 
 		// return it
 		return outResults;
@@ -72,10 +84,11 @@ public class HeadlessPalladioSimulator {
 	 * @param modelConfig      the configuration which holds the paths to the models
 	 * @param simulationConfig the configuration which specifies the properties of
 	 *                         the simulation
+	 * @param listeners
 	 * @return {@link LocalMemoryRepository} which contains the simulation data
 	 */
 	public LocalMemoryRepository triggerSimulationRaw(HeadlessModelConfig modelConfig,
-			HeadlessSimulationConfig simulationConfig) {
+			HeadlessSimulationConfig simulationConfig, List<ISimulationProgressListener> listeners, boolean wait) {
 		// 1. create the resource partition from the config
 		PCMResourceSetPartition pcmPartition = createResourceSetPartitionFromConfig(modelConfig);
 
@@ -106,7 +119,22 @@ public class HeadlessPalladioSimulator {
 			// 5.3 execute
 			runtime.runSimulation();
 			runtime.cleanUp();
+
+			// 5.4. inform
+			if (listeners != null) {
+				listeners.forEach(l -> l.finishedRepetition());
+			}
 		});
+
+		// 5.x inform
+		if (listeners != null) {
+			listeners.forEach(l -> {
+				l.finished();
+				if (!wait) {
+					l.processed(); // we completely finished
+				}
+			});
+		}
 
 		// 6. return
 		return repository;
