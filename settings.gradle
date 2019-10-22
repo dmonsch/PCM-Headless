@@ -9,4 +9,4 @@
 
 rootProject.name = 'org.pcm.headless.root'
 
-include 'org.pcm.headless.core', 'org.pcm.headless.agent', 'org.pcm.headless.api', 'org.pcm.headless.rest'
+include 'org.pcm.headless.core', 'org.pcm.headless.agent', 'org.pcm.headless.api', 'org.pcm.headless.rest', 'org.pcm.headless.shared'

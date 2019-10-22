@@ -1,29 +1,49 @@
 package org.pcm.headless.rest.iface;
 
 import java.io.File;
+import java.io.FilenameFilter;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.apache.commons.io.FileUtils;
 import org.pcm.headless.core.HeadlessPalladioSimulator;
-import org.pcm.headless.core.data.results.InMemoryResultRepository;
 import org.pcm.headless.core.progress.ISimulationProgressListener;
+import org.pcm.headless.rest.data.SimulationStateSummary;
+import org.pcm.headless.rest.data.StateSummary;
+import org.pcm.headless.rest.state.ESimulationState;
 import org.pcm.headless.rest.state.PCMSimulationState;
+import org.pcm.headless.shared.data.ESimulationPart;
+import org.pcm.headless.shared.data.config.HeadlessSimulationConfig;
+import org.pcm.headless.shared.data.results.InMemoryResultRepository;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Lists;
 
+import lombok.extern.java.Log;
+
+@Log
 @RestController
+@RequestMapping("/rest")
 public class RestInterface implements InitializingBean {
 	// files & folders
 	private static final File SIM_DATA_FOLDER = new File("SimulationData/");
@@ -55,10 +75,19 @@ public class RestInterface implements InitializingBean {
 		this.stateMapping.clear();
 		try {
 			FileUtils.deleteDirectory(SIM_DATA_FOLDER);
-			return "true";
 		} catch (IOException e) {
-			return "false";
+			log.warning("Could not clean all files.");
 		}
+
+		this.readySimulations.clear();
+		this.queuedSimulations.clear();
+		this.runningSimulations.clear();
+		this.finishedSimulations.clear();
+
+		this.executorService.shutdownNow();
+		this.executorService = Executors.newScheduledThreadPool(concurrentSimulations);
+
+		return "{}";
 	}
 
 	@GetMapping("/prepare")
@@ -71,15 +100,86 @@ public class RestInterface implements InitializingBean {
 		return generatedId;
 	}
 
-	@GetMapping("/state/{id}")
+	@GetMapping("/state")
+	public String getStateSummary() {
+		StateSummary r = new StateSummary();
+		List<SimulationStateSummary> simR = stateMapping.entrySet().stream().map(st -> {
+			SimulationStateSummary inner = new SimulationStateSummary();
+			inner.setFinishedRepetitions(st.getValue().getRepetitionProgress());
+			inner.setName(st.getValue().getSimConfig().getExperimentName());
+			inner.setRepetitions(st.getValue().getSimConfig().getRepetitions());
+			inner.setState(st.getValue().getState().getName());
+			return inner;
+		}).collect(Collectors.toList());
+		r.setSimulations(simR);
+
+		try {
+			return objectMapper.writeValueAsString(r);
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+			return "{}";
+		}
+	}
+
+	@PostMapping("/{id}/set/config")
+	public synchronized void setConfiguration(@PathVariable String id, @RequestParam String configJson) {
+		if (stateMapping.containsKey(id)) {
+			PCMSimulationState state = stateMapping.get(id);
+			try {
+				HeadlessSimulationConfig simConfig = objectMapper.readValue(configJson, HeadlessSimulationConfig.class);
+				state.setSimConfig(simConfig);
+			} catch (JsonProcessingException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	@PostMapping("/{id}/set/{type}")
+	public synchronized void setPart(@PathVariable String id, @PathVariable String type,
+			@RequestParam("file") MultipartFile file) {
+		if (stateMapping.containsKey(id)) {
+			ESimulationPart part = ESimulationPart.fromString(type);
+			PCMSimulationState state = stateMapping.get(id);
+
+			if (part != null && file != null) {
+				state.injectFile(file, part);
+			}
+		}
+	}
+
+	@GetMapping("/{id}/results")
+	public String getResults(@PathVariable String id) {
+		if (resultMapping.containsKey(id)) {
+			try {
+				return objectMapper.writeValueAsString(resultMapping.get(id));
+			} catch (JsonProcessingException e) {
+				e.printStackTrace();
+				return "{}";
+			}
+		}
+		return "{}";
+	}
+
+	@GetMapping("/{id}/state")
 	public String getSimulationState(@PathVariable String id) {
 		if (stateMapping.containsKey(id)) {
 			return stateMapping.get(id).getState().getName();
 		}
-		return "null";
+		return "{}";
 	}
 
-	@GetMapping("/start/{id}/")
+	@GetMapping("/{id}/clear")
+	public String clearSimulationState(@PathVariable String id) {
+		if (stateMapping.containsKey(id)) {
+			boolean success = clearState(stateMapping.get(id));
+			if (success) {
+				return "{success : true}";
+			}
+		}
+		return "{success : false}";
+	}
+
+	@GetMapping("/{id}/start")
 	public synchronized String startSimulation(@PathVariable String id) {
 		if (stateMapping.containsKey(id)) {
 			PCMSimulationState state = stateMapping.get(id);
@@ -93,7 +193,7 @@ public class RestInterface implements InitializingBean {
 
 	@GetMapping("/ping")
 	public String reachable() {
-		return "true";
+		return "{}";
 	}
 
 	@Override
@@ -109,6 +209,8 @@ public class RestInterface implements InitializingBean {
 		this.readySimulations = new LinkedList<>();
 
 		this.executorService = Executors.newScheduledThreadPool(concurrentSimulations);
+
+		log.info("Initialized REST interface successfully.");
 	}
 
 	private void checkQueue() {
@@ -121,6 +223,7 @@ public class RestInterface implements InitializingBean {
 				public void processed() {
 					finishedSimulations.add(removeFromQueue);
 					trimFinishedQueue();
+					clearHTMLFiles();
 				}
 
 				@Override
@@ -146,7 +249,41 @@ public class RestInterface implements InitializingBean {
 	}
 
 	private void trimFinishedQueue() {
-		// TODO
+		if (this.finishedSimulations.size() > simulationMemory) {
+			this.clearState(this.finishedSimulations.removeFirst());
+			this.trimFinishedQueue();
+		}
+	}
+
+	private boolean clearState(PCMSimulationState pcmSimulationState) {
+		if (pcmSimulationState.getState() == ESimulationState.READY
+				|| pcmSimulationState.getState() == ESimulationState.QUEUED
+				|| pcmSimulationState.getState() == ESimulationState.EXECUTED) {
+			// we can remove it
+			this.stateMapping.remove(pcmSimulationState.getId());
+			this.resultMapping.remove(pcmSimulationState.getId());
+
+			this.queuedSimulations.remove(pcmSimulationState);
+			this.runningSimulations.remove(pcmSimulationState);
+			this.readySimulations.remove(pcmSimulationState);
+			this.finishedSimulations.remove(pcmSimulationState);
+
+			return true;
+		}
+		return false;
+	}
+
+	private void clearHTMLFiles() {
+		Path currentRelativePath = Paths.get("");
+
+		Stream.of(currentRelativePath.toFile().listFiles(new FilenameFilter() {
+			public boolean accept(File dir, String filename) {
+				return filename.endsWith(".html");
+			}
+		})).forEach(file -> {
+			System.out.println(file.getAbsolutePath());
+			// file.delete();
+		});
 	}
 
 }

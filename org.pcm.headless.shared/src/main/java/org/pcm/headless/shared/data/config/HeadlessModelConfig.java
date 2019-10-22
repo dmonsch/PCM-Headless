@@ -1,6 +1,7 @@
-package org.pcm.headless.core.config;
+package org.pcm.headless.shared.data.config;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 import lombok.Data;
@@ -8,7 +9,7 @@ import lombok.Data;
 @Data
 public class HeadlessModelConfig {
 
-	private List<File> repositoryFiles;
+	private List<File> repositoryFiles = new ArrayList<>();
 	private File systemFile;
 	private File resourceEnvironmentFile;
 	private File allocationFile;
@@ -16,6 +17,6 @@ public class HeadlessModelConfig {
 
 	private File monitorRepository;
 
-	private List<File> additionals;
+	private List<File> additionals = new ArrayList<>();
 
 }

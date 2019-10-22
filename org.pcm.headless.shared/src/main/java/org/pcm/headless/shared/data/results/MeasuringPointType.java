@@ -1,4 +1,4 @@
-package org.pcm.headless.core.data.results;
+package org.pcm.headless.shared.data.results;
 
 public enum MeasuringPointType {
 

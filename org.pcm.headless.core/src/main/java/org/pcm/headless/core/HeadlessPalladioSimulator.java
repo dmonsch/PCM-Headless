@@ -18,13 +18,14 @@ import org.palladiosimulator.simulizar.access.ModelAccess;
 import org.palladiosimulator.simulizar.runconfig.SimuLizarWorkflowConfiguration;
 import org.palladiosimulator.simulizar.runtimestate.SimuLizarRuntimeState;
 import org.palladiosimulator.simulizar.runtimestate.SimulationCancelationDelegate;
-import org.pcm.headless.core.config.HeadlessModelConfig;
-import org.pcm.headless.core.config.HeadlessSimulationConfig;
 import org.pcm.headless.core.data.InMemoryRepositoryReader;
-import org.pcm.headless.core.data.results.InMemoryResultRepository;
 import org.pcm.headless.core.progress.ISimulationProgressListener;
 import org.pcm.headless.core.proxy.ResourceContainerFactoryProxy;
+import org.pcm.headless.core.util.HeadlessSimulationConfigUtil;
 import org.pcm.headless.core.util.PCMUtil;
+import org.pcm.headless.shared.data.config.HeadlessModelConfig;
+import org.pcm.headless.shared.data.config.HeadlessSimulationConfig;
+import org.pcm.headless.shared.data.results.InMemoryResultRepository;
 
 import com.google.common.collect.Lists;
 
@@ -96,7 +97,7 @@ public class HeadlessPalladioSimulator {
 		MDSDBlackboard blackboard = createBlackboard(pcmPartition);
 
 		// 3. create config map
-		Map<String, Object> configurationMap = simulationConfig.convertToConfigMap();
+		Map<String, Object> configurationMap = HeadlessSimulationConfigUtil.convertToConfigMap(simulationConfig);
 
 		// 4. create in memory repo
 		LocalMemoryRepository repository = createInMemoryRepository("HeadlessDomain");

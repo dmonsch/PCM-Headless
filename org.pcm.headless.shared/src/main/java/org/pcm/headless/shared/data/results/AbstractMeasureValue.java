@@ -1,4 +1,4 @@
-package org.pcm.headless.core.data.results;
+package org.pcm.headless.shared.data.results;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonSubTypes.Type;

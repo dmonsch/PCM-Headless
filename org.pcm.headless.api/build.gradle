@@ -7,4 +7,24 @@ repositories {
 }
 
 dependencies {
+	compile project(":org.pcm.headless.shared")
+
+	// https://mvnrepository.com/artifact/com.mashape.unirest/unirest-java
+	compile group: 'com.mashape.unirest', name: 'unirest-java', version: '1.4.9'
+	
+	compile 'extra:org.palladiosimulator.pcm:4.1.0.201910030052'
+	compile 'extra:org.palladiosimulator.monitorrepository:3.0.1.201910030104'
+	compile 'extra:org.palladiosimulator.edp2:2.0.0.201910030048'
+	compile 'extra:org.palladiosimulator.pcm.edp2.measuringpoint:1.0.0.201910030052'
+	
+	compile 'extra:org.eclipse.emf.ant:2.11.0.v20190418-1022'
+    compile 'extra:org.eclipse.emf.cdo.common:4.7.0.v20180529-1130'
+    compile 'extra:org.eclipse.emf.cdo:4.6.100.v20180529-1130'
+    compile 'extra:org.eclipse.emf.common.ui:2.18.0.v20190507-0402'
+    compile 'extra:org.eclipse.emf.common:2.16.0.v20190625-1131'
+    compile 'extra:org.eclipse.emf.databinding:1.5.0.v20180706-1146'
+    compile 'extra:org.eclipse.emf.ecore.change:2.14.0.v20190528-0725'
+    compile 'extra:org.eclipse.emf.ecore.xmi:2.16.0.v20190528-0725'
+    compile 'extra:org.eclipse.emf.ecore:2.19.0.v20190822-1451'
+    compile 'extra:org.eclipse.emf:2.8.0.v20180706-1146'
 }

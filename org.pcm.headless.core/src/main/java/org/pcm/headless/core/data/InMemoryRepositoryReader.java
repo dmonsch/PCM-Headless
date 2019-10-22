@@ -22,16 +22,16 @@ import org.palladiosimulator.pcmmeasuringpoint.AssemblyOperationMeasuringPoint;
 import org.palladiosimulator.pcmmeasuringpoint.EntryLevelSystemCallMeasuringPoint;
 import org.palladiosimulator.pcmmeasuringpoint.ExternalCallActionMeasuringPoint;
 import org.palladiosimulator.pcmmeasuringpoint.LinkingResourceMeasuringPoint;
-import org.pcm.headless.core.data.results.AbstractMeasureValue;
-import org.pcm.headless.core.data.results.DoubleMeasureValue;
-import org.pcm.headless.core.data.results.InMemoryResultRepository;
-import org.pcm.headless.core.data.results.LongMeasureValue;
-import org.pcm.headless.core.data.results.MeasuringPointType;
-import org.pcm.headless.core.data.results.PlainDataMeasure;
-import org.pcm.headless.core.data.results.PlainDataSeries;
-import org.pcm.headless.core.data.results.PlainMeasuringPoint;
-import org.pcm.headless.core.data.results.PlainMetricDescription;
-import org.pcm.headless.core.data.results.PlainMetricMeasuringPointBundle;
+import org.pcm.headless.shared.data.results.AbstractMeasureValue;
+import org.pcm.headless.shared.data.results.DoubleMeasureValue;
+import org.pcm.headless.shared.data.results.InMemoryResultRepository;
+import org.pcm.headless.shared.data.results.LongMeasureValue;
+import org.pcm.headless.shared.data.results.MeasuringPointType;
+import org.pcm.headless.shared.data.results.PlainDataMeasure;
+import org.pcm.headless.shared.data.results.PlainDataSeries;
+import org.pcm.headless.shared.data.results.PlainMeasuringPoint;
+import org.pcm.headless.shared.data.results.PlainMetricDescription;
+import org.pcm.headless.shared.data.results.PlainMetricMeasuringPointBundle;
 
 import com.google.common.collect.Lists;
 

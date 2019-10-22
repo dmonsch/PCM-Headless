@@ -2,9 +2,9 @@ package org.pcm.headless.core;
 
 import java.io.File;
 
-import org.pcm.headless.core.config.HeadlessModelConfig;
-import org.pcm.headless.core.config.HeadlessSimulationConfig;
-import org.pcm.headless.core.data.results.InMemoryResultRepository;
+import org.pcm.headless.shared.data.config.HeadlessModelConfig;
+import org.pcm.headless.shared.data.config.HeadlessSimulationConfig;
+import org.pcm.headless.shared.data.results.InMemoryResultRepository;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
