@@ -16,6 +16,7 @@ dependencies {
 	compile 'extra:org.palladiosimulator.monitorrepository:3.0.1.201910030104'
 	compile 'extra:org.palladiosimulator.edp2:2.0.0.201910030048'
 	compile 'extra:org.palladiosimulator.pcm.edp2.measuringpoint:1.0.0.201910030052'
+	compile 'extra:de.uka.ipd.sdq.identifier:2.1.0.201910030029'
 	
 	compile 'extra:org.eclipse.emf.ant:2.11.0.v20190418-1022'
     compile 'extra:org.eclipse.emf.cdo.common:4.7.0.v20180529-1130'

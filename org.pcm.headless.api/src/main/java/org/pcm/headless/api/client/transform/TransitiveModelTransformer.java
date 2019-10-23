@@ -1,4 +1,4 @@
-package org.pcm.headless.core.transform;
+package org.pcm.headless.api.client.transform;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -12,7 +12,7 @@ import java.util.stream.Stream;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
-import org.pcm.headless.core.util.ModelUtil;
+import org.pcm.headless.api.util.ModelUtil;
 
 public class TransitiveModelTransformer {
 	// base

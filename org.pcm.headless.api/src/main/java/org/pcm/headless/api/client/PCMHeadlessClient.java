@@ -4,9 +4,9 @@ import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 
 public class PCMHeadlessClient {
-	private static final String PING_URL = "ping";
-	private static final String CLEAR_URL = "clear";
-	private static final String PREPARE_URL = "prepare";
+	private static final String PING_URL = "rest/ping";
+	private static final String CLEAR_URL = "rest/clear";
+	private static final String PREPARE_URL = "rest/prepare";
 
 	private String baseUrl;
 
@@ -38,7 +38,7 @@ public class PCMHeadlessClient {
 		Unirest.setTimeouts(timeout, timeout);
 		boolean reach;
 		try {
-			reach = Unirest.get(this.baseUrl + PING_URL).asString().getBody().equals("true");
+			reach = Unirest.get(this.baseUrl + PING_URL).asString().getBody().equals("{}");
 		} catch (UnirestException e) {
 			reach = false;
 		}

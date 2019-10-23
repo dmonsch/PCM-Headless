@@ -9,6 +9,7 @@ import java.nio.file.StandardCopyOption;
 import org.apache.commons.io.FileUtils;
 import org.pcm.headless.core.progress.ISimulationProgressListener;
 import org.pcm.headless.shared.data.ESimulationPart;
+import org.pcm.headless.shared.data.ESimulationState;
 import org.pcm.headless.shared.data.config.HeadlessModelConfig;
 import org.pcm.headless.shared.data.config.HeadlessSimulationConfig;
 import org.springframework.web.multipart.MultipartFile;
@@ -37,7 +38,7 @@ public class PCMSimulationState implements ISimulationProgressListener {
 		this.repetitionProgress = 0;
 
 		this.modelConfig = new HeadlessModelConfig();
-		this.simConfig = new HeadlessSimulationConfig();
+		this.simConfig = HeadlessSimulationConfig.builder().build();
 	}
 
 	public PCMSimulationState(String id) {

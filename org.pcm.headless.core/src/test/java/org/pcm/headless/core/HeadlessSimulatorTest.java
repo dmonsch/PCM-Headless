@@ -23,7 +23,7 @@ public class HeadlessSimulatorTest {
 		conf1.setUsageFile(new File("examples/cocome/cocome.usagemodel"));
 		conf1.setAdditionals(Lists.newArrayList(new File("examples/cocome/cocome.measuringpoint")));
 
-		HeadlessSimulationConfig conf2 = new HeadlessSimulationConfig();
+		HeadlessSimulationConfig conf2 = HeadlessSimulationConfig.builder().build();
 
 		HeadlessPalladioSimulator sim = new HeadlessPalladioSimulator();
 		InMemoryResultRepository repo = sim.triggerSimulation(conf1, conf2);

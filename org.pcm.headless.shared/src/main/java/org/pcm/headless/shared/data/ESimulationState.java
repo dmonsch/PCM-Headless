@@ -1,4 +1,4 @@
-package org.pcm.headless.rest.state;
+package org.pcm.headless.shared.data;
 
 public enum ESimulationState {
 	READY("ready"), QUEUED("queued"), RUNNING("running"), EXECUTED("executed"), FINISHED("finished");
@@ -11,5 +11,14 @@ public enum ESimulationState {
 
 	public String getName() {
 		return name;
+	}
+
+	public static ESimulationState fromString(String text) {
+		for (ESimulationState b : ESimulationState.values()) {
+			if (b.name.equalsIgnoreCase(text)) {
+				return b;
+			}
+		}
+		return null;
 	}
 }
