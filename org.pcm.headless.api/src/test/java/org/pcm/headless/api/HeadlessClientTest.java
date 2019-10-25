@@ -13,7 +13,7 @@ public class HeadlessClientTest {
 			System.out.println("Backend erreichbar.");
 
 			File allocationFile = new File("examples/cocome/cocome.allocation");
-			File monitorRepositoryFile = new File("examples/cocome/cocome.monitorrepository");
+			File monitorRepositoryFile = new File("examples/cocome/cocome2.monitorrepository");
 			File repositoryFile = new File("examples/cocome/cocome.repository");
 			File resourceEnvironmentFile = new File("examples/cocome/cocome.resourceenvironment");
 			File systemFile = new File("examples/cocome/cocome.system");
@@ -21,16 +21,20 @@ public class HeadlessClientTest {
 
 			SimulationClient sim = client.prepareSimulation();
 			sim.setAllocation(allocationFile);
-			sim.setMonitorRepository(monitorRepositoryFile);
 			sim.setRepository(repositoryFile);
 			sim.setSystem(systemFile);
 			sim.setUsageModel(usageFile);
 			sim.setResourceEnvironment(resourceEnvironmentFile);
+			sim.setMonitorRepository(monitorRepositoryFile);
 
 			sim.createTransitiveClosure();
 			sim.sync();
 
-			sim.clearLocal();
+			long simStart = System.currentTimeMillis();
+			boolean success = sim.executeSimulation(res -> {
+				System.out.println(res.getValues().size());
+				System.out.println("Simulation needed " + (System.currentTimeMillis() - simStart) + "ms");
+			});
 		}
 	}
 

@@ -45,6 +45,11 @@ public class TransitiveModelTransformer {
 			this.buildTransitiveClosure();
 		}
 
+		// create rules before
+		transitiveClosure.forEach(r -> {
+			transformer.installRule(r.getURI());
+		});
+
 		resourceMapping.entrySet().forEach(e -> {
 			// install rules for all crosses
 			filterResources(

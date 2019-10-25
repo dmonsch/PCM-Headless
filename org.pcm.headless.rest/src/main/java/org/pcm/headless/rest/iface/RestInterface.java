@@ -64,7 +64,7 @@ public class RestInterface implements InitializingBean {
 	private LinkedList<PCMSimulationState> finishedSimulations;
 
 	// properties
-	@Value("${concurrentSimulations:0}")
+	@Value("${concurrentSimulations:3}")
 	private int concurrentSimulations;
 
 	@Value("${simulationMemory:10}")
@@ -207,6 +207,7 @@ public class RestInterface implements InitializingBean {
 		this.queuedSimulations = new LinkedList<>();
 		this.runningSimulations = new LinkedList<>();
 		this.readySimulations = new LinkedList<>();
+		this.finishedSimulations = new LinkedList<>();
 
 		this.executorService = Executors.newScheduledThreadPool(concurrentSimulations);
 
@@ -238,13 +239,21 @@ public class RestInterface implements InitializingBean {
 
 			// start one
 			this.executorService.submit(() -> {
-				InMemoryResultRepository resultRepository = this.executor.triggerSimulation(
-						removeFromQueue.getModelConfig(), removeFromQueue.getSimConfig(),
-						Lists.newArrayList(removeFromQueue, list));
-				resultMapping.put(removeFromQueue.getId(), resultRepository);
+				try {
+					InMemoryResultRepository resultRepository = this.executor.triggerSimulation(
+							removeFromQueue.getModelConfig(), removeFromQueue.getSimConfig(),
+							Lists.newArrayList(removeFromQueue, list));
+					resultMapping.put(removeFromQueue.getId(), resultRepository);
+					removeFromQueue.setState(ESimulationState.EXECUTED);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			});
+
 			// add to running
 			this.runningSimulations.add(removeFromQueue);
+
+			removeFromQueue.setState(ESimulationState.RUNNING);
 		}
 	}
 
@@ -274,15 +283,14 @@ public class RestInterface implements InitializingBean {
 	}
 
 	private void clearHTMLFiles() {
-		Path currentRelativePath = Paths.get("");
+		Path currentRelativePath = Paths.get(".");
 
 		Stream.of(currentRelativePath.toFile().listFiles(new FilenameFilter() {
 			public boolean accept(File dir, String filename) {
 				return filename.endsWith(".html");
 			}
 		})).forEach(file -> {
-			System.out.println(file.getAbsolutePath());
-			// file.delete();
+			file.delete();
 		});
 	}
 

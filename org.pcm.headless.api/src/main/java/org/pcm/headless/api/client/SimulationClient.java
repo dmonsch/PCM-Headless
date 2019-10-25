@@ -2,10 +2,10 @@ package org.pcm.headless.api.client;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.http.entity.ContentType;
 import org.eclipse.emf.common.util.URI;
@@ -16,13 +16,15 @@ import org.palladiosimulator.pcm.repository.Repository;
 import org.palladiosimulator.pcm.resourceenvironment.ResourceEnvironment;
 import org.palladiosimulator.pcm.system.System;
 import org.palladiosimulator.pcm.usagemodel.UsageModel;
+import org.pcm.headless.api.client.data.InMemoryModelConfig;
 import org.pcm.headless.api.client.transform.DefaultURITransformer;
 import org.pcm.headless.api.client.transform.TransitiveModelTransformer;
 import org.pcm.headless.api.util.ModelUtil;
+import org.pcm.headless.api.util.MonitorRepositoryTransformer;
 import org.pcm.headless.shared.data.ESimulationPart;
 import org.pcm.headless.shared.data.ESimulationState;
-import org.pcm.headless.shared.data.config.HeadlessModelConfig;
 import org.pcm.headless.shared.data.config.HeadlessSimulationConfig;
+import org.pcm.headless.shared.data.results.InMemoryResultRepository;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -30,20 +32,25 @@ import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 
 public class SimulationClient {
+	// STATICS
+	private static final long POLL_DELAY = 250;
+	private static final long MAX_TIMEOUT_RESULTS = 60000;
+
 	// URLS
 	private static final String SET_URL = "/rest/{id}/set/";
 	private static final String SET_CONFIG_URL = "/rest/{id}/set/config";
 	private static final String CLEAR_URL = "/rest/{id}/clear";
 	private static final String GET_STATE_URL = "/rest/{id}/state";
+	private static final String RESULTS_URL = "/rest//{id}/results";
+
+	private static final String START_URL = "/rest/{id}/start";
 
 	private static final ObjectMapper JSON_MAPPER = new ObjectMapper();
 
 	private String baseUrl;
 	private String id;
 
-	private HeadlessModelConfig models;
-
-	private Map<String, String> orgFileNameMapping;
+	private InMemoryModelConfig models;
 
 	private boolean synced = false;
 
@@ -51,51 +58,66 @@ public class SimulationClient {
 		this.baseUrl = baseUrl;
 		this.id = id;
 
-		this.models = new HeadlessModelConfig();
-		this.orgFileNameMapping = new HashMap<>();
+		this.models = new InMemoryModelConfig();
+	}
+
+	public InMemoryResultRepository getResults() {
+		try {
+			String resultBody = Unirest.get(this.baseUrl + integrateId(RESULTS_URL)).asString().getBody();
+			return JSON_MAPPER.readValue(resultBody, InMemoryResultRepository.class);
+		} catch (UnirestException | JsonProcessingException e) {
+			return null;
+		}
 	}
 
 	public void sync() {
 		// REPOSITORY
-		this.models.getRepositoryFiles().forEach(r -> {
-			uploadModelFile(r, ESimulationPart.REPOSITORY, getOriginalFilename(r));
+		this.models.getRepositorys().forEach(r -> {
+			uploadModel(r, ESimulationPart.REPOSITORY);
 		});
 
 		// ALLOCATION
-		uploadModelFile(models.getAllocationFile(), ESimulationPart.ALLOCATION,
-				getOriginalFilename(models.getAllocationFile()));
+		uploadModel(models.getAllocation(), ESimulationPart.ALLOCATION);
 
 		// SYSTEM
-		uploadModelFile(models.getSystemFile(), ESimulationPart.SYSTEM, getOriginalFilename(models.getSystemFile()));
+		uploadModel(models.getSystem(), ESimulationPart.SYSTEM);
 
 		// USAGE
-		uploadModelFile(models.getUsageFile(), ESimulationPart.USAGE_MODEL, getOriginalFilename(models.getUsageFile()));
+		uploadModel(models.getUsage(), ESimulationPart.USAGE_MODEL);
 
 		// RESOURCE ENV
-		uploadModelFile(models.getResourceEnvironmentFile(), ESimulationPart.RESOURCE_ENVIRONMENT,
-				getOriginalFilename(models.getResourceEnvironmentFile()));
+		uploadModel(models.getResourceEnvironment(), ESimulationPart.RESOURCE_ENVIRONMENT);
+
+		// MONITOR REPO
+		MonitorRepositoryTransformer.makePersistable(models.getMonitorRepository());
+		uploadModel(models.getMonitorRepository(), ESimulationPart.MONITOR_REPOSITORY);
 
 		// ADDITIONALS
 		this.models.getAdditionals().forEach(r -> {
-			uploadModelFile(r, ESimulationPart.ADDITIONAL, getOriginalFilename(r));
+			uploadModel(r, ESimulationPart.ADDITIONAL);
 		});
 
 		synced = true;
 	}
 
 	public boolean executeSimulation(ISimulationResultListener resultListener) {
-		if (synced) {
-			// TODO
+		ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
 
-			return true;
+		if (synced) {
+			try {
+				Unirest.get(this.baseUrl + integrateId(START_URL)).asString().getBody();
+				executorService.submit(new ResultListenerTask(resultListener, executorService));
+				return true;
+			} catch (UnirestException e) {
+				return false;
+			}
 		}
 		return false;
 	}
 
 	public void createTransitiveClosure() {
 		// collect all models from the config
-		EObject[] loadedModels = models.getAllFiles().stream()
-				.map(f -> ModelUtil.readFromFile(f.getAbsolutePath(), EObject.class)).toArray(EObject[]::new);
+		EObject[] loadedModels = models.getAllModels().stream().toArray(EObject[]::new);
 
 		// create transformer
 		TransitiveModelTransformer transformer = new TransitiveModelTransformer(loadedModels);
@@ -128,10 +150,6 @@ public class SimulationClient {
 		return true;
 	}
 
-	public boolean clearLocal() {
-		return models.getAllFiles().stream().allMatch(f -> f.delete());
-	}
-
 	public ESimulationState getState() {
 		try {
 			return ESimulationState
@@ -150,65 +168,46 @@ public class SimulationClient {
 		}
 	}
 
-	private <T extends EObject> boolean setModel(T obj, ESimulationPart part) {
-		String orgFileName = obj.eResource().getURI().lastSegment();
-
-		try {
-			File tempFile = File.createTempFile("pcm_repo", ".model");
-			ModelUtil.saveToFile(obj, tempFile.getAbsolutePath());
-
-			applyModelFile(tempFile, part);
-
-			orgFileNameMapping.put(tempFile.getCanonicalPath(), orgFileName);
-
-			return true;
-		} catch (IOException e) {
-			return false;
-		}
-	}
-
-	private void applyModelFile(File tempFile, ESimulationPart part) {
+	private <T extends EObject> void setModel(T obj, ESimulationPart part) {
 		switch (part) {
 		case ADDITIONAL:
-			models.getAdditionals().add(tempFile);
+			models.getAdditionals().add(obj);
 			break;
 		case ALLOCATION:
-			models.setAllocationFile(tempFile);
+			models.setAllocation(obj);
 			break;
 		case MONITOR_REPOSITORY:
-			models.setMonitorRepository(tempFile);
+			models.setMonitorRepository(obj);
 			break;
 		case REPOSITORY:
-			models.getRepositoryFiles().add(tempFile);
+			models.getRepositorys().add(obj);
 			break;
 		case RESOURCE_ENVIRONMENT:
-			models.setResourceEnvironmentFile(tempFile);
+			models.setResourceEnvironment(obj);
 			break;
 		case SYSTEM:
-			models.setSystemFile(tempFile);
+			models.setSystem(obj);
 			break;
 		case USAGE_MODEL:
-			models.setUsageFile(tempFile);
+			models.setUsage(obj);
 			break;
 		default:
 			break;
 		}
 	}
 
-	private String getOriginalFilename(File file) {
-		try {
-			return orgFileNameMapping.get(file.getCanonicalPath());
-		} catch (IOException e) {
-			return null;
-		}
-	}
+	private void uploadModel(EObject obj, ESimulationPart part) {
+		String orgFileName = obj.eResource().getURI().lastSegment();
 
-	private void uploadModelFile(File tempFile, ESimulationPart part, String orgFileName) {
 		try {
+			File tempFile = File.createTempFile("pcm_repo", ".model");
+			ModelUtil.saveToFile(obj, tempFile.getAbsolutePath());
+
 			Unirest.post(this.baseUrl + integrateId(SET_URL) + part.toString())
 					.field("file", new FileInputStream(tempFile), ContentType.APPLICATION_OCTET_STREAM, orgFileName)
 					.asString().getBody();
-		} catch (FileNotFoundException | UnirestException e) {
+			tempFile.delete();
+		} catch (IOException | UnirestException e) {
 			e.printStackTrace();
 		}
 	}
@@ -225,9 +224,7 @@ public class SimulationClient {
 	}
 
 	public SimulationClient setRepository(File repo) {
-		synced = false;
-		applyModelFile(repo, ESimulationPart.REPOSITORY);
-		return this;
+		return this.setRepository(ModelUtil.readFromFile(repo.getAbsolutePath(), Repository.class));
 	}
 
 	public SimulationClient setSystem(System repo) {
@@ -237,9 +234,7 @@ public class SimulationClient {
 	}
 
 	public SimulationClient setSystem(File repo) {
-		synced = false;
-		applyModelFile(repo, ESimulationPart.SYSTEM);
-		return this;
+		return this.setSystem(ModelUtil.readFromFile(repo.getAbsolutePath(), System.class));
 	}
 
 	public SimulationClient setUsageModel(UsageModel repo) {
@@ -249,9 +244,7 @@ public class SimulationClient {
 	}
 
 	public SimulationClient setUsageModel(File repo) {
-		synced = false;
-		applyModelFile(repo, ESimulationPart.USAGE_MODEL);
-		return this;
+		return this.setUsageModel(ModelUtil.readFromFile(repo.getAbsolutePath(), UsageModel.class));
 	}
 
 	public SimulationClient setAllocation(Allocation repo) {
@@ -261,21 +254,17 @@ public class SimulationClient {
 	}
 
 	public SimulationClient setAllocation(File repo) {
-		synced = false;
-		applyModelFile(repo, ESimulationPart.ALLOCATION);
-		return this;
+		return this.setAllocation(ModelUtil.readFromFile(repo.getAbsolutePath(), Allocation.class));
 	}
 
 	public SimulationClient setResourceEnvironment(ResourceEnvironment repo) {
 		synced = false;
-		setModel(repo, ESimulationPart.REPOSITORY);
+		setModel(repo, ESimulationPart.RESOURCE_ENVIRONMENT);
 		return this;
 	}
 
 	public SimulationClient setResourceEnvironment(File repo) {
-		synced = false;
-		applyModelFile(repo, ESimulationPart.RESOURCE_ENVIRONMENT);
-		return this;
+		return this.setResourceEnvironment(ModelUtil.readFromFile(repo.getAbsolutePath(), ResourceEnvironment.class));
 	}
 
 	public SimulationClient setMonitorRepository(MonitorRepository repo) {
@@ -285,8 +274,34 @@ public class SimulationClient {
 	}
 
 	public SimulationClient setMonitorRepository(File repo) {
-		synced = false;
-		applyModelFile(repo, ESimulationPart.MONITOR_REPOSITORY);
-		return this;
+		return this.setMonitorRepository(ModelUtil.readFromFile(repo.getAbsolutePath(), MonitorRepository.class));
+	}
+
+	private class ResultListenerTask implements Runnable {
+		private ISimulationResultListener listener;
+		private int trys;
+		private ScheduledExecutorService executorService;
+
+		public ResultListenerTask(ISimulationResultListener listener, ScheduledExecutorService executorService) {
+			this.listener = listener;
+			this.trys = 0;
+			this.executorService = executorService;
+		}
+
+		@Override
+		public void run() {
+			ESimulationState currentState = SimulationClient.this.getState();
+
+			if (currentState != ESimulationState.EXECUTED && this.trys * POLL_DELAY < MAX_TIMEOUT_RESULTS) {
+				this.trys++;
+				executorService.schedule(this, POLL_DELAY, TimeUnit.MILLISECONDS);
+			} else if (this.trys * POLL_DELAY >= MAX_TIMEOUT_RESULTS) {
+				executorService.shutdown();
+				listener.onResult(null); // => timeout
+			} else if (currentState == ESimulationState.EXECUTED) {
+				executorService.shutdown();
+				listener.onResult(getResults());
+			}
+		}
 	}
 }

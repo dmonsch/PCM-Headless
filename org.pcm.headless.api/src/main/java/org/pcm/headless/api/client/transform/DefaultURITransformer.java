@@ -15,6 +15,10 @@ public class DefaultURITransformer implements IURITransformer {
 		currentFileId = 0;
 	}
 
+	public Map<URI, URI> getTransformationRules() {
+		return this.transformationRules;
+	}
+
 	@Override
 	public URI transform(URI uri) {
 		if (transformationRules.containsKey(uri)) {

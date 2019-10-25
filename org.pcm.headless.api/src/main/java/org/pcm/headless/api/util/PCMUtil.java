@@ -9,6 +9,7 @@ import org.eclipse.emf.ecore.resource.URIConverter;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
 import org.palladiosimulator.edp2.models.measuringpoint.MeasuringpointPackage;
 import org.palladiosimulator.monitorrepository.MonitorRepositoryPackage;
+import org.palladiosimulator.monitorrepository.impl.MonitorRepositoryPackageImpl;
 import org.palladiosimulator.pcm.PcmPackage;
 import org.palladiosimulator.pcm.repository.RepositoryPackage;
 import org.palladiosimulator.pcm.resourcetype.ResourcetypePackage;
@@ -25,7 +26,12 @@ public class PCMUtil {
 		RepositoryPackage.eINSTANCE.eClass();
 		PcmPackage.eINSTANCE.eClass();
 		ResourcetypePackage.eINSTANCE.eClass();
+
 		MonitorRepositoryPackage.eINSTANCE.eClass();
+		MonitorRepositoryPackageImpl.init();
+		((MonitorRepositoryPackageImpl) MonitorRepositoryPackage.eINSTANCE).createPackageContents();
+		((MonitorRepositoryPackageImpl) MonitorRepositoryPackage.eINSTANCE).initializePackageContents();
+
 		MeasuringpointPackage.eINSTANCE.eClass();
 		PcmmeasuringpointPackage.eINSTANCE.eClass();
 

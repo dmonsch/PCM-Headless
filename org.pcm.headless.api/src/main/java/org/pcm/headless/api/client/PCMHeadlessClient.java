@@ -1,9 +1,13 @@
 package org.pcm.headless.api.client;
 
+import org.pcm.headless.api.util.PCMUtil;
+
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 
 public class PCMHeadlessClient {
+	private static boolean PCM_INITED = false;
+
 	private static final String PING_URL = "rest/ping";
 	private static final String CLEAR_URL = "rest/clear";
 	private static final String PREPARE_URL = "rest/prepare";
@@ -14,6 +18,11 @@ public class PCMHeadlessClient {
 		this.baseUrl = baseUrl.endsWith("/") ? baseUrl : baseUrl + "/";
 		if (!this.baseUrl.startsWith("http://")) {
 			this.baseUrl = "http://" + this.baseUrl;
+		}
+
+		if (!PCM_INITED) {
+			PCMUtil.loadPCMModels();
+			PCM_INITED = true;
 		}
 	}
 

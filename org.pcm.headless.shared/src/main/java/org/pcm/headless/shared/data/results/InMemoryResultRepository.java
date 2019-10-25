@@ -1,28 +1,23 @@
 package org.pcm.headless.shared.data.results;
 
-import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
-import com.google.common.collect.Lists;
+import org.pcm.headless.shared.data.KeyValuePair;
 
 import lombok.Data;
 
 @Data
 public class InMemoryResultRepository {
 
-	private Map<PlainMetricMeasuringPointBundle, List<PlainDataSeries>> values;
+	private List<KeyValuePair<PlainMetricMeasuringPointBundle, PlainDataSeries>> values;
 
 	public InMemoryResultRepository() {
-		this.values = new HashMap<>();
+		this.values = new LinkedList<>();
 	}
 
 	public void addDataSeries(PlainMetricMeasuringPointBundle bundle, PlainDataSeries series) {
-		if (this.values.containsKey(bundle)) {
-			this.values.get(bundle).add(series);
-		} else {
-			this.values.put(bundle, Lists.newArrayList(series));
-		}
+		this.values.add(new KeyValuePair<>(bundle, series));
 	}
 
 }

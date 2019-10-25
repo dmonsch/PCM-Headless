@@ -8,15 +8,34 @@ repositories {
 
 dependencies {
 	compile project(":org.pcm.headless.shared")
-
-	// https://mvnrepository.com/artifact/com.mashape.unirest/unirest-java
+	
 	compile group: 'com.mashape.unirest', name: 'unirest-java', version: '1.4.9'
+	compile group: 'org.jscience', name: 'jscience', version: '4.3.1'
+	compile group: 'lpg.runtime', name: 'java', version: '2.0.17-v201004271640'
+	
+	compile 'extra:org.eclipse.core.runtime:3.16.0.v20190823-1314'
+	compile 'extra:org.eclipse.equinox.common:3.10.500.v20190815-1535'
+	compile 'org.antlr:antlr-runtime:3.5.2' 
+	
+	compile 'extra:org.eclipse.ocl.ecore:3.14.0.v20190910-0937'
+    compile 'extra:org.eclipse.ocl.pivot:1.9.0.v20190910-0937'
+    compile 'extra:org.eclipse.ocl:3.10.400.v20190910-0937'
 	
 	compile 'extra:org.palladiosimulator.pcm:4.1.0.201910030052'
 	compile 'extra:org.palladiosimulator.monitorrepository:3.0.1.201910030104'
 	compile 'extra:org.palladiosimulator.edp2:2.0.0.201910030048'
 	compile 'extra:org.palladiosimulator.pcm.edp2.measuringpoint:1.0.0.201910030052'
+	compile 'extra:org.palladiosimulator.edp2.dao:1.0.0.201910030048'
+	compile 'extra:org.palladiosimulator.commons:1.0.1.201910030029'
+	
 	compile 'extra:de.uka.ipd.sdq.identifier:2.1.0.201910030029'
+	compile 'extra:de.uka.ipd.sdq.stoex:2.2.0.201910030029'
+	compile 'extra:de.uka.ipd.sdq.units:2.1.1.201910030029'
+	compile 'extra:de.uka.ipd.sdq.probfunction:2.1.1.201910030029'
+	compile 'extra:org.palladiosimulator.metricspec:1.0.3.201910030036'
+	
+	compile 'extra:org.eclipse.net4j.util:3.8.0.v20180530-0909'
+    compile 'extra:org.eclipse.net4j:4.7.0.v20180530-1201'
 	
 	compile 'extra:org.eclipse.emf.ant:2.11.0.v20190418-1022'
     compile 'extra:org.eclipse.emf.cdo.common:4.7.0.v20180529-1130'
