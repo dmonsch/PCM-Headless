@@ -1,7 +1,7 @@
 package org.pcm.headless.shared.data;
 
 public enum ESimulationState {
-	READY("ready"), QUEUED("queued"), RUNNING("running"), EXECUTED("executed"), FINISHED("finished");
+	READY("ready"), QUEUED("queued"), RUNNING("running"), EXECUTED("executed"), FINISHED("finished"), FAILED("failed");
 
 	private String name;
 

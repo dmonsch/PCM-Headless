@@ -2,12 +2,15 @@ package org.pcm.headless.api.util;
 
 import java.net.URL;
 import java.util.Map;
+import java.util.Optional;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.URIConverter;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
 import org.palladiosimulator.edp2.models.measuringpoint.MeasuringpointPackage;
+import org.palladiosimulator.metricspec.MetricDescription;
+import org.palladiosimulator.metricspec.MetricDescriptionRepository;
 import org.palladiosimulator.monitorrepository.MonitorRepositoryPackage;
 import org.palladiosimulator.monitorrepository.impl.MonitorRepositoryPackageImpl;
 import org.palladiosimulator.pcm.PcmPackage;
@@ -16,6 +19,7 @@ import org.palladiosimulator.pcm.resourcetype.ResourcetypePackage;
 import org.palladiosimulator.pcmmeasuringpoint.PcmmeasuringpointPackage;
 
 public class PCMUtil {
+	private static final String METRIC_DESC_PATHMAP = "pathmap://METRIC_SPEC_MODELS/commonMetrics.metricspec";
 
 	/**
 	 * Visits all common PCM package classes to load them.
@@ -36,6 +40,11 @@ public class PCMUtil {
 		PcmmeasuringpointPackage.eINSTANCE.eClass();
 
 		initPathmaps();
+	}
+
+	public static Optional<MetricDescription> getMetricByID(String id) {
+		return ModelUtil.readFromURI(METRIC_DESC_PATHMAP, MetricDescriptionRepository.class).getMetricDescriptions()
+				.stream().filter(d -> d.getId().equals(id)).findFirst();
 	}
 
 	private static void initPathmaps() {

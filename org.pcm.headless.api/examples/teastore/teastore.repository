@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<repository:Repository xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:repository="http://palladiosimulator.org/PalladioComponentModel/Repository/5.2" xmlns:seff="http://palladiosimulator.org/PalladioComponentModel/SEFF/5.2" id="_BEtsIGBREem3FetPjQjq2g" entityName="TeaStore Repository">
+  <components__Repository xsi:type="repository:BasicComponent" id="_FSvLwGBREem3FetPjQjq2g" entityName="Recommender">
+    <providedRoles_InterfaceProvidingEntity xsi:type="repository:OperationProvidedRole" id="_FuAgkWBTEem3FetPjQjq2g" entityName="provideRecommender" providedInterface__OperationProvidedRole="_KMP4YWBREem3FetPjQjq2g"/>
+    <serviceEffectSpecifications__BasicComponent xsi:type="seff:ResourceDemandingSEFF" id="_fgN6Z2BTEem3FetPjQjq2g" describedService__SEFF="_MuwRYGBREem3FetPjQjq2g">
+      <steps_Behaviour xsi:type="seff:StartAction" id="_hWv-MmBTEem3FetPjQjq2g" entityName="startRecommend" successor_AbstractAction="_r2gsPGBUEem3FetPjQjq2g"/>
+      <steps_Behaviour xsi:type="seff:InternalAction" id="_r2gsPGBUEem3FetPjQjq2g" entityName="getRecommender" predecessor_AbstractAction="_hWv-MmBTEem3FetPjQjq2g" successor_AbstractAction="_1OWlVGBUEem3FetPjQjq2g">
+        <resourceDemand_Action>
+          <specification_ParametericResourceDemand specification="1"/>
+          <requiredResource_ParametricResourceDemand href="pathmap://PCM_MODELS/Palladio.resourcetype#_oro4gG3fEdy4YaaT-RYrLQ"/>
+        </resourceDemand_Action>
+      </steps_Behaviour>
+      <steps_Behaviour xsi:type="seff:LoopAction" id="_1OWlVGBUEem3FetPjQjq2g" entityName="Convert List" predecessor_AbstractAction="_r2gsPGBUEem3FetPjQjq2g" successor_AbstractAction="_CHb7LGBWEem3FetPjQjq2g">
+        <bodyBehaviour_Loop id="_rbrU4mBVEem3FetPjQjq2g">
+          <steps_Behaviour xsi:type="seff:StartAction" id="_r_OG0mBVEem3FetPjQjq2g" entityName="startConvert" successor_AbstractAction="_y8fa_GBVEem3FetPjQjq2g"/>
+          <steps_Behaviour xsi:type="seff:InternalAction" id="_y8fa_GBVEem3FetPjQjq2g" entityName="convAction" predecessor_AbstractAction="_r_OG0mBVEem3FetPjQjq2g" successor_AbstractAction="_2YSMYGBVEem3FetPjQjq2g">
+            <resourceDemand_Action>
+              <specification_ParametericResourceDemand specification="1"/>
+              <requiredResource_ParametricResourceDemand href="pathmap://PCM_MODELS/Palladio.resourcetype#_oro4gG3fEdy4YaaT-RYrLQ"/>
+            </resourceDemand_Action>
+          </steps_Behaviour>
+          <steps_Behaviour xsi:type="seff:StopAction" id="_2YSMYGBVEem3FetPjQjq2g" entityName="stopConvert" predecessor_AbstractAction="_y8fa_GBVEem3FetPjQjq2g"/>
+        </bodyBehaviour_Loop>
+        <iterationCount_LoopAction specification="1"/>
+      </steps_Behaviour>
+      <steps_Behaviour xsi:type="seff:InternalAction" id="_CHb7LGBWEem3FetPjQjq2g" entityName="executeRecommend" predecessor_AbstractAction="_1OWlVGBUEem3FetPjQjq2g" successor_AbstractAction="_HK9fYGBWEem3FetPjQjq2g">
+        <resourceDemand_Action>
+          <specification_ParametericResourceDemand specification="items.NUMBER_OF_ELEMENTS + (recommender.VALUE == &quot;POPULARITY&quot; ? 100 : 10)"/>
+          <requiredResource_ParametricResourceDemand href="pathmap://PCM_MODELS/Palladio.resourcetype#_oro4gG3fEdy4YaaT-RYrLQ"/>
+        </resourceDemand_Action>
+      </steps_Behaviour>
+      <steps_Behaviour xsi:type="seff:StopAction" id="_HK9fYGBWEem3FetPjQjq2g" entityName="stopRecommend" predecessor_AbstractAction="_CHb7LGBWEem3FetPjQjq2g"/>
+    </serviceEffectSpecifications__BasicComponent>
+  </components__Repository>
+  <interfaces__Repository xsi:type="repository:OperationInterface" id="_KMP4YWBREem3FetPjQjq2g" entityName="RecommenderInterface">
+    <signatures__OperationInterface id="_MuwRYGBREem3FetPjQjq2g" entityName="recommend">
+      <parameters__OperationSignature dataType__Parameter="_UbdB7GBSEem3FetPjQjq2g" parameterName="items"/>
+      <parameters__OperationSignature parameterName="userId">
+        <dataType__Parameter xsi:type="repository:PrimitiveDataType" href="pathmap://PCM_MODELS/PrimitiveTypes.repository#//@dataTypes__Repository.0"/>
+      </parameters__OperationSignature>
+      <parameters__OperationSignature parameterName="recommender"/>
+    </signatures__OperationInterface>
+  </interfaces__Repository>
+  <dataTypes__Repository xsi:type="repository:CollectionDataType" id="_UbdB7GBSEem3FetPjQjq2g" entityName="java.util.List"/>
+</repository:Repository>

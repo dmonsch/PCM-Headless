@@ -1,36 +1,22 @@
 package org.pcm.headless.core;
 
-import java.io.File;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.UUID;
 import java.util.stream.IntStream;
 
-import org.eclipse.emf.common.util.URI;
-import org.palladiosimulator.analyzer.workflow.blackboard.PCMResourceSetPartition;
 import org.palladiosimulator.edp2.dao.exception.DataNotAccessibleException;
 import org.palladiosimulator.edp2.impl.RepositoryManager;
 import org.palladiosimulator.edp2.models.Repository.LocalMemoryRepository;
-import org.palladiosimulator.edp2.models.Repository.RepositoryFactory;
-import org.palladiosimulator.recorderframework.edp2.config.AbstractEDP2RecorderConfigurationFactory;
-import org.palladiosimulator.simulizar.access.ModelAccess;
-import org.palladiosimulator.simulizar.runconfig.SimuLizarWorkflowConfiguration;
-import org.palladiosimulator.simulizar.runtimestate.SimuLizarRuntimeState;
-import org.palladiosimulator.simulizar.runtimestate.SimulationCancelationDelegate;
 import org.pcm.headless.core.data.InMemoryRepositoryReader;
 import org.pcm.headless.core.progress.ISimulationProgressListener;
-import org.pcm.headless.core.proxy.ResourceContainerFactoryProxy;
-import org.pcm.headless.core.util.HeadlessSimulationConfigUtil;
+import org.pcm.headless.core.simulator.IHeadlessSimulator;
+import org.pcm.headless.core.simulator.impl.SimuComHeadlessSimulator;
+import org.pcm.headless.core.simulator.impl.SimuLizarHeadlessSimulator;
 import org.pcm.headless.core.util.PCMUtil;
+import org.pcm.headless.shared.data.ESimulationType;
 import org.pcm.headless.shared.data.config.HeadlessModelConfig;
 import org.pcm.headless.shared.data.config.HeadlessSimulationConfig;
 import org.pcm.headless.shared.data.results.InMemoryResultRepository;
 
-import com.google.common.collect.Lists;
-
-import de.uka.ipd.sdq.simucomframework.SimuComConfig;
-import de.uka.ipd.sdq.workflow.mdsd.blackboard.MDSDBlackboard;
 import lombok.extern.java.Log;
 
 @Log
@@ -63,6 +49,7 @@ public class HeadlessPalladioSimulator {
 
 		cleanUp(results);
 
+		// tell all that we processed the results
 		if (listeners != null) {
 			listeners.forEach(l -> {
 				l.processed();
@@ -90,44 +77,30 @@ public class HeadlessPalladioSimulator {
 	 */
 	public LocalMemoryRepository triggerSimulationRaw(HeadlessModelConfig modelConfig,
 			HeadlessSimulationConfig simulationConfig, List<ISimulationProgressListener> listeners, boolean wait) {
-		// 1. create the resource partition from the config
-		PCMResourceSetPartition pcmPartition = createResourceSetPartitionFromConfig(modelConfig);
+		// 1. create belonging simulator
+		IHeadlessSimulator simulator = createSimulatorFromType(simulationConfig.getType());
+		simulator.initialize(modelConfig, simulationConfig);
 
-		// 2. create blackboard
-		MDSDBlackboard blackboard = createBlackboard(pcmPartition);
-
-		// 3. create config map
-		Map<String, Object> configurationMap = HeadlessSimulationConfigUtil.convertToConfigMap(simulationConfig);
-
-		// 4. create in memory repo
-		LocalMemoryRepository repository = createInMemoryRepository("HeadlessDomain");
-		configurationMap.put(AbstractEDP2RecorderConfigurationFactory.REPOSITORY_ID, repository.getId());
-
-		// 5. execute multiple times
+		// 2. execute multiple times
 		IntStream str = IntStream.range(0, simulationConfig.getRepetitions());
 		if (simulationConfig.isParallelizeRepetitions()) {
 			str = str.parallel();
 		}
+
 		str.forEach(i -> {
-			// 5.1 create simulizar configuration (atm i dont know if this is necessary
-			// within every repetition)
-			SimuLizarRuntimeState runtime = buildSimulizarConfiguration(blackboard, configurationMap);
+			// 3.1. prepare
+			simulator.prepareRepetition();
 
-			// 5.2 initialize resource environment
-			runtime.getModel().initialiseResourceContainer(
-					new ResourceContainerFactoryProxy(pcmPartition.getResourceEnvironment()));
+			// 3.2. execute
+			simulator.executeRepetition();
 
-			// 5.3 execute
-			runtime.runSimulation();
-			runtime.cleanUp();
-
-			// 5.4. inform
+			// 3.3. inform
 			if (listeners != null) {
 				listeners.forEach(l -> l.finishedRepetition());
 			}
 		});
 
-		// 5.x inform
+		// 4 inform
 		if (listeners != null) {
 			listeners.forEach(l -> {
 				l.finished();
@@ -137,8 +110,20 @@ public class HeadlessPalladioSimulator {
 			});
 		}
 
-		// 6. return
-		return repository;
+		// 5. return
+		return simulator.getResults();
+	}
+
+	private IHeadlessSimulator createSimulatorFromType(ESimulationType type) {
+		switch (type) {
+		case SIMUCOM:
+			return new SimuComHeadlessSimulator();
+		case SIMULIZAR:
+			return new SimuLizarHeadlessSimulator();
+		default:
+			log.warning("Could not create the appropriate simulator.");
+			return null;
+		}
 	}
 
 	private void cleanUp(LocalMemoryRepository results) {
@@ -149,51 +134,6 @@ public class HeadlessPalladioSimulator {
 		} finally {
 			RepositoryManager.removeRepository(RepositoryManager.getCentralRepository(), results);
 		}
-	}
-
-	private SimuLizarRuntimeState buildSimulizarConfiguration(MDSDBlackboard blackboard,
-			Map<String, Object> configMap) {
-		SimuLizarWorkflowConfiguration config = new SimuLizarWorkflowConfiguration(new HashMap<>());
-
-		SimuComConfig simuconfig = new SimuComConfig(configMap, false);
-		config.setSimuComConfiguration(simuconfig);
-
-		return new SimuLizarRuntimeState(config, new ModelAccess(blackboard),
-				new SimulationCancelationDelegate(() -> false));
-	}
-
-	private LocalMemoryRepository createInMemoryRepository(String domain) {
-		LocalMemoryRepository repo = RepositoryFactory.eINSTANCE.createLocalMemoryRepository();
-		repo.setId(UUID.randomUUID().toString());
-		repo.setDomain(domain);
-		RepositoryManager.addRepository(RepositoryManager.getCentralRepository(), repo);
-
-		return repo;
-	}
-
-	private MDSDBlackboard createBlackboard(PCMResourceSetPartition partition) {
-		MDSDBlackboard blackboard = new MDSDBlackboard();
-		blackboard.addPartition("org.palladiosimulator.pcmmodels.partition", partition);
-		return blackboard;
-	}
-
-	private PCMResourceSetPartition createResourceSetPartitionFromConfig(HeadlessModelConfig modelConfig) {
-		PCMResourceSetPartition partition = new PCMResourceSetPartition();
-
-		// collect all files
-		List<File> collectedFiles = Lists.newArrayList(modelConfig.getAllocationFile(),
-				modelConfig.getResourceEnvironmentFile(), modelConfig.getSystemFile(), modelConfig.getUsageFile(),
-				modelConfig.getMonitorRepository());
-		collectedFiles.addAll(modelConfig.getRepositoryFiles());
-		collectedFiles.addAll(modelConfig.getAdditionals());
-
-		// load them into the resource set
-		collectedFiles.forEach(file -> partition.loadModel(URI.createFileURI(file.getAbsolutePath())));
-
-		// resolve proxies
-		partition.resolveAllProxies();
-
-		return partition;
 	}
 
 }

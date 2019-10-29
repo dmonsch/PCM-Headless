@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -105,10 +106,14 @@ public class RestInterface implements InitializingBean {
 		StateSummary r = new StateSummary();
 		List<SimulationStateSummary> simR = stateMapping.entrySet().stream().map(st -> {
 			SimulationStateSummary inner = new SimulationStateSummary();
+			inner.setId(st.getValue().getId());
+			inner.setSimulator(st.getValue().getSimConfig().getType().getName());
 			inner.setFinishedRepetitions(st.getValue().getRepetitionProgress());
 			inner.setName(st.getValue().getSimConfig().getExperimentName());
 			inner.setRepetitions(st.getValue().getSimConfig().getRepetitions());
 			inner.setState(st.getValue().getState().getName());
+			inner.setSimulationTime(st.getValue().getSimConfig().getSimulationTime());
+			inner.setMaximumMeasurementCount(st.getValue().getSimConfig().getMaximumMeasurementCount());
 			return inner;
 		}).collect(Collectors.toList());
 		r.setSimulations(simR);
@@ -201,7 +206,7 @@ public class RestInterface implements InitializingBean {
 		this.objectMapper = new ObjectMapper();
 		this.executor = new HeadlessPalladioSimulator();
 
-		this.stateMapping = new HashMap<>();
+		this.stateMapping = new LinkedHashMap<>();
 		this.resultMapping = new HashMap<>();
 
 		this.queuedSimulations = new LinkedList<>();
@@ -246,6 +251,9 @@ public class RestInterface implements InitializingBean {
 					resultMapping.put(removeFromQueue.getId(), resultRepository);
 					removeFromQueue.setState(ESimulationState.EXECUTED);
 				} catch (Exception e) {
+					runningSimulations.remove(removeFromQueue);
+					finishedSimulations.add(removeFromQueue);
+					removeFromQueue.setState(ESimulationState.FAILED);
 					e.printStackTrace();
 				}
 			});
@@ -267,7 +275,15 @@ public class RestInterface implements InitializingBean {
 	private boolean clearState(PCMSimulationState pcmSimulationState) {
 		if (pcmSimulationState.getState() == ESimulationState.READY
 				|| pcmSimulationState.getState() == ESimulationState.QUEUED
-				|| pcmSimulationState.getState() == ESimulationState.EXECUTED) {
+				|| pcmSimulationState.getState() == ESimulationState.EXECUTED
+				|| pcmSimulationState.getState() == ESimulationState.FAILED) {
+			// delete data
+			try {
+				FileUtils.deleteDirectory(pcmSimulationState.getParentFolder());
+			} catch (IOException e) {
+				log.warning("Could not delete simulation data.");
+			}
+
 			// we can remove it
 			this.stateMapping.remove(pcmSimulationState.getId());
 			this.resultMapping.remove(pcmSimulationState.getId());

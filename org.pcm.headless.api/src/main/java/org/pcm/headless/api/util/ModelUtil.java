@@ -20,6 +20,17 @@ public class ModelUtil {
 		return URI.createFileURI(new File(string).getAbsolutePath());
 	}
 
+	public static <T> T readFromURI(String uri, Class<T> clazz) {
+		ResourceSet resourceSet = new ResourceSetImpl();
+		resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap()
+				.put(Resource.Factory.Registry.DEFAULT_EXTENSION, new XMIResourceFactoryImpl());
+
+		URI filePathUri = org.eclipse.emf.common.util.URI.createURI(uri);
+
+		Resource resource = resourceSet.getResource(filePathUri, true);
+		return clazz.cast(resource.getContents().get(0));
+	}
+
 	/**
 	 * Reads a Model from file with a given class
 	 * 

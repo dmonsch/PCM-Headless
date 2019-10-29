@@ -2,11 +2,17 @@ package org.pcm.headless.shared.data.config;
 
 import java.util.UUID;
 
+import org.pcm.headless.shared.data.ESimulationType;
+
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class HeadlessSimulationConfig {
 
 	@Builder.Default
@@ -26,5 +32,8 @@ public class HeadlessSimulationConfig {
 
 	@Builder.Default
 	private int repetitions = 1;
+
+	@Builder.Default
+	private ESimulationType type = ESimulationType.SIMULIZAR;
 
 }

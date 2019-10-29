@@ -1,0 +1,103 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8">
+
+<title>PCM-Headless UI</title>
+<meta name="description" content="PCM-Headless">
+<meta name="author" content="David Monschein">
+
+<link rel="stylesheet" href="css/styles.css">
+<link rel="stylesheet"
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+
+<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+<link rel="icon" href="/favicon.ico" type="image/x-icon">
+<link
+	href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css"
+	rel="stylesheet">
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css">
+
+</head>
+
+<body>
+
+	<div class="container">
+		<div class="py-5 text-center">
+			<div>
+				<img class="mb-4 mr-2" src="/img/pcm-logo.png" alt="" width="72"
+					height="72"> <img class="mb-4 ml-2" src="/img/sim-logo.png"
+					alt="" width="72" height="72">
+			</div>
+			<h2>Current simulations</h2>
+			<!--
+			<div class="row mt-4">
+				<input type="checkbox" data-width="300" data-height="40" checked data-toggle="toggle" data-on="Automatically poll updates"
+					data-off="No automatic updates" data-onstyle="success" data-offstyle="danger">
+			</div>
+			 -->
+			<div class="row mt-4">
+				<div class="table-responsive">
+					<table class="table table-sm table-dark">
+						<thead>
+							<tr>
+								<th scope="col">State</th>
+								<th scope="col">Name</th>
+								<th scope="col">Simulator</th>
+								<th scope="col">Repetitions</th>
+								<th scope="col">Simulation Time</th>
+								<th scope="col">Measurements</th>
+								<th scope="col">Clear</th>
+								<th scope="col">Results</th>
+								<th scope="col">Execute</th>
+							</tr>
+						</thead>
+						<tbody id="table-body">
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- [1] -->
+	<div class="modal micromodal-slide" id="modal-1" aria-hidden="true">
+		<div class="modal__overlay" tabindex="-1" data-micromodal-close>
+			<div class="modal__container" role="dialog" aria-modal="true"
+				aria-labelledby="modal-1-title">
+				<header class="modal__header">
+					<h2 class="modal__title" id="modal-1-title">Results of the
+						simulation</h2>
+					<button class="modal__close" aria-label="Close modal"
+						data-micromodal-close></button>
+				</header>
+				<main class="modal__content" id="modal-1-content">
+					<p>The results consist of X measurements.</p>
+				</main>
+				<footer class="modal__footer">
+					<button class="modal__btn modal__btn-primary" id="modal-1-download">Download
+						JSON</button>
+					<button class="modal__btn" data-micromodal-close
+						aria-label="Close this dialog window">Close</button>
+				</footer>
+			</div>
+		</div>
+	</div>
+
+	<!-- Javascripts -->
+	<script type="text/javascript"
+		src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+	<script type="text/javascript"
+		src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+	<script
+		src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+	<script src="https://unpkg.com/micromodal/dist/micromodal.min.js"
+		type="text/javascript"></script>
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/jquery.fileDownload/1.4.2/jquery.fileDownload.min.js"
+		type="text/javascript"></script>
+	<script src="/js/headless.js" type="text/javascript"></script>
+</body>
+</html>

@@ -2,10 +2,12 @@ package org.pcm.headless.core.util;
 
 import java.util.Map;
 
+import org.pcm.headless.shared.data.ESimulationType;
 import org.pcm.headless.shared.data.config.HeadlessSimulationConfig;
 
 import com.google.common.collect.Maps;
 
+import de.uka.ipd.sdq.simucomframework.SimuComConfig;
 import de.uka.ipd.sdq.simulation.AbstractSimulationConfig;
 
 public class HeadlessSimulationConfigUtil {
@@ -24,6 +26,11 @@ public class HeadlessSimulationConfigUtil {
 				String.valueOf(config.getMaximumMeasurementCount()));
 		configMap.put(AbstractSimulationConfig.PERSISTENCE_RECORDER_NAME, EDP2_RECORDER);
 		configMap.put(AbstractSimulationConfig.USE_FIXED_SEED, config.isUseFixedSeed());
+
+		if (config.getType() == ESimulationType.SIMUCOM) {
+			configMap.put(SimuComConfig.SIMULATE_LINKING_RESOURCES, false);
+			configMap.put(SimuComConfig.SIMULATE_FAILURES, false);
+		}
 
 		return configMap;
 

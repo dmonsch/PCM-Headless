@@ -127,6 +127,8 @@ public class InMemoryRepositoryReader {
 		PlainMeasuringPoint conv = new PlainMeasuringPoint();
 		conv.setStringRepresentation(belongingPoint.getStringRepresentation());
 
+		java.lang.System.out.println(belongingPoint.getClass().getName());
+
 		if (belongingPoint instanceof EntryLevelSystemCallMeasuringPoint) {
 			conv.setType(MeasuringPointType.ENTRY_LEVEL_CALL);
 			conv.setSourceId(((EntryLevelSystemCallMeasuringPoint) belongingPoint).getEntryLevelSystemCall().getId());
