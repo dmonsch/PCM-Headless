@@ -24,6 +24,7 @@ import org.pcm.headless.rest.data.StateSummary;
 import org.pcm.headless.rest.state.PCMSimulationState;
 import org.pcm.headless.shared.data.ESimulationPart;
 import org.pcm.headless.shared.data.ESimulationState;
+import org.pcm.headless.shared.data.ESimulationType;
 import org.pcm.headless.shared.data.config.HeadlessSimulationConfig;
 import org.pcm.headless.shared.data.results.InMemoryResultRepository;
 import org.springframework.beans.factory.InitializingBean;
@@ -71,22 +72,27 @@ public class RestInterface implements InitializingBean {
 	@Value("${simulationMemory:10}")
 	private int simulationMemory;
 
+	@Value("${clearEnabled:true}")
+	private boolean clearEnabled;
+
 	@GetMapping("/clear")
 	public synchronized String clear() {
-		this.stateMapping.clear();
-		try {
-			FileUtils.deleteDirectory(SIM_DATA_FOLDER);
-		} catch (IOException e) {
-			log.warning("Could not clean all files.");
+		if (clearEnabled) {
+			this.stateMapping.clear();
+			try {
+				FileUtils.deleteDirectory(SIM_DATA_FOLDER);
+			} catch (IOException e) {
+				log.warning("Could not clean all files.");
+			}
+
+			this.readySimulations.clear();
+			this.queuedSimulations.clear();
+			this.runningSimulations.clear();
+			this.finishedSimulations.clear();
+
+			this.executorService.shutdownNow();
+			this.executorService = Executors.newScheduledThreadPool(concurrentSimulations);
 		}
-
-		this.readySimulations.clear();
-		this.queuedSimulations.clear();
-		this.runningSimulations.clear();
-		this.finishedSimulations.clear();
-
-		this.executorService.shutdownNow();
-		this.executorService = Executors.newScheduledThreadPool(concurrentSimulations);
 
 		return "{}";
 	}
@@ -132,6 +138,9 @@ public class RestInterface implements InitializingBean {
 			PCMSimulationState state = stateMapping.get(id);
 			try {
 				HeadlessSimulationConfig simConfig = objectMapper.readValue(configJson, HeadlessSimulationConfig.class);
+				if (simConfig.getType() == ESimulationType.SIMUCOM) {
+					simConfig.setSimuComStoragePath(new File(state.getParentFolder(), "simucom").getAbsolutePath());
+				}
 				state.setSimConfig(simConfig);
 			} catch (JsonProcessingException e) {
 				e.printStackTrace();
@@ -251,10 +260,10 @@ public class RestInterface implements InitializingBean {
 					resultMapping.put(removeFromQueue.getId(), resultRepository);
 					removeFromQueue.setState(ESimulationState.EXECUTED);
 				} catch (Exception e) {
+					e.printStackTrace();
 					runningSimulations.remove(removeFromQueue);
 					finishedSimulations.add(removeFromQueue);
 					removeFromQueue.setState(ESimulationState.FAILED);
-					e.printStackTrace();
 				}
 			});
 

@@ -2,6 +2,7 @@ package org.pcm.headless.core;
 
 import java.io.File;
 
+import org.pcm.headless.shared.data.ESimulationType;
 import org.pcm.headless.shared.data.config.HeadlessModelConfig;
 import org.pcm.headless.shared.data.config.HeadlessSimulationConfig;
 import org.pcm.headless.shared.data.results.InMemoryResultRepository;
@@ -23,7 +24,8 @@ public class HeadlessSimulatorTest {
 		conf1.setUsageFile(new File("examples/cocome/cocome.usagemodel"));
 		conf1.setAdditionals(Lists.newArrayList(new File("examples/cocome/cocome.measuringpoint")));
 
-		HeadlessSimulationConfig conf2 = HeadlessSimulationConfig.builder().build();
+		HeadlessSimulationConfig conf2 = HeadlessSimulationConfig.builder().type(ESimulationType.SIMUCOM).build();
+		conf2.setSimuComStoragePath("simucom");
 
 		HeadlessPalladioSimulator sim = new HeadlessPalladioSimulator();
 		InMemoryResultRepository repo = sim.triggerSimulation(conf1, conf2);

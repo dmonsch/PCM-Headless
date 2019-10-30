@@ -36,4 +36,7 @@ public class HeadlessSimulationConfig {
 	@Builder.Default
 	private ESimulationType type = ESimulationType.SIMULIZAR;
 
+	@Builder.Default
+	private String simuComStoragePath = null;
+
 }

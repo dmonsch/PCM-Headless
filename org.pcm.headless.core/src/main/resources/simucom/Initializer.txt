@@ -1,0 +1,65 @@
+package agent.main;
+
+import java.util.Map;
+
+import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.resource.URIConverter;
+import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
+import org.palladiosimulator.edp2.models.measuringpoint.MeasuringpointPackage;
+import org.palladiosimulator.monitorrepository.MonitorRepositoryPackage;
+import org.palladiosimulator.pcm.PcmPackage;
+import org.palladiosimulator.pcm.repository.RepositoryPackage;
+import org.palladiosimulator.pcm.resourcetype.ResourcetypePackage;
+import org.palladiosimulator.pcmmeasuringpoint.PcmmeasuringpointPackage;
+
+import de.uka.ipd.sdq.simulation.IStatusObserver;
+
+public class Initializer {
+
+	public static IStatusObserver generateMock() {
+		return new StatusObserverMock();
+	}
+
+	public static void initialize() {
+		RepositoryPackage.eINSTANCE.eClass();
+		PcmPackage.eINSTANCE.eClass();
+		ResourcetypePackage.eINSTANCE.eClass();
+		MonitorRepositoryPackage.eINSTANCE.eClass();
+		MeasuringpointPackage.eINSTANCE.eClass();
+		PcmmeasuringpointPackage.eINSTANCE.eClass();
+
+		initPathmaps();
+
+		Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put("*", new XMIResourceFactoryImpl());
+	}
+
+	private static void initPathmaps() {
+		final String palladioResModel = "file:/Users/david/Desktop/SimulizarStandalone/workspace/SimulizarAutomizer/simucom/src/main/resources";
+		final String metricSpecModel = "file:/Users/david/Desktop/SimulizarStandalone/workspace/SimulizarAutomizer/simucom/src/main/resources";
+
+		String urlString = palladioResModel;
+		final URI uri = URI.createURI(urlString);
+		final URI target = uri.appendSegment("models").appendSegment("");
+		URIConverter.URI_MAP.put(URI.createURI("pathmap://PCM_MODELS/"), target);
+
+		urlString = metricSpecModel;
+		final URI uri2 = URI.createURI(urlString);
+		final URI target2 = uri2.appendSegment("models").appendSegment("");
+		URIConverter.URI_MAP.put(URI.createURI("pathmap://METRIC_SPEC_MODELS/"), target2);
+
+		final Resource.Factory.Registry reg = Resource.Factory.Registry.INSTANCE;
+		final Map<String, Object> m = reg.getExtensionToFactoryMap();
+		m.put("resourcetype", new XMIResourceFactoryImpl());
+		m.put("metricspec", new XMIResourceFactoryImpl());
+	}
+
+	private static class StatusObserverMock implements IStatusObserver {
+
+		@Override
+		public void updateStatus(int arg0, double arg1, long arg2) {
+			System.out.println(arg0 + ";" + arg1 + ";" + arg2);
+		}
+	}
+
+}

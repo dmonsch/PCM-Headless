@@ -19,14 +19,12 @@ dependencies {
 	compile group: 'lpg.runtime', name: 'java', version: '2.0.17-v201004271640'
 
 	// PALLADIO
-    compile 'extra:org.palladiosimulator.protocom.resourcestrategies:4.1.0.201910030122'
     compile 'extra:org.eclipse.core.runtime:3.16.0.v20190823-1314'
     compile 'extra:org.palladiosimulator.pcm:4.1.0.201910030052'
     compile 'extra:de.uka.ipd.sdq.pcm.gmf.seff.custom:4.1.0.201910030104'
     compile 'extra:de.uka.ipd.sdq.dsexplore:1.3.0.201910030125'
 
     compile 'extra:de.uka.ipd.sdq.featureconfig:2.1.0.201910030036'
-    compile 'extra:org.palladiosimulator.protocom.workflow:4.1.0.201910030122'
     compile 'extra:org.palladiosimulator.commons:1.0.1.201910030029'
     compile 'extra:org.palladiosimulator.qes.ide:1.0.0.201910030125'
     
@@ -35,7 +33,6 @@ dependencies {
    
     compile 'extra:de.uka.ipd.sdq.workflow:2.2.3.201910030036'
     compile 'extra:de.uka.ipd.sdq.simucomframework:4.1.1.201910030114'
-    compile 'extra:de.uka.ipd.sdq.sensorframework.visualisation.rvisualisation:1.0.0.201910030042'
     compile 'extra:de.uka.ipd.sdq.dialogs:2.0.1.201910030029'
     compile 'extra:org.palladiosimulator.analyzer.accuracy:1.0.1.201910030104'
     compile 'extra:org.palladiosimulator.experimentautomation:1.1.0.201910030158'
@@ -59,8 +56,6 @@ dependencies {
     compile 'extra:de.uka.ipd.sdq.codegen.simucontroller:4.1.1.201910030114'
     
     compile 'extra:de.desmoj:2.3.3'
-   
-    compile 'extra:de.uka.ipd.sdq.codegen.simudatavisualisation.datatypes:2.0.0.201910030042'
     
     compile 'extra:de.uka.ipd.sdq.errorhandling:1.0.0.201910030029'
     compile 'extra:de.uka.ipd.sdq.featuremodel:2.1.0.201910030036'
@@ -114,6 +109,12 @@ dependencies {
     compile 'extra:org.eclipse.emf.ecore.xmi:2.16.0.v20190528-0725'
     compile 'extra:org.eclipse.emf.ecore:2.19.0.v20190822-1451'
     compile 'extra:org.eclipse.emf:2.8.0.v20180706-1146'
+    compile 'extra:org.eclipse.emf.query:1.7.0.201805030653'
+    
+    compile 'extra:org.eclipse.emf.mwe2.lib:2.11.0.201906111547'
+    compile 'extra:org.eclipse.emf.mwe2.runtime:2.11.0.201906111547'
+    compile 'extra:org.eclipse.emf.mwe.utils:1.5.0.201906111547'
+    compile 'extra:org.eclipse.emf.mwe.core:1.5.0.201906111547'
     
     compile 'extra:org.eclipse.equinox.common:3.10.500.v20190815-1535'
     compile 'extra:org.eclipse.equinox.launcher:1.5.500.v20190715-1310'
@@ -139,19 +140,12 @@ dependencies {
     compile 'extra:org.palladiosimulator.edp2.datastream:1.0.0.201910030048'
     compile 'extra:org.palladiosimulator.edp2.distancemetrics.ui:1.0.0.201910030048'
     compile 'extra:org.palladiosimulator.edp2.distancemetrics:1.0.0.201910030048'
-    compile 'extra:org.palladiosimulator.edp2.examples:1.0.0.201910030048'
     compile 'extra:org.palladiosimulator.edp2.filter.exponentialsmoothing:1.0.0.201910030048'
     compile 'extra:org.palladiosimulator.edp2.repository.local:1.0.0.201910030048'
     compile 'extra:org.palladiosimulator.edp2.ui:1.0.0.201910030048'
     compile 'extra:org.palladiosimulator.edp2.util:1.0.0.201910030048'
-    compile 'extra:org.palladiosimulator.edp2.visualization.jfreechart:1.0.1.201910030048'
-    compile 'extra:org.palladiosimulator.edp2.visualization:1.0.0.201910030048'
     compile 'extra:org.palladiosimulator.edp2:2.0.0.201910030048'
     compile 'extra:org.palladiosimulator.experimentanalysis:1.0.0.201910030104'
-    compile 'extra:org.palladiosimulator.experimentautomation.application.tooladapter.simucom.model:1.0.0.201910030158'
-    compile 'extra:org.palladiosimulator.experimentautomation.application.tooladapter.simucom:1.0.0.201910030158'
-    compile 'extra:org.palladiosimulator.experimentautomation.application.tooladapter.simulizar:1.0.0.201910030158'
-    compile 'extra:org.palladiosimulator.experimentautomation.examples.espresso:1.0.0.201910030158'
     compile 'extra:org.palladiosimulator.mdsdprofiles.api:1.0.1.201910030036'
     compile 'extra:org.palladiosimulator.mdsdprofiles.ui:1.0.1.201910030036'
     compile 'extra:org.palladiosimulator.mdsdprofiles:1.0.1.201910030036'
@@ -160,14 +154,8 @@ dependencies {
     compile 'extra:org.palladiosimulator.metricspec:1.0.3.201910030036'
     compile 'extra:org.palladiosimulator.monitorrepository.map:1.0.0.201910030104'
     compile 'extra:org.palladiosimulator.pcm.edp2.measuringpoint:1.0.0.201910030052'
-    compile 'extra:org.palladiosimulator.pcm.help:2.1.0.201910030052'
     compile 'extra:org.palladiosimulator.pcm.resources:4.0.0.201910030052'
-    compile 'extra:org.palladiosimulator.pcm.ui:2.0.0.201910030052'
-    compile 'extra:org.palladiosimulator.probeframework.probes.example:2.0.0.201910030052'
     compile 'extra:org.palladiosimulator.probeframework:2.0.2.201910030052'
-    compile 'extra:org.palladiosimulator.protocom.framework.java.ee:4.1.0.201910030122'
-    compile 'extra:org.palladiosimulator.protocom.framework.java.se:4.1.0.201910030122'
-    compile 'extra:org.palladiosimulator.protocom:4.1.0.201910030122'
     compile 'extra:org.palladiosimulator.qes:1.0.0.201910030125'
     compile 'extra:org.palladiosimulator.qualitymodel:1.0.0.201910030125'
     compile 'extra:org.palladiosimulator.recorderframework.edp2:2.0.2.201910030057'
@@ -192,8 +180,6 @@ dependencies {
     compile 'extra:org.palladiosimulator.simulizar.reconfigurationrule:0.1.0.201910030122'
     compile 'extra:org.palladiosimulator.simulizar.runtimemeasurement:2.0.0.201910030122'
     compile 'extra:org.palladiosimulator.simulizar.slidingwindow:1.0.0.201910030122'
-    compile 'extra:org.palladiosimulator.simulizar.ui.perspective:1.0.0.201910030122'
-    compile 'extra:org.palladiosimulator.simulizar.ui:2.0.0.201910030122'
     compile 'extra:org.palladiosimulator.simulizar.utilization:1.0.1.201910030122'
     compile 'extra:org.palladiosimulator.simulizar:2.1.0.201910030122'
     compile 'extra:org.palladiosimulator.solver.context:4.1.0.201910030114'
@@ -211,5 +197,19 @@ dependencies {
     compile 'extra:org.slf4j.impl.log4j12:1.7.2.v20131105-2200'
 
     compile 'extra:tools.descartes.dlim.generator:0.15.9.201606230914'
+    
+    // SIMUCOM
+    compile 'extra:com.google.inject:3.0.0.v201605172100'
+    compile 'extra:javax.inject:1.0.0.v20091030'
+    
+    compile 'extra:org.eclipse.xtend:2.2.0.v201605260315'
+    compile 'extra:org.eclipse.xtend.standalone:2.19.0.v20190902-1150'
+    compile 'extra:org.eclipse.xtend.core:2.19.0.v20190902-1150'
+    compile 'extra:org.eclipse.xtend.lib:2.19.0.v20190902-0728'
+    compile 'extra:org.eclipse.xtend.lib.macro:2.19.0.v20190902-0728'
+    compile 'extra:org.eclipse.xtend.typesystem.emf:2.2.0.v201605260315'
+    
+    compile 'extra:org.eclipse.xtext.xbase:2.19.0.v20190902-0952'
+    compile 'extra:org.eclipse.xtext.xbase.lib:2.19.0.v20190902-0728'
 
 }

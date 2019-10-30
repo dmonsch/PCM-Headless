@@ -9,6 +9,7 @@ import org.pcm.headless.agent.transform.impl.ExtensionHelperHook;
 import org.pcm.headless.agent.transform.impl.PreferencesHelperTransformer;
 import org.pcm.headless.agent.transform.impl.RecorderExtensionHelperTransformer;
 import org.pcm.headless.agent.transform.impl.SchedulingFactoryTransformer;
+import org.pcm.headless.agent.transform.impl.XTendTransformTransformer;
 
 /**
  * Java agent entry point which is used to delegate the transformation of the
@@ -32,6 +33,8 @@ public class EclipsePluginTransformerAgent {
 				new SchedulingFactoryTransformer());
 		classTransformerMapping.put("org.palladiosimulator.recorderframework.utils.RecorderExtensionHelper",
 				new RecorderExtensionHelperTransformer());
+		classTransformerMapping.put("de.uka.ipd.sdq.codegen.simucontroller.workflow.jobs.XtendTransformPCMToCodeJob",
+				new XTendTransformTransformer());
 	}
 
 	/**
