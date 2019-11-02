@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 
 import javax.measure.unit.UnitFormat;
 
+import org.apache.commons.lang3.tuple.Pair;
 import org.palladiosimulator.edp2.dao.MeasurementsDaoRegistry;
 import org.palladiosimulator.edp2.models.ExperimentData.DataSeries;
 import org.palladiosimulator.edp2.models.ExperimentData.DoubleBinaryMeasurements;
@@ -16,12 +17,14 @@ import org.palladiosimulator.edp2.models.ExperimentData.Measurement;
 import org.palladiosimulator.edp2.models.ExperimentData.MeasurementRange;
 import org.palladiosimulator.edp2.models.Repository.LocalMemoryRepository;
 import org.palladiosimulator.edp2.models.measuringpoint.MeasuringPoint;
+import org.palladiosimulator.edp2.models.measuringpoint.StringMeasuringPoint;
 import org.palladiosimulator.metricspec.MetricDescription;
 import org.palladiosimulator.pcmmeasuringpoint.ActiveResourceMeasuringPoint;
 import org.palladiosimulator.pcmmeasuringpoint.AssemblyOperationMeasuringPoint;
 import org.palladiosimulator.pcmmeasuringpoint.EntryLevelSystemCallMeasuringPoint;
 import org.palladiosimulator.pcmmeasuringpoint.ExternalCallActionMeasuringPoint;
 import org.palladiosimulator.pcmmeasuringpoint.LinkingResourceMeasuringPoint;
+import org.palladiosimulator.pcmmeasuringpoint.UsageScenarioMeasuringPoint;
 import org.pcm.headless.shared.data.results.AbstractMeasureValue;
 import org.pcm.headless.shared.data.results.DoubleMeasureValue;
 import org.pcm.headless.shared.data.results.InMemoryResultRepository;
@@ -40,7 +43,7 @@ import lombok.extern.java.Log;
 @Log
 public class InMemoryRepositoryReader {
 
-	public InMemoryResultRepository converRepository(LocalMemoryRepository org) {
+	public InMemoryResultRepository convertRepository(LocalMemoryRepository org) {
 		InMemoryResultRepository repo = new InMemoryResultRepository();
 
 		for (ExperimentGroup group : org.getExperimentGroups()) {
@@ -123,11 +126,10 @@ public class InMemoryRepositoryReader {
 		return conv;
 	}
 
+	// maybe this should be separated into multiple methods
 	private PlainMeasuringPoint convertMeasuringPoint(MeasuringPoint belongingPoint) {
 		PlainMeasuringPoint conv = new PlainMeasuringPoint();
 		conv.setStringRepresentation(belongingPoint.getStringRepresentation());
-
-		java.lang.System.out.println(belongingPoint.getClass().getName());
 
 		if (belongingPoint instanceof EntryLevelSystemCallMeasuringPoint) {
 			conv.setType(MeasuringPointType.ENTRY_LEVEL_CALL);
@@ -135,6 +137,9 @@ public class InMemoryRepositoryReader {
 		} else if (belongingPoint instanceof ActiveResourceMeasuringPoint) {
 			conv.setType(MeasuringPointType.ACTIVE_RESURCE);
 			conv.setSourceId(((ActiveResourceMeasuringPoint) belongingPoint).getActiveResource().getId());
+		} else if (belongingPoint instanceof UsageScenarioMeasuringPoint) {
+			conv.setType(MeasuringPointType.USAGE_SCENARIO);
+			conv.setSourceId(((UsageScenarioMeasuringPoint) belongingPoint).getUsageScenario().getId());
 		} else if (belongingPoint instanceof LinkingResourceMeasuringPoint) {
 			conv.setType(MeasuringPointType.LINKING_RESURCE);
 			conv.setSourceId(((LinkingResourceMeasuringPoint) belongingPoint).getLinkingResource().getId());
@@ -147,6 +152,12 @@ public class InMemoryRepositoryReader {
 		} else if (belongingPoint instanceof ExternalCallActionMeasuringPoint) {
 			conv.setType(MeasuringPointType.EXTERNAL_CALL);
 			conv.setSourceId(((ExternalCallActionMeasuringPoint) belongingPoint).getExternalCall().getId());
+		} else if (belongingPoint instanceof StringMeasuringPoint) {
+			String measuringPointString = ((StringMeasuringPoint) belongingPoint).getMeasuringPoint();
+			Pair<List<String>, MeasuringPointType> extractedData = RepositoryReaderUtil
+					.extractMeasuringPointDataFromString(measuringPointString);
+			conv.setSourceIds(extractedData.getLeft());
+			conv.setType(extractedData.getRight());
 		} else {
 			log.warning(
 					"Could not resolve type of measuring point (class = " + belongingPoint.getClass().getName() + ").");

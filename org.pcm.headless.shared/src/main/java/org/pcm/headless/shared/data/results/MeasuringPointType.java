@@ -3,7 +3,7 @@ package org.pcm.headless.shared.data.results;
 public enum MeasuringPointType {
 
 	ENTRY_LEVEL_CALL("entry"), ACTIVE_RESURCE("activer"), LINKING_RESURCE("linkr"), ASSEMBLY_OPERATION("ass_op"),
-	EXTERNAL_CALL("ext_call");
+	EXTERNAL_CALL("ext_call"), USAGE_SCENARIO("usagesc"), UNKNOWN("unknown");
 
 	private String name;
 

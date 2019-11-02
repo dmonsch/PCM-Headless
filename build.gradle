@@ -9,6 +9,7 @@ allprojects {
 	repositories {
     	jcenter()
    		maven {url project.rootDir.toString() + "/mvn-supplemental/mvn-repo"}
+   		maven{url "https://repo.gradle.org/gradle/libs-releases-local/"}
 	}
 
 	dependencies {

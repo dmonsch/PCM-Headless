@@ -4,12 +4,15 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
+import java.util.Optional;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.pcm.headless.core.data.ReflectiveInMemoryRepositoryReader;
 import org.pcm.headless.core.simulator.AbstractHeadlessSimulator;
 
 import de.uka.ipd.sdq.codegen.simucontroller.runconfig.SimuComWorkflowConfiguration;
@@ -24,6 +27,9 @@ public class SimuComHeadlessSimulator extends AbstractHeadlessSimulator {
 	private static final String GRADLE_SETTINGS_RESOURCE = "/simucom/settings.gradle";
 
 	private static final String DEPENDENCIES_RESOURCE = "/simucom/dependencies.zip";
+	private static final String MODELS_RESOURCE = "/simucom/models.zip";
+
+	private static final String MODELS_PATH = "src" + File.separator + "main" + File.separator + "resources";
 
 	private static final String INITIALIZER_PACKAGE_PATH = "agent" + File.separator + "main" + File.separator
 			+ "Initializer.java";
@@ -68,11 +74,13 @@ public class SimuComHeadlessSimulator extends AbstractHeadlessSimulator {
 		}
 
 		// copy build.gradle & settings.gradle to outside
-		File destinationBuildGradle = new File(new File(simulationConfig.getSimuComStoragePath()), "build.gradle");
-		File destinationSettingsGradle = new File(new File(simulationConfig.getSimuComStoragePath()),
-				"settings.gradle");
-		File destinationInitializer = new File(new File(simulationConfig.getSimuComStoragePath()),
+		File projectBasePath = new File(simulationConfig.getSimuComStoragePath());
+		File destinationBuildGradle = new File(projectBasePath, "build.gradle");
+		File destinationSettingsGradle = new File(projectBasePath, "settings.gradle");
+		File destinationInitializer = new File(projectBasePath,
 				"src" + File.separator + "main" + File.separator + "java" + File.separator + INITIALIZER_PACKAGE_PATH);
+		File destionationModels = new File(projectBasePath, MODELS_PATH);
+		destionationModels.mkdirs();
 
 		try {
 			Files.copy(SimuComHeadlessSimulator.class.getResourceAsStream(GRADLE_BUILD_RESOURCE),
@@ -81,7 +89,9 @@ public class SimuComHeadlessSimulator extends AbstractHeadlessSimulator {
 					destinationSettingsGradle.toPath(), StandardCopyOption.REPLACE_EXISTING);
 
 			// extract repository to outside
-			extractRepository(new File(simulationConfig.getSimuComStoragePath()));
+			extractRepository(SimuComHeadlessSimulator.class.getResourceAsStream(DEPENDENCIES_RESOURCE),
+					projectBasePath);
+			extractRepository(SimuComHeadlessSimulator.class.getResourceAsStream(MODELS_RESOURCE), destionationModels);
 
 			// add agent
 			destinationInitializer.getParentFile().mkdirs();
@@ -90,11 +100,23 @@ public class SimuComHeadlessSimulator extends AbstractHeadlessSimulator {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+
+		// build gradle project
+		File resultingJar = GradleJarBuilder.buildGradleProject(projectBasePath, Optional.empty());
+
+		// reflective trigger the simulation
+		ReflectiveSimulationInvoker invoker = new ReflectiveSimulationInvoker(resultingJar);
+		invoker.invokeSimulation(configurationMap);
+
+		// convert
+		ReflectiveInMemoryRepositoryReader reader = new ReflectiveInMemoryRepositoryReader();
+		reader.convertRepository(invoker.getResultRepository());
+
+		invoker.close();
 	}
 
-	private void extractRepository(File destDir) throws IOException {
-		ZipInputStream zipIn = new ZipInputStream(
-				SimuComHeadlessSimulator.class.getResourceAsStream(DEPENDENCIES_RESOURCE));
+	private void extractRepository(InputStream resource, File destDir) throws IOException {
+		ZipInputStream zipIn = new ZipInputStream(resource);
 		ZipEntry entry = zipIn.getNextEntry();
 		// iterates over entries in the zip file
 		while (entry != null) {

@@ -8,6 +8,9 @@ repositories {
 
 dependencies {
 	compile project(":org.pcm.headless.shared")
+	
+	// gradle
+	compile group: 'org.gradle', name: 'gradle-tooling-api', version: '5.6.3'
 
 	compile group: 'extra', name: 'desmoj', version: '2.0+'
 	

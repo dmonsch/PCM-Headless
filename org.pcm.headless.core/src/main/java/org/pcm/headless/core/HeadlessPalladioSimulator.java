@@ -45,7 +45,7 @@ public class HeadlessPalladioSimulator {
 		LocalMemoryRepository results = triggerSimulationRaw(modelConfig, simulationConfig, listeners, true);
 
 		// parse results
-		InMemoryResultRepository outResults = repositoryReader.converRepository(results);
+		InMemoryResultRepository outResults = repositoryReader.convertRepository(results);
 
 		cleanUp(results);
 
