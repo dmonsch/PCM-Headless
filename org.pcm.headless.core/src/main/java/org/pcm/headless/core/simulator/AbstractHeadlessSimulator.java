@@ -26,8 +26,8 @@ public abstract class AbstractHeadlessSimulator implements IHeadlessSimulator {
 	protected HeadlessModelConfig modelConfig;
 	protected HeadlessSimulationConfig simulationConfig;
 	protected Map<String, Object> configurationMap;
-
 	private LocalMemoryRepository repository;
+
 	// otherwise we dont use the initially loaded items
 	private boolean firstCall = true;
 

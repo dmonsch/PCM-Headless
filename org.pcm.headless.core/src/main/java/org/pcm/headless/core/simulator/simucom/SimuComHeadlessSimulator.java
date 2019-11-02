@@ -1,18 +1,21 @@
 package org.pcm.headless.core.simulator.simucom;
 
 import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.pcm.headless.core.data.ReflectiveInMemoryRepositoryReader;
 import org.pcm.headless.core.simulator.AbstractHeadlessSimulator;
 
 import de.uka.ipd.sdq.codegen.simucontroller.runconfig.SimuComWorkflowConfiguration;
@@ -29,11 +32,14 @@ public class SimuComHeadlessSimulator extends AbstractHeadlessSimulator {
 	private static final String DEPENDENCIES_RESOURCE = "/simucom/dependencies.zip";
 	private static final String MODELS_RESOURCE = "/simucom/models.zip";
 
-	private static final String MODELS_PATH = "src" + File.separator + "main" + File.separator + "resources";
+	private static final String JAVA_AGENT_RESOURCES = "/simucom/java/";
 
-	private static final String INITIALIZER_PACKAGE_PATH = "agent" + File.separator + "main" + File.separator
-			+ "Initializer.java";
+	private static final String MODELS_PATH = "src" + File.separator + "main" + File.separator + "resources";
+	private static final String SOURCES_PATH = "src" + File.separator + "main" + File.separator + "java";
+
 	private static final String INITIALIZER_CODE_RESOURCE = "/simucom/Initializer.txt";
+
+	private static final Pattern PACKAGE_PATTERN = Pattern.compile("package (.*);");
 
 	private SimuComWorkflowConfiguration workflowConfiguration;
 
@@ -77,8 +83,6 @@ public class SimuComHeadlessSimulator extends AbstractHeadlessSimulator {
 		File projectBasePath = new File(simulationConfig.getSimuComStoragePath());
 		File destinationBuildGradle = new File(projectBasePath, "build.gradle");
 		File destinationSettingsGradle = new File(projectBasePath, "settings.gradle");
-		File destinationInitializer = new File(projectBasePath,
-				"src" + File.separator + "main" + File.separator + "java" + File.separator + INITIALIZER_PACKAGE_PATH);
 		File destionationModels = new File(projectBasePath, MODELS_PATH);
 		destionationModels.mkdirs();
 
@@ -93,10 +97,35 @@ public class SimuComHeadlessSimulator extends AbstractHeadlessSimulator {
 					projectBasePath);
 			extractRepository(SimuComHeadlessSimulator.class.getResourceAsStream(MODELS_RESOURCE), destionationModels);
 
-			// add agent
-			destinationInitializer.getParentFile().mkdirs();
-			Files.copy(SimuComHeadlessSimulator.class.getResourceAsStream(INITIALIZER_CODE_RESOURCE),
-					destinationInitializer.toPath(), StandardCopyOption.REPLACE_EXISTING);
+			// add agent files dynamically
+			PathMatchingResourceResolver resourceResolver = new PathMatchingResourceResolver();
+			resourceResolver.getResourceFiles(JAVA_AGENT_RESOURCES).forEach(ja -> {
+				InputStream resourceInputStream = getClass().getResourceAsStream(JAVA_AGENT_RESOURCES + ja);
+				String packageName = getPackageName(resourceInputStream);
+				String[] pckgSplit = packageName.split("\\.");
+				String currentString = SOURCES_PATH;
+				for (String pckgPart : pckgSplit) {
+					currentString += File.separator + pckgPart;
+				}
+
+				String[] fileNameSplit = ja.split("\\.");
+				String fileNameConcat = "";
+				for (int i = 0; i < fileNameSplit.length - 1; i++) {
+					fileNameConcat += fileNameSplit[i] + ".";
+				}
+				fileNameConcat = fileNameConcat.substring(0, fileNameConcat.length() - 1);
+
+				currentString += File.separator + fileNameConcat;
+
+				File destinationFile = new File(projectBasePath, currentString);
+				destinationFile.mkdirs();
+				try {
+					resourceInputStream = getClass().getResourceAsStream(JAVA_AGENT_RESOURCES + ja);
+					Files.copy(resourceInputStream, destinationFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			});
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -108,11 +137,21 @@ public class SimuComHeadlessSimulator extends AbstractHeadlessSimulator {
 		ReflectiveSimulationInvoker invoker = new ReflectiveSimulationInvoker(resultingJar);
 		invoker.invokeSimulation(configurationMap);
 
-		// convert
-		ReflectiveInMemoryRepositoryReader reader = new ReflectiveInMemoryRepositoryReader();
-		reader.convertRepository(invoker.getResultRepository());
-
 		invoker.close();
+	}
+
+	private String getPackageName(InputStream sourceFile) {
+		try (BufferedReader reader = new BufferedReader(new InputStreamReader(sourceFile))) {
+			String pckgLine = reader.readLine();
+			Matcher pckgMatcher = PACKAGE_PATTERN.matcher(pckgLine);
+			if (pckgMatcher.find()) {
+				return pckgMatcher.group(1).trim();
+			} else {
+				return null;
+			}
+		} catch (IOException e) {
+			return null;
+		}
 	}
 
 	private void extractRepository(InputStream resource, File destDir) throws IOException {

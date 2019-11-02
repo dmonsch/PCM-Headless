@@ -63,6 +63,7 @@ public class ReflectionUtil {
 		try {
 			return Class.forName(className, true, loader);
 		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
 			return null;
 		}
 	}

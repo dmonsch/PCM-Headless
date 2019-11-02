@@ -90,7 +90,6 @@ dependencies {
     compile 'extra:de.uka.ipd.sdq.units:2.1.1.201910030029'
     compile 'extra:de.uka.ipd.sdq.workflow.launchconfig:2.2.3.201910030036'
     compile 'extra:de.uka.ipd.sdq.workflow.logging.console:2.2.3.201910030036'
-    compile 'extra:de.uka.ipd.sdq.workflow.ui:2.2.3.201910030036'
     compile 'extra:edu.kit.ipd.are.dsexplore.featurecompletions.weaver:1.0.0.201910030125'
     compile 'extra:edu.kit.ipd.sdq.pcm.simulation.scheduler.exact:4.1.0.201910030122'
     
@@ -105,7 +104,6 @@ dependencies {
     compile 'extra:org.eclipse.emf.ant:2.11.0.v20190418-1022'
     compile 'extra:org.eclipse.emf.cdo.common:4.7.0.v20180529-1130'
     compile 'extra:org.eclipse.emf.cdo:4.6.100.v20180529-1130'
-    compile 'extra:org.eclipse.emf.common.ui:2.18.0.v20190507-0402'
     compile 'extra:org.eclipse.emf.common:2.16.0.v20190625-1131'
     compile 'extra:org.eclipse.emf.databinding:1.5.0.v20180706-1146'
     compile 'extra:org.eclipse.emf.ecore.change:2.14.0.v20190528-0725'
@@ -141,16 +139,13 @@ dependencies {
     compile 'extra:org.palladiosimulator.edp2.batchexport:1.0.0.201910030048'
     compile 'extra:org.palladiosimulator.edp2.dao:1.0.0.201910030048'
     compile 'extra:org.palladiosimulator.edp2.datastream:1.0.0.201910030048'
-    compile 'extra:org.palladiosimulator.edp2.distancemetrics.ui:1.0.0.201910030048'
     compile 'extra:org.palladiosimulator.edp2.distancemetrics:1.0.0.201910030048'
     compile 'extra:org.palladiosimulator.edp2.filter.exponentialsmoothing:1.0.0.201910030048'
     compile 'extra:org.palladiosimulator.edp2.repository.local:1.0.0.201910030048'
-    compile 'extra:org.palladiosimulator.edp2.ui:1.0.0.201910030048'
     compile 'extra:org.palladiosimulator.edp2.util:1.0.0.201910030048'
     compile 'extra:org.palladiosimulator.edp2:2.0.0.201910030048'
     compile 'extra:org.palladiosimulator.experimentanalysis:1.0.0.201910030104'
     compile 'extra:org.palladiosimulator.mdsdprofiles.api:1.0.1.201910030036'
-    compile 'extra:org.palladiosimulator.mdsdprofiles.ui:1.0.1.201910030036'
     compile 'extra:org.palladiosimulator.mdsdprofiles:1.0.1.201910030036'
     compile 'extra:org.palladiosimulator.measurementframework:1.0.1.201910030042'
     compile 'extra:org.palladiosimulator.metricspec.resources:1.0.3.201910030036'
@@ -216,3 +211,21 @@ dependencies {
     compile 'extra:org.eclipse.xtext.xbase.lib:2.19.0.v20190902-0728'
 
 }
+
+task copyTask(type: Copy) {
+	from("src/main/java/agent/main/mock")
+	into ("src/main/resources/simucom/java/")
+	include("Initializer.java")
+	rename '(.*).java', '$1.java.txt'
+	dependsOn "copyTaskSub"
+	filter { line -> line.replaceAll('package agent.main.mock;', 'package agent.main;') }
+}
+
+task copyTaskSub(type: Copy) {
+	from("src/main/java/org/pcm/headless/core/data")
+	into ("src/main/resources/simucom/java/")
+	include("InMemoryRepositoryReader.java", "RepositoryReaderUtil.java")
+	rename '(.*).java', '$1.java.txt'
+}
+
+build.dependsOn copyTask
