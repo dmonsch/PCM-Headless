@@ -13,7 +13,6 @@ public class HeadlessClientTestCoCoME {
 	public static void main(String[] args) {
 		PCMHeadlessClient client = new PCMHeadlessClient("http://127.0.0.1:8080/");
 		if (client.isReachable(3000)) {
-			client.clear();
 			System.out.println("Backend erreichbar.");
 
 			File allocationFile = new File("examples/cocome/cocome.allocation");
@@ -36,7 +35,7 @@ public class HeadlessClientTestCoCoME {
 			sim.setResourceEnvironment(resourceEnvironmentFile);
 			sim.setMonitorRepository(monitorRepositoryFile);
 
-			sim.setSimulationConfig(HeadlessSimulationConfig.builder().type(ESimulationType.SIMUCOM).repetitions(1)
+			sim.setSimulationConfig(HeadlessSimulationConfig.builder().type(ESimulationType.SIMUCOM).repetitions(20)
 					.experimentName("CoCoME Simulation").build());
 
 			sim.createTransitiveClosure();

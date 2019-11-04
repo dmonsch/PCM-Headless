@@ -1,10 +1,10 @@
 package org.pcm.headless.core.progress;
 
+import org.pcm.headless.core.simulator.ISimulationResults;
+
 public interface ISimulationProgressListener {
 
-	public void processed();
-
-	public void finished();
+	public void finished(ISimulationResults results);
 
 	public void finishedRepetition();
 

@@ -9,6 +9,9 @@ import java.util.Map;
 
 import org.pcm.headless.core.util.ReflectionUtil;
 
+import lombok.extern.java.Log;
+
+@Log
 public class ReflectiveSimulationInvoker {
 	private static final String AGENT_MAIN_CLASS = "agent.main.Initializer";
 
@@ -38,7 +41,7 @@ public class ReflectiveSimulationInvoker {
 		try {
 			classloader.close();
 		} catch (IOException e) {
-			e.printStackTrace();
+			log.warning("Could not close a classloader properly.");
 		}
 	}
 
@@ -47,7 +50,7 @@ public class ReflectiveSimulationInvoker {
 			return new URLClassLoader(new URL[] { jar.toURI().toURL() },
 					ReflectiveSimulationInvoker.class.getClassLoader());
 		} catch (MalformedURLException e) {
-			e.printStackTrace();
+			log.warning("Could not create a child classloader from the SimuCom jar.");
 			return null;
 		}
 	}

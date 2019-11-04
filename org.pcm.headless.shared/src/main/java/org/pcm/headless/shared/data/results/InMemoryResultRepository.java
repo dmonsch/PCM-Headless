@@ -20,4 +20,8 @@ public class InMemoryResultRepository {
 		this.values.add(new KeyValuePair<>(bundle, series));
 	}
 
+	public void merge(InMemoryResultRepository other) {
+		values.addAll(other.values);
+	}
+
 }

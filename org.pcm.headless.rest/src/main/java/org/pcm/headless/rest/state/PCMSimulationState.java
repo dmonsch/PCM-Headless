@@ -8,6 +8,7 @@ import java.nio.file.StandardCopyOption;
 
 import org.apache.commons.io.FileUtils;
 import org.pcm.headless.core.progress.ISimulationProgressListener;
+import org.pcm.headless.core.simulator.ISimulationResults;
 import org.pcm.headless.shared.data.ESimulationPart;
 import org.pcm.headless.shared.data.ESimulationState;
 import org.pcm.headless.shared.data.config.HeadlessModelConfig;
@@ -64,19 +65,13 @@ public class PCMSimulationState implements ISimulationProgressListener {
 	}
 
 	@Override
-	public void finished() {
-		this.state = ESimulationState.EXECUTED;
+	public void finished(ISimulationResults results) {
 	}
 
 	@Override
 	public synchronized void finishedRepetition() {
 		this.state = ESimulationState.RUNNING;
 		this.repetitionProgress++;
-	}
-
-	@Override
-	public void processed() {
-		this.state = ESimulationState.FINISHED;
 	}
 
 	public void injectFile(MultipartFile file, ESimulationPart part) {

@@ -1,6 +1,5 @@
 package org.pcm.headless.core.simulator;
 
-import org.palladiosimulator.edp2.models.Repository.LocalMemoryRepository;
 import org.pcm.headless.shared.data.config.HeadlessModelConfig;
 import org.pcm.headless.shared.data.config.HeadlessSimulationConfig;
 
@@ -8,10 +7,16 @@ public interface IHeadlessSimulator {
 
 	public void initialize(HeadlessModelConfig models, HeadlessSimulationConfig simulationConfig);
 
-	public void prepareRepetition();
+	public void onceBefore();
 
-	public void executeRepetition();
+	public RepetitionData beforeRepetition();
 
-	public LocalMemoryRepository getResults();
+	public void executeRepetition(RepetitionData data);
+
+	public void afterRepetition(RepetitionData data);
+
+	public void onceAfter();
+
+	public ISimulationResults getResults();
 
 }

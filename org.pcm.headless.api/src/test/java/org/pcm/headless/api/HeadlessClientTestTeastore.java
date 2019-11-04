@@ -4,6 +4,7 @@ import java.io.File;
 
 import org.pcm.headless.api.client.PCMHeadlessClient;
 import org.pcm.headless.api.client.SimulationClient;
+import org.pcm.headless.shared.data.ESimulationType;
 import org.pcm.headless.shared.data.config.HeadlessSimulationConfig;
 
 public class HeadlessClientTestTeastore {
@@ -26,7 +27,8 @@ public class HeadlessClientTestTeastore {
 			sim.setResourceEnvironment(resourceEnvironmentFile);
 			sim.setMonitorRepository(monitorRepositoryFile);
 
-			sim.setSimulationConfig(HeadlessSimulationConfig.builder().repetitions(1).build());
+			sim.setSimulationConfig(HeadlessSimulationConfig.builder().type(ESimulationType.SIMUCOM)
+					.experimentName("TeaStore Simulation").repetitions(10).build());
 
 			sim.createTransitiveClosure();
 			sim.sync();

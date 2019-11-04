@@ -19,6 +19,7 @@ import java.util.stream.Stream;
 import org.apache.commons.io.FileUtils;
 import org.pcm.headless.core.HeadlessPalladioSimulator;
 import org.pcm.headless.core.progress.ISimulationProgressListener;
+import org.pcm.headless.core.simulator.ISimulationResults;
 import org.pcm.headless.rest.data.SimulationStateSummary;
 import org.pcm.headless.rest.data.StateSummary;
 import org.pcm.headless.rest.state.PCMSimulationState;
@@ -58,6 +59,7 @@ public class RestInterface implements InitializingBean {
 	private HeadlessPalladioSimulator executor;
 	private ObjectMapper objectMapper;
 	private ScheduledExecutorService executorService;
+	private ScheduledExecutorService repetitionService;
 
 	// queue
 	private LinkedList<PCMSimulationState> readySimulations;
@@ -74,6 +76,12 @@ public class RestInterface implements InitializingBean {
 
 	@Value("${clearEnabled:true}")
 	private boolean clearEnabled;
+
+	@Value("${parallelRepetitionsEnabled:true}")
+	private boolean parallelRepetitionsEnabled;
+
+	@Value("${concurrentRepetitions:1}")
+	private int concurrentRepetitions;
 
 	@GetMapping("/clear")
 	public synchronized String clear() {
@@ -92,6 +100,7 @@ public class RestInterface implements InitializingBean {
 
 			this.executorService.shutdownNow();
 			this.executorService = Executors.newScheduledThreadPool(concurrentSimulations);
+			this.repetitionService = Executors.newScheduledThreadPool(concurrentRepetitions);
 		}
 
 		return "{}";
@@ -139,7 +148,11 @@ public class RestInterface implements InitializingBean {
 			try {
 				HeadlessSimulationConfig simConfig = objectMapper.readValue(configJson, HeadlessSimulationConfig.class);
 				if (simConfig.getType() == ESimulationType.SIMUCOM) {
+					simConfig.setParallelizeRepetitions(false);
 					simConfig.setSimuComStoragePath(new File(state.getParentFolder(), "simucom").getAbsolutePath());
+				}
+				if (!parallelRepetitionsEnabled) {
+					simConfig.setParallelizeRepetitions(false);
 				}
 				state.setSimConfig(simConfig);
 			} catch (JsonProcessingException e) {
@@ -234,31 +247,30 @@ public class RestInterface implements InitializingBean {
 
 			// create new listeners
 			ISimulationProgressListener list = new ISimulationProgressListener() {
-				@Override
-				public void processed() {
-					finishedSimulations.add(removeFromQueue);
-					trimFinishedQueue();
-					clearHTMLFiles();
-				}
 
 				@Override
 				public void finishedRepetition() {
 				}
 
 				@Override
-				public void finished() {
+				public void finished(ISimulationResults results) {
 					runningSimulations.remove(removeFromQueue);
+
+					removeFromQueue.setState(ESimulationState.FINISHED);
+					resultMapping.put(removeFromQueue.getId(), results.getConvertedRepository());
+					removeFromQueue.setState(ESimulationState.EXECUTED);
+
+					finishedSimulations.add(removeFromQueue);
+					trimFinishedQueue();
+					clearHTMLFiles();
 				}
 			};
 
 			// start one
 			this.executorService.submit(() -> {
 				try {
-					InMemoryResultRepository resultRepository = this.executor.triggerSimulation(
-							removeFromQueue.getModelConfig(), removeFromQueue.getSimConfig(),
-							Lists.newArrayList(removeFromQueue, list));
-					resultMapping.put(removeFromQueue.getId(), resultRepository);
-					removeFromQueue.setState(ESimulationState.EXECUTED);
+					this.executor.triggerSimulation(removeFromQueue.getModelConfig(), removeFromQueue.getSimConfig(),
+							Lists.newArrayList(removeFromQueue, list), repetitionService);
 				} catch (Exception e) {
 					e.printStackTrace();
 					runningSimulations.remove(removeFromQueue);

@@ -1,21 +1,21 @@
 package org.pcm.headless.core;
 
 import java.util.List;
-import java.util.stream.IntStream;
+import java.util.concurrent.ScheduledExecutorService;
 
-import org.palladiosimulator.edp2.dao.exception.DataNotAccessibleException;
-import org.palladiosimulator.edp2.impl.RepositoryManager;
 import org.palladiosimulator.edp2.models.Repository.LocalMemoryRepository;
-import org.pcm.headless.core.data.InMemoryRepositoryReader;
 import org.pcm.headless.core.progress.ISimulationProgressListener;
 import org.pcm.headless.core.simulator.IHeadlessSimulator;
+import org.pcm.headless.core.simulator.ISimulationResults;
+import org.pcm.headless.core.simulator.RepetitionData;
 import org.pcm.headless.core.simulator.simucom.SimuComHeadlessSimulator;
 import org.pcm.headless.core.simulator.simulizar.SimuLizarHeadlessSimulator;
 import org.pcm.headless.core.util.PCMUtil;
 import org.pcm.headless.shared.data.ESimulationType;
 import org.pcm.headless.shared.data.config.HeadlessModelConfig;
 import org.pcm.headless.shared.data.config.HeadlessSimulationConfig;
-import org.pcm.headless.shared.data.results.InMemoryResultRepository;
+
+import com.google.common.collect.Lists;
 
 import lombok.extern.java.Log;
 
@@ -24,40 +24,21 @@ public class HeadlessPalladioSimulator {
 
 	private static boolean PCM_INITIALIZED = false;
 
-	private InMemoryRepositoryReader repositoryReader;
-
 	public HeadlessPalladioSimulator() {
 		if (!PCM_INITIALIZED) {
 			log.info("Initializing packages and loading PCM default models.");
 			PCMUtil.loadPCMModels();
 			PCM_INITIALIZED = true;
 		}
-		repositoryReader = new InMemoryRepositoryReader();
 	}
 
-	public InMemoryResultRepository triggerSimulation(HeadlessModelConfig modelConfig,
-			HeadlessSimulationConfig simulationConfig) {
-		return this.triggerSimulation(modelConfig, simulationConfig, null);
+	public void triggerSimulation(HeadlessModelConfig modelConfig, HeadlessSimulationConfig simulationConfig) {
+		this.triggerSimulation(modelConfig, simulationConfig, null, null);
 	}
 
-	public InMemoryResultRepository triggerSimulation(HeadlessModelConfig modelConfig,
-			HeadlessSimulationConfig simulationConfig, List<ISimulationProgressListener> listeners) {
-		LocalMemoryRepository results = triggerSimulationRaw(modelConfig, simulationConfig, listeners, true);
-
-		// parse results
-		InMemoryResultRepository outResults = repositoryReader.convertRepository(results);
-
-		cleanUp(results);
-
-		// tell all that we processed the results
-		if (listeners != null) {
-			listeners.forEach(l -> {
-				l.processed();
-			});
-		}
-
-		// return it
-		return outResults;
+	public void triggerSimulation(HeadlessModelConfig modelConfig, HeadlessSimulationConfig simulationConfig,
+			ScheduledExecutorService service) {
+		this.triggerSimulation(modelConfig, simulationConfig, null, service);
 	}
 
 	/**
@@ -75,43 +56,81 @@ public class HeadlessPalladioSimulator {
 	 * @param listeners
 	 * @return {@link LocalMemoryRepository} which contains the simulation data
 	 */
-	public LocalMemoryRepository triggerSimulationRaw(HeadlessModelConfig modelConfig,
-			HeadlessSimulationConfig simulationConfig, List<ISimulationProgressListener> listeners, boolean wait) {
+	public void triggerSimulation(HeadlessModelConfig modelConfig, HeadlessSimulationConfig simulationConfig,
+			List<ISimulationProgressListener> listeners, ScheduledExecutorService service) {
 		// 1. create belonging simulator
 		IHeadlessSimulator simulator = createSimulatorFromType(simulationConfig.getType());
 		simulator.initialize(modelConfig, simulationConfig);
 
-		// 2. execute multiple times
-		IntStream str = IntStream.range(0, simulationConfig.getRepetitions());
-		if (simulationConfig.isParallelizeRepetitions()) {
-			str = str.parallel();
-		}
+		// 2. once execution
+		simulator.onceBefore();
 
-		str.forEach(i -> {
-			// 3.1. prepare
-			simulator.prepareRepetition();
+		// 3. add own listener
+		final List<ISimulationProgressListener> listenersCopy = listeners;
 
-			// 3.2. execute
-			simulator.executeRepetition();
+		ISimulationProgressListener internListener = new ISimulationProgressListener() {
+			private volatile int reps = 0;
+			private final int freps = simulationConfig.getRepetitions();
 
-			// 3.3. inform
-			if (listeners != null) {
-				listeners.forEach(l -> l.finishedRepetition());
-			}
-		});
+			@Override
+			public synchronized void finishedRepetition() {
+				reps++;
+				if (reps == freps) {
+					// 4. once after
+					simulator.onceAfter();
 
-		// 4 inform
-		if (listeners != null) {
-			listeners.forEach(l -> {
-				l.finished();
-				if (!wait) {
-					l.processed(); // we completely finished
+					// 5 inform
+					listenersCopy.forEach(l -> {
+						l.finished(simulator.getResults());
+					});
 				}
-			});
+			}
+
+			@Override
+			public void finished(ISimulationResults results) {
+			}
+		};
+
+		if (listeners == null) {
+			listeners = Lists.newArrayList(internListener);
+		} else {
+			listeners.add(internListener);
 		}
 
-		// 5. return
-		return simulator.getResults();
+		if (!simulationConfig.isParallelizeRepetitions()) {
+			// no parallel execution
+			for (int i = 0; i < simulationConfig.getRepetitions(); i++) {
+				internSimulationProcess(simulator, listeners);
+			}
+		} else {
+			// use scheduler
+			for (int i = 0; i < simulationConfig.getRepetitions(); i++) {
+				service.submit(() -> {
+					try {
+						internSimulationProcess(simulator, listenersCopy);
+					} catch (Exception e) {
+						// we do not want the thread to die
+						listenersCopy.forEach(l -> l.finishedRepetition()); // otherwise we do not get the results
+					}
+				});
+			}
+		}
+	}
+
+	private void internSimulationProcess(IHeadlessSimulator simulator, List<ISimulationProgressListener> listeners) {
+		// 3.1. prepare
+		RepetitionData data = simulator.beforeRepetition();
+
+		// 3.2. execute
+		simulator.executeRepetition(data);
+
+		// 3.3. inform
+		if (listeners != null) {
+			listeners.forEach(l -> l.finishedRepetition());
+		}
+
+		// 3.4. after rep
+		simulator.afterRepetition(data);
 	}
 
 	private IHeadlessSimulator createSimulatorFromType(ESimulationType type) {
@@ -123,16 +142,6 @@ public class HeadlessPalladioSimulator {
 		default:
 			log.warning("Could not create the appropriate simulator.");
 			return null;
-		}
-	}
-
-	private void cleanUp(LocalMemoryRepository results) {
-		try {
-			results.close();
-		} catch (DataNotAccessibleException e) {
-			log.warning("The repository could not be closed. This may lead to a memory leak.");
-		} finally {
-			RepositoryManager.removeRepository(RepositoryManager.getCentralRepository(), results);
 		}
 	}
 
