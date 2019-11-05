@@ -77,7 +77,11 @@ public abstract class AbstractHeadlessSimulator implements IHeadlessSimulator {
 		collectedFiles.addAll(modelConfig.getAdditionals());
 
 		// load them into the resource set
-		collectedFiles.forEach(file -> partition.loadModel(URI.createFileURI(file.getAbsolutePath())));
+		collectedFiles.forEach(file -> {
+			if (file != null) {
+				partition.loadModel(URI.createFileURI(file.getAbsolutePath()));
+			}
+		});
 
 		// resolve proxies
 		partition.resolveAllProxies();

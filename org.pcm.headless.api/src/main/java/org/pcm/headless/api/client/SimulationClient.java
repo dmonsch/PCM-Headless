@@ -89,8 +89,10 @@ public class SimulationClient {
 		uploadModel(models.getResourceEnvironment(), ESimulationPart.RESOURCE_ENVIRONMENT);
 
 		// MONITOR REPO
-		MonitorRepositoryTransformer.makePersistable(models.getMonitorRepository());
-		uploadModel(models.getMonitorRepository(), ESimulationPart.MONITOR_REPOSITORY);
+		if (models.getMonitorRepository() != null) {
+			MonitorRepositoryTransformer.makePersistable(models.getMonitorRepository());
+			uploadModel(models.getMonitorRepository(), ESimulationPart.MONITOR_REPOSITORY);
+		}
 
 		// ADDITIONALS
 		this.models.getAdditionals().forEach(r -> {

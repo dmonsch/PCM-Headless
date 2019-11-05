@@ -35,7 +35,7 @@ public class HeadlessClientTestCoCoME {
 			sim.setResourceEnvironment(resourceEnvironmentFile);
 			sim.setMonitorRepository(monitorRepositoryFile);
 
-			sim.setSimulationConfig(HeadlessSimulationConfig.builder().type(ESimulationType.SIMUCOM).repetitions(20)
+			sim.setSimulationConfig(HeadlessSimulationConfig.builder().type(ESimulationType.SIMULIZAR).repetitions(10)
 					.experimentName("CoCoME Simulation").build());
 
 			sim.createTransitiveClosure();

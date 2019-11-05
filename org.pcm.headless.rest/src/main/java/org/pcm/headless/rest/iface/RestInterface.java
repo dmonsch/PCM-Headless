@@ -276,6 +276,7 @@ public class RestInterface implements InitializingBean {
 					runningSimulations.remove(removeFromQueue);
 					finishedSimulations.add(removeFromQueue);
 					removeFromQueue.setState(ESimulationState.FAILED);
+					clearHTMLFiles();
 				}
 			});
 

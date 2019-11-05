@@ -14,6 +14,8 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.pcm.headless.api.util.ModelUtil;
 
+import com.google.common.collect.Lists;
+
 public class TransitiveModelTransformer {
 	// base
 	private List<EObject> models;
@@ -75,8 +77,10 @@ public class TransitiveModelTransformer {
 
 		// add all ex models
 		for (EObject m : models) {
-			resourcesClosed.add(m.eResource());
-			resourceMapping.put(m.eResource().getURI(), m);
+			if (m != null) {
+				resourcesClosed.add(m.eResource());
+				resourceMapping.put(m.eResource().getURI(), m);
+			}
 		}
 
 		// first filter
@@ -119,6 +123,9 @@ public class TransitiveModelTransformer {
 	}
 
 	private List<EObject> allCrossReferences(EObject obj) {
+		if (obj == null) {
+			return Lists.newArrayList();
+		}
 		Set<EObject> references = new HashSet<>();
 
 		// direct ones
