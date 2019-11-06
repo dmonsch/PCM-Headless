@@ -24,7 +24,7 @@ public class HeadlessClientTestCoCoME {
 
 			MonitorRepositoryBuilderUtil monitorBuilder = new MonitorRepositoryBuilderUtil(repositoryFile, systemFile,
 					usageFile);
-			monitorBuilder.monitorServices().monitorUsageScenarios();
+			monitorBuilder.monitorExternalCalls().monitorUsageScenarios();
 			monitorBuilder.saveToFile(monitorRepositoryFile, new File("examples/cocome/cocome_gen.measuringpoint"));
 
 			SimulationClient sim = client.prepareSimulation();
@@ -35,7 +35,7 @@ public class HeadlessClientTestCoCoME {
 			sim.setResourceEnvironment(resourceEnvironmentFile);
 			sim.setMonitorRepository(monitorRepositoryFile);
 
-			sim.setSimulationConfig(HeadlessSimulationConfig.builder().type(ESimulationType.SIMULIZAR).repetitions(10)
+			sim.setSimulationConfig(HeadlessSimulationConfig.builder().type(ESimulationType.SIMULIZAR).repetitions(1)
 					.experimentName("CoCoME Simulation").build());
 
 			sim.createTransitiveClosure();

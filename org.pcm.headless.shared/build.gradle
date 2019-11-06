@@ -7,9 +7,11 @@ repositories {
 }
 
 dependencies {
+
 	// https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind
 	compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.10.0'
 	
 	// https://mvnrepository.com/artifact/com.google.guava/guava
-	compile group: 'com.google.guava', name: 'guava', version: '28.1-jre'
+	compile group: 'com.google.guava', name: 'guava-collections', version: 'r03'
+
 }

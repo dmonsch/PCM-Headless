@@ -127,6 +127,7 @@ public class InMemoryRepositoryReader {
 	}
 
 	// maybe this should be separated into multiple methods
+	// TODO add missing types
 	private PlainMeasuringPoint convertMeasuringPoint(MeasuringPoint belongingPoint) {
 		PlainMeasuringPoint conv = new PlainMeasuringPoint();
 		conv.setStringRepresentation(belongingPoint.getStringRepresentation());

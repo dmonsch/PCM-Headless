@@ -13,12 +13,10 @@ dependencies {
 	compile group: 'org.jscience', name: 'jscience', version: '4.3.1'
 	compile group: 'lpg.runtime', name: 'java', version: '2.0.17-v201004271640'
 	
-	compile 'extra:org.eclipse.core.runtime:3.16.0.v20190823-1314'
 	compile 'extra:org.eclipse.equinox.common:3.10.500.v20190815-1535'
 	compile 'org.antlr:antlr-runtime:3.5.2' 
 	
 	compile 'extra:org.eclipse.ocl.ecore:3.14.0.v20190910-0937'
-    compile 'extra:org.eclipse.ocl.pivot:1.9.0.v20190910-0937'
     compile 'extra:org.eclipse.ocl:3.10.400.v20190910-0937'
 	
 	compile 'extra:org.palladiosimulator.pcm:4.1.0.201910030052'
@@ -36,15 +34,23 @@ dependencies {
 	
 	compile 'extra:org.eclipse.net4j.util:3.8.0.v20180530-0909'
     compile 'extra:org.eclipse.net4j:4.7.0.v20180530-1201'
-	
-	compile 'extra:org.eclipse.emf.ant:2.11.0.v20190418-1022'
+    
     compile 'extra:org.eclipse.emf.cdo.common:4.7.0.v20180529-1130'
     compile 'extra:org.eclipse.emf.cdo:4.6.100.v20180529-1130'
-    compile 'extra:org.eclipse.emf.common.ui:2.18.0.v20190507-0402'
     compile 'extra:org.eclipse.emf.common:2.16.0.v20190625-1131'
-    compile 'extra:org.eclipse.emf.databinding:1.5.0.v20180706-1146'
-    compile 'extra:org.eclipse.emf.ecore.change:2.14.0.v20190528-0725'
     compile 'extra:org.eclipse.emf.ecore.xmi:2.16.0.v20190528-0725'
     compile 'extra:org.eclipse.emf.ecore:2.19.0.v20190822-1451'
     compile 'extra:org.eclipse.emf:2.8.0.v20180706-1146'
+}
+
+jar {
+	from {
+		configurations.runtime.collect({ it.isDirectory() ? it : zipTree(it) })
+	}
+	{
+		exclude 'META-INF/MANIFEST.MF'
+		exclude 'META-INF/*.SF'
+		exclude 'META-INF/*.DSA'
+		exclude 'META-INF/*.RSA'
+	}
 }
