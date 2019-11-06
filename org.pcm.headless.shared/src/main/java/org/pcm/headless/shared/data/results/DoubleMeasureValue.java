@@ -1,15 +1,12 @@
 package org.pcm.headless.shared.data.results;
 
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+
+@Data
+@EqualsAndHashCode(callSuper = true)
 public class DoubleMeasureValue extends AbstractMeasureValue {
 
-	private double value;
-
-	public double getValue() {
-		return value;
-	}
-
-	public void setValue(double value) {
-		this.value = value;
-	}
+	private double v;
 
 }

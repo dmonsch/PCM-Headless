@@ -5,7 +5,7 @@ import lombok.Data;
 @Data
 public class PlainDataMeasure {
 
-	private String unit;
-	private AbstractMeasureValue value;
+	private String u;
+	private AbstractMeasureValue v;
 
 }

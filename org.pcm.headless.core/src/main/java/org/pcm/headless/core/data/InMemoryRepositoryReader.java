@@ -92,8 +92,8 @@ public class InMemoryRepositoryReader {
 					String unit = UnitFormat.getInstance().format(m.getUnit());
 
 					PlainDataMeasure measure = new PlainDataMeasure();
-					measure.setUnit(unit);
-					measure.setValue(convertMeasureValue(m.getValue(), series.getClass()));
+					measure.setU(unit);
+					measure.setV(convertMeasureValue(m.getValue(), series.getClass()));
 
 					return measure;
 				}).collect(Collectors.toList());
@@ -105,11 +105,11 @@ public class InMemoryRepositoryReader {
 	private AbstractMeasureValue convertMeasureValue(Object value, Class<? extends DataSeries> class1) {
 		if (DoubleBinaryMeasurements.class.isAssignableFrom(class1)) {
 			DoubleMeasureValue val = new DoubleMeasureValue();
-			val.setValue((double) value);
+			val.setV((double) value);
 			return val;
 		} else if (LongBinaryMeasurements.class.isAssignableFrom(class1)) {
 			LongMeasureValue val = new LongMeasureValue();
-			val.setValue((long) value);
+			val.setV((long) value);
 			return val;
 		} else {
 			log.warning("Could not parse results of type " + class1.getName() + "!");

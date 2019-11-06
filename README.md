@@ -9,6 +9,8 @@ Supported simulation engines:
 - [x] SimuLizar
 - [ ] EventSim (not planned but maybe some future stuff)
 
+If you want to know more about how the headless simulations work you can click [here](https://github.com/dmonsch/PCM-Headless/wiki/How-it-works).
+
 # Setup
 In general, there are two different ways to use the headless implementation. The first and simpler method is the use of the prepared Docker Image in combination with the offered REST interface. The second possibility is the direct use of the Gradle projects and the source code.
 

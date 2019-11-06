@@ -238,6 +238,10 @@ public class RestInterface implements InitializingBean {
 
 		this.executorService = Executors.newScheduledThreadPool(concurrentSimulations);
 
+		if (this.clearEnabled) {
+			this.clear();
+		}
+
 		log.info("Initialized REST interface successfully.");
 	}
 
