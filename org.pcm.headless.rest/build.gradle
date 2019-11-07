@@ -1,20 +1,21 @@
 plugins {
-	id 'org.springframework.boot' version '2.1.9.RELEASE' apply false
+	id 'org.springframework.boot' version '2.1.9.RELEASE' apply true
 }
 
 apply plugin: 'java'
-apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
 
 repositories {
     jcenter()
 }
 
+version = '0.1.0'
+
 bootJar {
-	baseName = 'Headless-PCM-REST'
-	mainClassName = 'org.pcm.headless.rest.PCMHeadlessRestApplication'
-	// Exclude manifest signature files
+    baseName = 'PCM-Headless-REST'
+    mainClassName = 'org.pcm.headless.rest.PCMHeadlessRestApplication'
+    // Exclude manifest signature files
     exclude 'META-INF/*.SF', 'META-INF/*.DSA', 'META-INF/*.RSA', 'META-INF/LICENSE'
-    version = '0.1.0'
 }
 
 dependencies {

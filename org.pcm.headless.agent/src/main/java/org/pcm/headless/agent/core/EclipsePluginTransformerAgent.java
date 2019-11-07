@@ -88,7 +88,7 @@ public class EclipsePluginTransformerAgent {
 			transform(targetCls, targetClassLoader, instrumentation, transformer);
 			return;
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			// ex.printStackTrace();
 		}
 
 		// otherwise iterate all loaded classes and find what we want
@@ -100,7 +100,9 @@ public class EclipsePluginTransformerAgent {
 				return;
 			}
 		}
-		throw new RuntimeException("Failed to find class [" + className + "]");
+
+		// add it with no target
+		instrumentation.addTransformer(transformer, true);
 	}
 
 	private void transform(Class<?> clazz, ClassLoader classLoader, Instrumentation instrumentation,

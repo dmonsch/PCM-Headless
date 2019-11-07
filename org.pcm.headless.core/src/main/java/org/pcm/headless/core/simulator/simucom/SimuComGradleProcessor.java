@@ -12,8 +12,11 @@ import java.nio.file.StandardCopyOption;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
+
+import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 
 import lombok.extern.java.Log;
 
@@ -25,7 +28,7 @@ public class SimuComGradleProcessor {
 	private static final String GRADLE_SETTINGS_RESOURCE = "/simucom/settings.gradle";
 	private static final String DEPENDENCIES_RESOURCE = "/simucom/dependencies.zip";
 	private static final String MODELS_RESOURCE = "/simucom/models.zip";
-	private static final String JAVA_AGENT_RESOURCES = "/simucom/java/";
+	private static final String JAVA_AGENT_RESOURCES = "/simucom/java/*";
 	private static final String MODELS_PATH = "src" + File.separator + "main" + File.separator + "resources";
 	private static final String SOURCES_PATH = "src" + File.separator + "main" + File.separator + "java";
 
@@ -71,29 +74,29 @@ public class SimuComGradleProcessor {
 	}
 
 	private void addAgentFilesDynamically() throws IOException {
-		PathMatchingResourceResolver resourceResolver = new PathMatchingResourceResolver();
-		resourceResolver.getResourceFiles(JAVA_AGENT_RESOURCES).forEach(ja -> {
-			InputStream resourceInputStream = getClass().getResourceAsStream(JAVA_AGENT_RESOURCES + ja);
-			String packageName = getPackageName(resourceInputStream);
-			String[] pckgSplit = packageName.split("\\.");
-			String currentString = SOURCES_PATH;
-			for (String pckgPart : pckgSplit) {
-				currentString += File.separator + pckgPart;
-			}
-
-			String[] fileNameSplit = ja.split("\\.");
-			String fileNameConcat = "";
-			for (int i = 0; i < fileNameSplit.length - 1; i++) {
-				fileNameConcat += fileNameSplit[i] + ".";
-			}
-			fileNameConcat = fileNameConcat.substring(0, fileNameConcat.length() - 1);
-
-			currentString += File.separator + fileNameConcat;
-
-			File destinationFile = new File(projectBasePath, currentString);
-			destinationFile.mkdirs();
+		PathMatchingResourcePatternResolver resourceResolver = new PathMatchingResourcePatternResolver();
+		Stream.of(resourceResolver.getResources(JAVA_AGENT_RESOURCES)).forEach(ja -> {
 			try {
-				resourceInputStream = getClass().getResourceAsStream(JAVA_AGENT_RESOURCES + ja);
+				InputStream resourceInputStream = ja.getInputStream();
+				String packageName = getPackageName(resourceInputStream);
+				String[] pckgSplit = packageName.split("\\.");
+				String currentString = SOURCES_PATH;
+				for (String pckgPart : pckgSplit) {
+					currentString += File.separator + pckgPart;
+				}
+
+				String[] fileNameSplit = ja.getFilename().split("\\.");
+				String fileNameConcat = "";
+				for (int i = 0; i < fileNameSplit.length - 1; i++) {
+					fileNameConcat += fileNameSplit[i] + ".";
+				}
+				fileNameConcat = fileNameConcat.substring(0, fileNameConcat.length() - 1);
+
+				currentString += File.separator + fileNameConcat;
+
+				File destinationFile = new File(projectBasePath, currentString);
+				destinationFile.mkdirs();
+				resourceInputStream = ja.getInputStream();
 				Files.copy(resourceInputStream, destinationFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
 			} catch (IOException e) {
 				e.printStackTrace();

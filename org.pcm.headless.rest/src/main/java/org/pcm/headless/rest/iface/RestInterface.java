@@ -155,7 +155,7 @@ public class RestInterface implements InitializingBean {
 					simConfig.setParallelizeRepetitions(false);
 				}
 				state.setSimConfig(simConfig);
-			} catch (JsonProcessingException e) {
+			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		}

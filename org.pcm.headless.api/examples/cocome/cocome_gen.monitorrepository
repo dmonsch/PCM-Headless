@@ -1,521 +1,87 @@
 <?xml version="1.0" encoding="ASCII"?>
-<monitorrepository:MonitorRepository xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:metricspec="http://palladiosimulator.org/MetricSpec/1.0" xmlns:monitorrepository="http://palladiosimulator.org/MonitorRepository/1.0" xmlns:pcmmeasuringpoint="http://palladiosimulator.org/PCM/MeasuringPoint/1.0" id="_ux7jgP2cEem0KeOxAOGH_Q">
-  <monitors id="_uz-K4P2cEem0KeOxAOGH_Q">
-    <measurementSpecifications id="_uz-x8P2cEem0KeOxAOGH_Q">
+<monitorrepository:MonitorRepository xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:metricspec="http://palladiosimulator.org/MetricSpec/1.0" xmlns:monitorrepository="http://palladiosimulator.org/MonitorRepository/1.0" xmlns:pcmmeasuringpoint="http://palladiosimulator.org/PCM/MeasuringPoint/1.0" id="_HS4R0AFjEeq88NQvxyVUuA">
+  <monitors id="_HS9KUAFjEeq88NQvxyVUuA">
+    <measurementSpecifications id="_HS9KUQFjEeq88NQvxyVUuA">
       <metricDescription xsi:type="metricspec:NumericalBaseMetricDescription" href="pathmap://METRIC_SPEC_MODELS/commonMetrics.metricspec#_6rYmYs7nEeOX_4BzImuHbA"/>
-      <processingType xsi:type="monitorrepository:FeedThrough" id="_u04w4P2cEem0KeOxAOGH_Q"/>
+      <processingType xsi:type="monitorrepository:FeedThrough" id="_HT8o0AFjEeq88NQvxyVUuA"/>
     </measurementSpecifications>
-    <measuringPoint xsi:type="pcmmeasuringpoint:AssemblyOperationMeasuringPoint" href="cocome_gen.measuringpoint#//@measuringPoints.0"/>
+    <measuringPoint xsi:type="pcmmeasuringpoint:ExternalCallActionMeasuringPoint" href="cocome_gen.measuringpoint#//@measuringPoints.0"/>
   </monitors>
-  <monitors id="_u04w4f2cEem0KeOxAOGH_Q">
-    <measurementSpecifications id="_u04w4v2cEem0KeOxAOGH_Q">
+  <monitors id="_HT8o0QFjEeq88NQvxyVUuA">
+    <measurementSpecifications id="_HT8o0gFjEeq88NQvxyVUuA">
       <metricDescription xsi:type="metricspec:NumericalBaseMetricDescription" href="pathmap://METRIC_SPEC_MODELS/commonMetrics.metricspec#_6rYmYs7nEeOX_4BzImuHbA"/>
-      <processingType xsi:type="monitorrepository:FeedThrough" id="_u1B60P2cEem0KeOxAOGH_Q"/>
+      <processingType xsi:type="monitorrepository:FeedThrough" id="_HUI2EAFjEeq88NQvxyVUuA"/>
     </measurementSpecifications>
-    <measuringPoint xsi:type="pcmmeasuringpoint:AssemblyOperationMeasuringPoint" href="cocome_gen.measuringpoint#//@measuringPoints.1"/>
+    <measuringPoint xsi:type="pcmmeasuringpoint:ExternalCallActionMeasuringPoint" href="cocome_gen.measuringpoint#//@measuringPoints.1"/>
   </monitors>
-  <monitors id="_u1B60f2cEem0KeOxAOGH_Q">
-    <measurementSpecifications id="_u1B60v2cEem0KeOxAOGH_Q">
+  <monitors id="_HUI2EQFjEeq88NQvxyVUuA">
+    <measurementSpecifications id="_HUI2EgFjEeq88NQvxyVUuA">
       <metricDescription xsi:type="metricspec:NumericalBaseMetricDescription" href="pathmap://METRIC_SPEC_MODELS/commonMetrics.metricspec#_6rYmYs7nEeOX_4BzImuHbA"/>
-      <processingType xsi:type="monitorrepository:FeedThrough" id="_u1OIEP2cEem0KeOxAOGH_Q"/>
+      <processingType xsi:type="monitorrepository:FeedThrough" id="_HUSnEwFjEeq88NQvxyVUuA"/>
     </measurementSpecifications>
-    <measuringPoint xsi:type="pcmmeasuringpoint:AssemblyOperationMeasuringPoint" href="cocome_gen.measuringpoint#//@measuringPoints.2"/>
+    <measuringPoint xsi:type="pcmmeasuringpoint:ExternalCallActionMeasuringPoint" href="cocome_gen.measuringpoint#//@measuringPoints.2"/>
   </monitors>
-  <monitors id="_u1OIEf2cEem0KeOxAOGH_Q">
-    <measurementSpecifications id="_u1OIEv2cEem0KeOxAOGH_Q">
+  <monitors id="_HUSnFAFjEeq88NQvxyVUuA">
+    <measurementSpecifications id="_HUSnFQFjEeq88NQvxyVUuA">
       <metricDescription xsi:type="metricspec:NumericalBaseMetricDescription" href="pathmap://METRIC_SPEC_MODELS/commonMetrics.metricspec#_6rYmYs7nEeOX_4BzImuHbA"/>
-      <processingType xsi:type="monitorrepository:FeedThrough" id="_u1bjcP2cEem0KeOxAOGH_Q"/>
+      <processingType xsi:type="monitorrepository:FeedThrough" id="_HUbxBAFjEeq88NQvxyVUuA"/>
     </measurementSpecifications>
-    <measuringPoint xsi:type="pcmmeasuringpoint:AssemblyOperationMeasuringPoint" href="cocome_gen.measuringpoint#//@measuringPoints.3"/>
+    <measuringPoint xsi:type="pcmmeasuringpoint:ExternalCallActionMeasuringPoint" href="cocome_gen.measuringpoint#//@measuringPoints.3"/>
   </monitors>
-  <monitors id="_u1bjcf2cEem0KeOxAOGH_Q">
-    <measurementSpecifications id="_u1bjcv2cEem0KeOxAOGH_Q">
+  <monitors id="_HUbxBQFjEeq88NQvxyVUuA">
+    <measurementSpecifications id="_HUbxBgFjEeq88NQvxyVUuA">
       <metricDescription xsi:type="metricspec:NumericalBaseMetricDescription" href="pathmap://METRIC_SPEC_MODELS/commonMetrics.metricspec#_6rYmYs7nEeOX_4BzImuHbA"/>
-      <processingType xsi:type="monitorrepository:FeedThrough" id="_u1hqFP2cEem0KeOxAOGH_Q"/>
+      <processingType xsi:type="monitorrepository:FeedThrough" id="_HUk68wFjEeq88NQvxyVUuA"/>
     </measurementSpecifications>
-    <measuringPoint xsi:type="pcmmeasuringpoint:AssemblyOperationMeasuringPoint" href="cocome_gen.measuringpoint#//@measuringPoints.4"/>
+    <measuringPoint xsi:type="pcmmeasuringpoint:ExternalCallActionMeasuringPoint" href="cocome_gen.measuringpoint#//@measuringPoints.4"/>
   </monitors>
-  <monitors id="_u1iRIP2cEem0KeOxAOGH_Q">
-    <measurementSpecifications id="_u1iRIf2cEem0KeOxAOGH_Q">
+  <monitors id="_HUk69AFjEeq88NQvxyVUuA">
+    <measurementSpecifications id="_HUk69QFjEeq88NQvxyVUuA">
       <metricDescription xsi:type="metricspec:NumericalBaseMetricDescription" href="pathmap://METRIC_SPEC_MODELS/commonMetrics.metricspec#_6rYmYs7nEeOX_4BzImuHbA"/>
-      <processingType xsi:type="monitorrepository:FeedThrough" id="_u1qM8_2cEem0KeOxAOGH_Q"/>
+      <processingType xsi:type="monitorrepository:FeedThrough" id="_HUs2wAFjEeq88NQvxyVUuA"/>
     </measurementSpecifications>
-    <measuringPoint xsi:type="pcmmeasuringpoint:AssemblyOperationMeasuringPoint" href="cocome_gen.measuringpoint#//@measuringPoints.5"/>
+    <measuringPoint xsi:type="pcmmeasuringpoint:ExternalCallActionMeasuringPoint" href="cocome_gen.measuringpoint#//@measuringPoints.5"/>
   </monitors>
-  <monitors id="_u1q0AP2cEem0KeOxAOGH_Q">
-    <measurementSpecifications id="_u1q0Af2cEem0KeOxAOGH_Q">
+  <monitors id="_HUs2wQFjEeq88NQvxyVUuA">
+    <measurementSpecifications id="_HUs2wgFjEeq88NQvxyVUuA">
       <metricDescription xsi:type="metricspec:NumericalBaseMetricDescription" href="pathmap://METRIC_SPEC_MODELS/commonMetrics.metricspec#_6rYmYs7nEeOX_4BzImuHbA"/>
-      <processingType xsi:type="monitorrepository:FeedThrough" id="_u1vsgf2cEem0KeOxAOGH_Q"/>
+      <processingType xsi:type="monitorrepository:FeedThrough" id="_HU3O0AFjEeq88NQvxyVUuA"/>
     </measurementSpecifications>
-    <measuringPoint xsi:type="pcmmeasuringpoint:AssemblyOperationMeasuringPoint" href="cocome_gen.measuringpoint#//@measuringPoints.6"/>
+    <measuringPoint xsi:type="pcmmeasuringpoint:ExternalCallActionMeasuringPoint" href="cocome_gen.measuringpoint#//@measuringPoints.6"/>
   </monitors>
-  <monitors id="_u1vsgv2cEem0KeOxAOGH_Q">
-    <measurementSpecifications id="_u1vsg_2cEem0KeOxAOGH_Q">
+  <monitors id="_HU3O0QFjEeq88NQvxyVUuA">
+    <measurementSpecifications id="_HU3O0gFjEeq88NQvxyVUuA">
       <metricDescription xsi:type="metricspec:NumericalBaseMetricDescription" href="pathmap://METRIC_SPEC_MODELS/commonMetrics.metricspec#_6rYmYs7nEeOX_4BzImuHbA"/>
-      <processingType xsi:type="monitorrepository:FeedThrough" id="_u12aMP2cEem0KeOxAOGH_Q"/>
+      <processingType xsi:type="monitorrepository:FeedThrough" id="_HU9VcAFjEeq88NQvxyVUuA"/>
     </measurementSpecifications>
-    <measuringPoint xsi:type="pcmmeasuringpoint:AssemblyOperationMeasuringPoint" href="cocome_gen.measuringpoint#//@measuringPoints.7"/>
+    <measuringPoint xsi:type="pcmmeasuringpoint:ExternalCallActionMeasuringPoint" href="cocome_gen.measuringpoint#//@measuringPoints.7"/>
   </monitors>
-  <monitors id="_u12aMf2cEem0KeOxAOGH_Q">
-    <measurementSpecifications id="_u12aMv2cEem0KeOxAOGH_Q">
+  <monitors id="_HU9VcQFjEeq88NQvxyVUuA">
+    <measurementSpecifications id="_HU9VcgFjEeq88NQvxyVUuA">
       <metricDescription xsi:type="metricspec:NumericalBaseMetricDescription" href="pathmap://METRIC_SPEC_MODELS/commonMetrics.metricspec#_6rYmYs7nEeOX_4BzImuHbA"/>
-      <processingType xsi:type="monitorrepository:FeedThrough" id="_u19u9P2cEem0KeOxAOGH_Q"/>
+      <processingType xsi:type="monitorrepository:FeedThrough" id="_HVCN8AFjEeq88NQvxyVUuA"/>
     </measurementSpecifications>
-    <measuringPoint xsi:type="pcmmeasuringpoint:AssemblyOperationMeasuringPoint" href="cocome_gen.measuringpoint#//@measuringPoints.8"/>
+    <measuringPoint xsi:type="pcmmeasuringpoint:ExternalCallActionMeasuringPoint" href="cocome_gen.measuringpoint#//@measuringPoints.8"/>
   </monitors>
-  <monitors id="_u1-WAP2cEem0KeOxAOGH_Q">
-    <measurementSpecifications id="_u1-WAf2cEem0KeOxAOGH_Q">
+  <monitors id="_HVCN8QFjEeq88NQvxyVUuA">
+    <measurementSpecifications id="_HVCN8gFjEeq88NQvxyVUuA">
       <metricDescription xsi:type="metricspec:NumericalBaseMetricDescription" href="pathmap://METRIC_SPEC_MODELS/commonMetrics.metricspec#_6rYmYs7nEeOX_4BzImuHbA"/>
-      <processingType xsi:type="monitorrepository:FeedThrough" id="_u2D1kP2cEem0KeOxAOGH_Q"/>
+      <processingType xsi:type="monitorrepository:FeedThrough" id="_HVHtgQFjEeq88NQvxyVUuA"/>
     </measurementSpecifications>
-    <measuringPoint xsi:type="pcmmeasuringpoint:AssemblyOperationMeasuringPoint" href="cocome_gen.measuringpoint#//@measuringPoints.9"/>
+    <measuringPoint xsi:type="pcmmeasuringpoint:ExternalCallActionMeasuringPoint" href="cocome_gen.measuringpoint#//@measuringPoints.9"/>
   </monitors>
-  <monitors id="_u2D1kf2cEem0KeOxAOGH_Q">
-    <measurementSpecifications id="_u2D1kv2cEem0KeOxAOGH_Q">
+  <monitors id="_HVHtggFjEeq88NQvxyVUuA">
+    <measurementSpecifications id="_HVHtgwFjEeq88NQvxyVUuA">
       <metricDescription xsi:type="metricspec:NumericalBaseMetricDescription" href="pathmap://METRIC_SPEC_MODELS/commonMetrics.metricspec#_6rYmYs7nEeOX_4BzImuHbA"/>
-      <processingType xsi:type="monitorrepository:FeedThrough" id="_u2JVI_2cEem0KeOxAOGH_Q"/>
+      <processingType xsi:type="monitorrepository:FeedThrough" id="_HVMmAAFjEeq88NQvxyVUuA"/>
     </measurementSpecifications>
-    <measuringPoint xsi:type="pcmmeasuringpoint:AssemblyOperationMeasuringPoint" href="cocome_gen.measuringpoint#//@measuringPoints.10"/>
+    <measuringPoint xsi:type="pcmmeasuringpoint:ExternalCallActionMeasuringPoint" href="cocome_gen.measuringpoint#//@measuringPoints.10"/>
   </monitors>
-  <monitors id="_u2JVJP2cEem0KeOxAOGH_Q">
-    <measurementSpecifications id="_u2JVJf2cEem0KeOxAOGH_Q">
+  <monitors id="_HVN0IAFjEeq88NQvxyVUuA">
+    <measurementSpecifications id="_HVN0IQFjEeq88NQvxyVUuA">
       <metricDescription xsi:type="metricspec:NumericalBaseMetricDescription" href="pathmap://METRIC_SPEC_MODELS/commonMetrics.metricspec#_6rYmYs7nEeOX_4BzImuHbA"/>
-      <processingType xsi:type="monitorrepository:FeedThrough" id="_u2R4Af2cEem0KeOxAOGH_Q"/>
+      <processingType xsi:type="monitorrepository:FeedThrough" id="_HVTTsQFjEeq88NQvxyVUuA"/>
     </measurementSpecifications>
-    <measuringPoint xsi:type="pcmmeasuringpoint:AssemblyOperationMeasuringPoint" href="cocome_gen.measuringpoint#//@measuringPoints.11"/>
-  </monitors>
-  <monitors id="_u2R4Av2cEem0KeOxAOGH_Q">
-    <measurementSpecifications id="_u2R4A_2cEem0KeOxAOGH_Q">
-      <metricDescription xsi:type="metricspec:NumericalBaseMetricDescription" href="pathmap://METRIC_SPEC_MODELS/commonMetrics.metricspec#_6rYmYs7nEeOX_4BzImuHbA"/>
-      <processingType xsi:type="monitorrepository:FeedThrough" id="_u2ZMxP2cEem0KeOxAOGH_Q"/>
-    </measurementSpecifications>
-    <measuringPoint xsi:type="pcmmeasuringpoint:AssemblyOperationMeasuringPoint" href="cocome_gen.measuringpoint#//@measuringPoints.12"/>
-  </monitors>
-  <monitors id="_u2ZMxf2cEem0KeOxAOGH_Q">
-    <measurementSpecifications id="_u2ZMxv2cEem0KeOxAOGH_Q">
-      <metricDescription xsi:type="metricspec:NumericalBaseMetricDescription" href="pathmap://METRIC_SPEC_MODELS/commonMetrics.metricspec#_6rYmYs7nEeOX_4BzImuHbA"/>
-      <processingType xsi:type="monitorrepository:FeedThrough" id="_u2eFQv2cEem0KeOxAOGH_Q"/>
-    </measurementSpecifications>
-    <measuringPoint xsi:type="pcmmeasuringpoint:AssemblyOperationMeasuringPoint" href="cocome_gen.measuringpoint#//@measuringPoints.13"/>
-  </monitors>
-  <monitors id="_u2eFQ_2cEem0KeOxAOGH_Q">
-    <measurementSpecifications id="_u2eFRP2cEem0KeOxAOGH_Q">
-      <metricDescription xsi:type="metricspec:NumericalBaseMetricDescription" href="pathmap://METRIC_SPEC_MODELS/commonMetrics.metricspec#_6rYmYs7nEeOX_4BzImuHbA"/>
-      <processingType xsi:type="monitorrepository:FeedThrough" id="_u2jk0P2cEem0KeOxAOGH_Q"/>
-    </measurementSpecifications>
-    <measuringPoint xsi:type="pcmmeasuringpoint:AssemblyOperationMeasuringPoint" href="cocome_gen.measuringpoint#//@measuringPoints.14"/>
-  </monitors>
-  <monitors id="_u2jk0f2cEem0KeOxAOGH_Q">
-    <measurementSpecifications id="_u2jk0v2cEem0KeOxAOGH_Q">
-      <metricDescription xsi:type="metricspec:NumericalBaseMetricDescription" href="pathmap://METRIC_SPEC_MODELS/commonMetrics.metricspec#_6rYmYs7nEeOX_4BzImuHbA"/>
-      <processingType xsi:type="monitorrepository:FeedThrough" id="_u2n2QP2cEem0KeOxAOGH_Q"/>
-    </measurementSpecifications>
-    <measuringPoint xsi:type="pcmmeasuringpoint:AssemblyOperationMeasuringPoint" href="cocome_gen.measuringpoint#//@measuringPoints.15"/>
-  </monitors>
-  <monitors id="_u2n2Qf2cEem0KeOxAOGH_Q">
-    <measurementSpecifications id="_u2n2Qv2cEem0KeOxAOGH_Q">
-      <metricDescription xsi:type="metricspec:NumericalBaseMetricDescription" href="pathmap://METRIC_SPEC_MODELS/commonMetrics.metricspec#_6rYmYs7nEeOX_4BzImuHbA"/>
-      <processingType xsi:type="monitorrepository:FeedThrough" id="_u2sHsP2cEem0KeOxAOGH_Q"/>
-    </measurementSpecifications>
-    <measuringPoint xsi:type="pcmmeasuringpoint:AssemblyOperationMeasuringPoint" href="cocome_gen.measuringpoint#//@measuringPoints.16"/>
-  </monitors>
-  <monitors id="_u2sHsf2cEem0KeOxAOGH_Q">
-    <measurementSpecifications id="_u2sHsv2cEem0KeOxAOGH_Q">
-      <metricDescription xsi:type="metricspec:NumericalBaseMetricDescription" href="pathmap://METRIC_SPEC_MODELS/commonMetrics.metricspec#_6rYmYs7nEeOX_4BzImuHbA"/>
-      <processingType xsi:type="monitorrepository:FeedThrough" id="_u2yOUP2cEem0KeOxAOGH_Q"/>
-    </measurementSpecifications>
-    <measuringPoint xsi:type="pcmmeasuringpoint:AssemblyOperationMeasuringPoint" href="cocome_gen.measuringpoint#//@measuringPoints.17"/>
-  </monitors>
-  <monitors id="_u2yOUf2cEem0KeOxAOGH_Q">
-    <measurementSpecifications id="_u2yOUv2cEem0KeOxAOGH_Q">
-      <metricDescription xsi:type="metricspec:NumericalBaseMetricDescription" href="pathmap://METRIC_SPEC_MODELS/commonMetrics.metricspec#_6rYmYs7nEeOX_4BzImuHbA"/>
-      <processingType xsi:type="monitorrepository:FeedThrough" id="_u23G0_2cEem0KeOxAOGH_Q"/>
-    </measurementSpecifications>
-    <measuringPoint xsi:type="pcmmeasuringpoint:AssemblyOperationMeasuringPoint" href="cocome_gen.measuringpoint#//@measuringPoints.18"/>
-  </monitors>
-  <monitors id="_u23G1P2cEem0KeOxAOGH_Q">
-    <measurementSpecifications id="_u23G1f2cEem0KeOxAOGH_Q">
-      <metricDescription xsi:type="metricspec:NumericalBaseMetricDescription" href="pathmap://METRIC_SPEC_MODELS/commonMetrics.metricspec#_6rYmYs7nEeOX_4BzImuHbA"/>
-      <processingType xsi:type="monitorrepository:FeedThrough" id="_u28mYP2cEem0KeOxAOGH_Q"/>
-    </measurementSpecifications>
-    <measuringPoint xsi:type="pcmmeasuringpoint:AssemblyOperationMeasuringPoint" href="cocome_gen.measuringpoint#//@measuringPoints.19"/>
-  </monitors>
-  <monitors id="_u28mYf2cEem0KeOxAOGH_Q">
-    <measurementSpecifications id="_u28mYv2cEem0KeOxAOGH_Q">
-      <metricDescription xsi:type="metricspec:NumericalBaseMetricDescription" href="pathmap://METRIC_SPEC_MODELS/commonMetrics.metricspec#_6rYmYs7nEeOX_4BzImuHbA"/>
-      <processingType xsi:type="monitorrepository:FeedThrough" id="_u3Be4P2cEem0KeOxAOGH_Q"/>
-    </measurementSpecifications>
-    <measuringPoint xsi:type="pcmmeasuringpoint:AssemblyOperationMeasuringPoint" href="cocome_gen.measuringpoint#//@measuringPoints.20"/>
-  </monitors>
-  <monitors id="_u3Be4f2cEem0KeOxAOGH_Q">
-    <measurementSpecifications id="_u3Be4v2cEem0KeOxAOGH_Q">
-      <metricDescription xsi:type="metricspec:NumericalBaseMetricDescription" href="pathmap://METRIC_SPEC_MODELS/commonMetrics.metricspec#_6rYmYs7nEeOX_4BzImuHbA"/>
-      <processingType xsi:type="monitorrepository:FeedThrough" id="_u3Izof2cEem0KeOxAOGH_Q"/>
-    </measurementSpecifications>
-    <measuringPoint xsi:type="pcmmeasuringpoint:AssemblyOperationMeasuringPoint" href="cocome_gen.measuringpoint#//@measuringPoints.21"/>
-  </monitors>
-  <monitors id="_u3Izov2cEem0KeOxAOGH_Q">
-    <measurementSpecifications id="_u3Izo_2cEem0KeOxAOGH_Q">
-      <metricDescription xsi:type="metricspec:NumericalBaseMetricDescription" href="pathmap://METRIC_SPEC_MODELS/commonMetrics.metricspec#_6rYmYs7nEeOX_4BzImuHbA"/>
-      <processingType xsi:type="monitorrepository:FeedThrough" id="_u3PhUP2cEem0KeOxAOGH_Q"/>
-    </measurementSpecifications>
-    <measuringPoint xsi:type="pcmmeasuringpoint:AssemblyOperationMeasuringPoint" href="cocome_gen.measuringpoint#//@measuringPoints.22"/>
-  </monitors>
-  <monitors id="_u3PhUf2cEem0KeOxAOGH_Q">
-    <measurementSpecifications id="_u3PhUv2cEem0KeOxAOGH_Q">
-      <metricDescription xsi:type="metricspec:NumericalBaseMetricDescription" href="pathmap://METRIC_SPEC_MODELS/commonMetrics.metricspec#_6rYmYs7nEeOX_4BzImuHbA"/>
-      <processingType xsi:type="monitorrepository:FeedThrough" id="_u3Vn8P2cEem0KeOxAOGH_Q"/>
-    </measurementSpecifications>
-    <measuringPoint xsi:type="pcmmeasuringpoint:AssemblyOperationMeasuringPoint" href="cocome_gen.measuringpoint#//@measuringPoints.23"/>
-  </monitors>
-  <monitors id="_u3Vn8f2cEem0KeOxAOGH_Q">
-    <measurementSpecifications id="_u3Vn8v2cEem0KeOxAOGH_Q">
-      <metricDescription xsi:type="metricspec:NumericalBaseMetricDescription" href="pathmap://METRIC_SPEC_MODELS/commonMetrics.metricspec#_6rYmYs7nEeOX_4BzImuHbA"/>
-      <processingType xsi:type="monitorrepository:FeedThrough" id="_u3bHgP2cEem0KeOxAOGH_Q"/>
-    </measurementSpecifications>
-    <measuringPoint xsi:type="pcmmeasuringpoint:AssemblyOperationMeasuringPoint" href="cocome_gen.measuringpoint#//@measuringPoints.24"/>
-  </monitors>
-  <monitors id="_u3bHgf2cEem0KeOxAOGH_Q">
-    <measurementSpecifications id="_u3bHgv2cEem0KeOxAOGH_Q">
-      <metricDescription xsi:type="metricspec:NumericalBaseMetricDescription" href="pathmap://METRIC_SPEC_MODELS/commonMetrics.metricspec#_6rYmYs7nEeOX_4BzImuHbA"/>
-      <processingType xsi:type="monitorrepository:FeedThrough" id="_u3fY8P2cEem0KeOxAOGH_Q"/>
-    </measurementSpecifications>
-    <measuringPoint xsi:type="pcmmeasuringpoint:AssemblyOperationMeasuringPoint" href="cocome_gen.measuringpoint#//@measuringPoints.25"/>
-  </monitors>
-  <monitors id="_u3fY8f2cEem0KeOxAOGH_Q">
-    <measurementSpecifications id="_u3fY8v2cEem0KeOxAOGH_Q">
-      <metricDescription xsi:type="metricspec:NumericalBaseMetricDescription" href="pathmap://METRIC_SPEC_MODELS/commonMetrics.metricspec#_6rYmYs7nEeOX_4BzImuHbA"/>
-      <processingType xsi:type="monitorrepository:FeedThrough" id="_u3kRcP2cEem0KeOxAOGH_Q"/>
-    </measurementSpecifications>
-    <measuringPoint xsi:type="pcmmeasuringpoint:AssemblyOperationMeasuringPoint" href="cocome_gen.measuringpoint#//@measuringPoints.26"/>
-  </monitors>
-  <monitors id="_u3kRcf2cEem0KeOxAOGH_Q">
-    <measurementSpecifications id="_u3kRcv2cEem0KeOxAOGH_Q">
-      <metricDescription xsi:type="metricspec:NumericalBaseMetricDescription" href="pathmap://METRIC_SPEC_MODELS/commonMetrics.metricspec#_6rYmYs7nEeOX_4BzImuHbA"/>
-      <processingType xsi:type="monitorrepository:FeedThrough" id="_u3pJ8P2cEem0KeOxAOGH_Q"/>
-    </measurementSpecifications>
-    <measuringPoint xsi:type="pcmmeasuringpoint:AssemblyOperationMeasuringPoint" href="cocome_gen.measuringpoint#//@measuringPoints.27"/>
-  </monitors>
-  <monitors id="_u3pJ8f2cEem0KeOxAOGH_Q">
-    <measurementSpecifications id="_u3pJ8v2cEem0KeOxAOGH_Q">
-      <metricDescription xsi:type="metricspec:NumericalBaseMetricDescription" href="pathmap://METRIC_SPEC_MODELS/commonMetrics.metricspec#_6rYmYs7nEeOX_4BzImuHbA"/>
-      <processingType xsi:type="monitorrepository:FeedThrough" id="_u3tbYP2cEem0KeOxAOGH_Q"/>
-    </measurementSpecifications>
-    <measuringPoint xsi:type="pcmmeasuringpoint:AssemblyOperationMeasuringPoint" href="cocome_gen.measuringpoint#//@measuringPoints.28"/>
-  </monitors>
-  <monitors id="_u3tbYf2cEem0KeOxAOGH_Q">
-    <measurementSpecifications id="_u3tbYv2cEem0KeOxAOGH_Q">
-      <metricDescription xsi:type="metricspec:NumericalBaseMetricDescription" href="pathmap://METRIC_SPEC_MODELS/commonMetrics.metricspec#_6rYmYs7nEeOX_4BzImuHbA"/>
-      <processingType xsi:type="monitorrepository:FeedThrough" id="_u3ziAv2cEem0KeOxAOGH_Q"/>
-    </measurementSpecifications>
-    <measuringPoint xsi:type="pcmmeasuringpoint:AssemblyOperationMeasuringPoint" href="cocome_gen.measuringpoint#//@measuringPoints.29"/>
-  </monitors>
-  <monitors id="_u3ziA_2cEem0KeOxAOGH_Q">
-    <measurementSpecifications id="_u3ziBP2cEem0KeOxAOGH_Q">
-      <metricDescription xsi:type="metricspec:NumericalBaseMetricDescription" href="pathmap://METRIC_SPEC_MODELS/commonMetrics.metricspec#_6rYmYs7nEeOX_4BzImuHbA"/>
-      <processingType xsi:type="monitorrepository:FeedThrough" id="_u35oo_2cEem0KeOxAOGH_Q"/>
-    </measurementSpecifications>
-    <measuringPoint xsi:type="pcmmeasuringpoint:AssemblyOperationMeasuringPoint" href="cocome_gen.measuringpoint#//@measuringPoints.30"/>
-  </monitors>
-  <monitors id="_u35opP2cEem0KeOxAOGH_Q">
-    <measurementSpecifications id="_u35opf2cEem0KeOxAOGH_Q">
-      <metricDescription xsi:type="metricspec:NumericalBaseMetricDescription" href="pathmap://METRIC_SPEC_MODELS/commonMetrics.metricspec#_6rYmYs7nEeOX_4BzImuHbA"/>
-      <processingType xsi:type="monitorrepository:FeedThrough" id="_u396EP2cEem0KeOxAOGH_Q"/>
-    </measurementSpecifications>
-    <measuringPoint xsi:type="pcmmeasuringpoint:AssemblyOperationMeasuringPoint" href="cocome_gen.measuringpoint#//@measuringPoints.31"/>
-  </monitors>
-  <monitors id="_u396Ef2cEem0KeOxAOGH_Q">
-    <measurementSpecifications id="_u396Ev2cEem0KeOxAOGH_Q">
-      <metricDescription xsi:type="metricspec:NumericalBaseMetricDescription" href="pathmap://METRIC_SPEC_MODELS/commonMetrics.metricspec#_6rYmYs7nEeOX_4BzImuHbA"/>
-      <processingType xsi:type="monitorrepository:FeedThrough" id="_u4Cylf2cEem0KeOxAOGH_Q"/>
-    </measurementSpecifications>
-    <measuringPoint xsi:type="pcmmeasuringpoint:AssemblyOperationMeasuringPoint" href="cocome_gen.measuringpoint#//@measuringPoints.32"/>
-  </monitors>
-  <monitors id="_u4Cylv2cEem0KeOxAOGH_Q">
-    <measurementSpecifications id="_u4Cyl_2cEem0KeOxAOGH_Q">
-      <metricDescription xsi:type="metricspec:NumericalBaseMetricDescription" href="pathmap://METRIC_SPEC_MODELS/commonMetrics.metricspec#_6rYmYs7nEeOX_4BzImuHbA"/>
-      <processingType xsi:type="monitorrepository:FeedThrough" id="_u4HEAP2cEem0KeOxAOGH_Q"/>
-    </measurementSpecifications>
-    <measuringPoint xsi:type="pcmmeasuringpoint:AssemblyOperationMeasuringPoint" href="cocome_gen.measuringpoint#//@measuringPoints.33"/>
-  </monitors>
-  <monitors id="_u4HEAf2cEem0KeOxAOGH_Q">
-    <measurementSpecifications id="_u4HEAv2cEem0KeOxAOGH_Q">
-      <metricDescription xsi:type="metricspec:NumericalBaseMetricDescription" href="pathmap://METRIC_SPEC_MODELS/commonMetrics.metricspec#_6rYmYs7nEeOX_4BzImuHbA"/>
-      <processingType xsi:type="monitorrepository:FeedThrough" id="_u4NxsP2cEem0KeOxAOGH_Q"/>
-    </measurementSpecifications>
-    <measuringPoint xsi:type="pcmmeasuringpoint:AssemblyOperationMeasuringPoint" href="cocome_gen.measuringpoint#//@measuringPoints.34"/>
-  </monitors>
-  <monitors id="_u4Nxsf2cEem0KeOxAOGH_Q">
-    <measurementSpecifications id="_u4Nxsv2cEem0KeOxAOGH_Q">
-      <metricDescription xsi:type="metricspec:NumericalBaseMetricDescription" href="pathmap://METRIC_SPEC_MODELS/commonMetrics.metricspec#_6rYmYs7nEeOX_4BzImuHbA"/>
-      <processingType xsi:type="monitorrepository:FeedThrough" id="_u4SDJP2cEem0KeOxAOGH_Q"/>
-    </measurementSpecifications>
-    <measuringPoint xsi:type="pcmmeasuringpoint:AssemblyOperationMeasuringPoint" href="cocome_gen.measuringpoint#//@measuringPoints.35"/>
-  </monitors>
-  <monitors id="_u4SDJf2cEem0KeOxAOGH_Q">
-    <measurementSpecifications id="_u4SDJv2cEem0KeOxAOGH_Q">
-      <metricDescription xsi:type="metricspec:NumericalBaseMetricDescription" href="pathmap://METRIC_SPEC_MODELS/commonMetrics.metricspec#_6rYmYs7nEeOX_4BzImuHbA"/>
-      <processingType xsi:type="monitorrepository:FeedThrough" id="_u4WUkf2cEem0KeOxAOGH_Q"/>
-    </measurementSpecifications>
-    <measuringPoint xsi:type="pcmmeasuringpoint:AssemblyOperationMeasuringPoint" href="cocome_gen.measuringpoint#//@measuringPoints.36"/>
-  </monitors>
-  <monitors id="_u4WUkv2cEem0KeOxAOGH_Q">
-    <measurementSpecifications id="_u4WUk_2cEem0KeOxAOGH_Q">
-      <metricDescription xsi:type="metricspec:NumericalBaseMetricDescription" href="pathmap://METRIC_SPEC_MODELS/commonMetrics.metricspec#_6rYmYs7nEeOX_4BzImuHbA"/>
-      <processingType xsi:type="monitorrepository:FeedThrough" id="_u4dpUP2cEem0KeOxAOGH_Q"/>
-    </measurementSpecifications>
-    <measuringPoint xsi:type="pcmmeasuringpoint:AssemblyOperationMeasuringPoint" href="cocome_gen.measuringpoint#//@measuringPoints.37"/>
-  </monitors>
-  <monitors id="_u4dpUf2cEem0KeOxAOGH_Q">
-    <measurementSpecifications id="_u4dpUv2cEem0KeOxAOGH_Q">
-      <metricDescription xsi:type="metricspec:NumericalBaseMetricDescription" href="pathmap://METRIC_SPEC_MODELS/commonMetrics.metricspec#_6rYmYs7nEeOX_4BzImuHbA"/>
-      <processingType xsi:type="monitorrepository:FeedThrough" id="_u4jI4P2cEem0KeOxAOGH_Q"/>
-    </measurementSpecifications>
-    <measuringPoint xsi:type="pcmmeasuringpoint:AssemblyOperationMeasuringPoint" href="cocome_gen.measuringpoint#//@measuringPoints.38"/>
-  </monitors>
-  <monitors id="_u4jI4f2cEem0KeOxAOGH_Q">
-    <measurementSpecifications id="_u4jI4v2cEem0KeOxAOGH_Q">
-      <metricDescription xsi:type="metricspec:NumericalBaseMetricDescription" href="pathmap://METRIC_SPEC_MODELS/commonMetrics.metricspec#_6rYmYs7nEeOX_4BzImuHbA"/>
-      <processingType xsi:type="monitorrepository:FeedThrough" id="_u4oBYv2cEem0KeOxAOGH_Q"/>
-    </measurementSpecifications>
-    <measuringPoint xsi:type="pcmmeasuringpoint:AssemblyOperationMeasuringPoint" href="cocome_gen.measuringpoint#//@measuringPoints.39"/>
-  </monitors>
-  <monitors id="_u4oBY_2cEem0KeOxAOGH_Q">
-    <measurementSpecifications id="_u4oBZP2cEem0KeOxAOGH_Q">
-      <metricDescription xsi:type="metricspec:NumericalBaseMetricDescription" href="pathmap://METRIC_SPEC_MODELS/commonMetrics.metricspec#_6rYmYs7nEeOX_4BzImuHbA"/>
-      <processingType xsi:type="monitorrepository:FeedThrough" id="_u4s54P2cEem0KeOxAOGH_Q"/>
-    </measurementSpecifications>
-    <measuringPoint xsi:type="pcmmeasuringpoint:AssemblyOperationMeasuringPoint" href="cocome_gen.measuringpoint#//@measuringPoints.40"/>
-  </monitors>
-  <monitors id="_u4s54f2cEem0KeOxAOGH_Q">
-    <measurementSpecifications id="_u4s54v2cEem0KeOxAOGH_Q">
-      <metricDescription xsi:type="metricspec:NumericalBaseMetricDescription" href="pathmap://METRIC_SPEC_MODELS/commonMetrics.metricspec#_6rYmYs7nEeOX_4BzImuHbA"/>
-      <processingType xsi:type="monitorrepository:FeedThrough" id="_u4v9Nf2cEem0KeOxAOGH_Q"/>
-    </measurementSpecifications>
-    <measuringPoint xsi:type="pcmmeasuringpoint:AssemblyOperationMeasuringPoint" href="cocome_gen.measuringpoint#//@measuringPoints.41"/>
-  </monitors>
-  <monitors id="_u4v9Nv2cEem0KeOxAOGH_Q">
-    <measurementSpecifications id="_u4v9N_2cEem0KeOxAOGH_Q">
-      <metricDescription xsi:type="metricspec:NumericalBaseMetricDescription" href="pathmap://METRIC_SPEC_MODELS/commonMetrics.metricspec#_6rYmYs7nEeOX_4BzImuHbA"/>
-      <processingType xsi:type="monitorrepository:FeedThrough" id="_u4znlP2cEem0KeOxAOGH_Q"/>
-    </measurementSpecifications>
-    <measuringPoint xsi:type="pcmmeasuringpoint:AssemblyOperationMeasuringPoint" href="cocome_gen.measuringpoint#//@measuringPoints.42"/>
-  </monitors>
-  <monitors id="_u4znlf2cEem0KeOxAOGH_Q">
-    <measurementSpecifications id="_u4znlv2cEem0KeOxAOGH_Q">
-      <metricDescription xsi:type="metricspec:NumericalBaseMetricDescription" href="pathmap://METRIC_SPEC_MODELS/commonMetrics.metricspec#_6rYmYs7nEeOX_4BzImuHbA"/>
-      <processingType xsi:type="monitorrepository:FeedThrough" id="_u44gE_2cEem0KeOxAOGH_Q"/>
-    </measurementSpecifications>
-    <measuringPoint xsi:type="pcmmeasuringpoint:AssemblyOperationMeasuringPoint" href="cocome_gen.measuringpoint#//@measuringPoints.43"/>
-  </monitors>
-  <monitors id="_u44gFP2cEem0KeOxAOGH_Q">
-    <measurementSpecifications id="_u44gFf2cEem0KeOxAOGH_Q">
-      <metricDescription xsi:type="metricspec:NumericalBaseMetricDescription" href="pathmap://METRIC_SPEC_MODELS/commonMetrics.metricspec#_6rYmYs7nEeOX_4BzImuHbA"/>
-      <processingType xsi:type="monitorrepository:FeedThrough" id="_u49_o_2cEem0KeOxAOGH_Q"/>
-    </measurementSpecifications>
-    <measuringPoint xsi:type="pcmmeasuringpoint:AssemblyOperationMeasuringPoint" href="cocome_gen.measuringpoint#//@measuringPoints.44"/>
-  </monitors>
-  <monitors id="_u49_pP2cEem0KeOxAOGH_Q">
-    <measurementSpecifications id="_u49_pf2cEem0KeOxAOGH_Q">
-      <metricDescription xsi:type="metricspec:NumericalBaseMetricDescription" href="pathmap://METRIC_SPEC_MODELS/commonMetrics.metricspec#_6rYmYs7nEeOX_4BzImuHbA"/>
-      <processingType xsi:type="monitorrepository:FeedThrough" id="_u5EGQP2cEem0KeOxAOGH_Q"/>
-    </measurementSpecifications>
-    <measuringPoint xsi:type="pcmmeasuringpoint:AssemblyOperationMeasuringPoint" href="cocome_gen.measuringpoint#//@measuringPoints.45"/>
-  </monitors>
-  <monitors id="_u5EGQf2cEem0KeOxAOGH_Q">
-    <measurementSpecifications id="_u5EGQv2cEem0KeOxAOGH_Q">
-      <metricDescription xsi:type="metricspec:NumericalBaseMetricDescription" href="pathmap://METRIC_SPEC_MODELS/commonMetrics.metricspec#_6rYmYs7nEeOX_4BzImuHbA"/>
-      <processingType xsi:type="monitorrepository:FeedThrough" id="_u5KM4P2cEem0KeOxAOGH_Q"/>
-    </measurementSpecifications>
-    <measuringPoint xsi:type="pcmmeasuringpoint:AssemblyOperationMeasuringPoint" href="cocome_gen.measuringpoint#//@measuringPoints.46"/>
-  </monitors>
-  <monitors id="_u5KM4f2cEem0KeOxAOGH_Q">
-    <measurementSpecifications id="_u5KM4v2cEem0KeOxAOGH_Q">
-      <metricDescription xsi:type="metricspec:NumericalBaseMetricDescription" href="pathmap://METRIC_SPEC_MODELS/commonMetrics.metricspec#_6rYmYs7nEeOX_4BzImuHbA"/>
-      <processingType xsi:type="monitorrepository:FeedThrough" id="_u5Q6k_2cEem0KeOxAOGH_Q"/>
-    </measurementSpecifications>
-    <measuringPoint xsi:type="pcmmeasuringpoint:AssemblyOperationMeasuringPoint" href="cocome_gen.measuringpoint#//@measuringPoints.47"/>
-  </monitors>
-  <monitors id="_u5Q6lP2cEem0KeOxAOGH_Q">
-    <measurementSpecifications id="_u5Q6lf2cEem0KeOxAOGH_Q">
-      <metricDescription xsi:type="metricspec:NumericalBaseMetricDescription" href="pathmap://METRIC_SPEC_MODELS/commonMetrics.metricspec#_6rYmYs7nEeOX_4BzImuHbA"/>
-      <processingType xsi:type="monitorrepository:FeedThrough" id="_u5XoQ_2cEem0KeOxAOGH_Q"/>
-    </measurementSpecifications>
-    <measuringPoint xsi:type="pcmmeasuringpoint:AssemblyOperationMeasuringPoint" href="cocome_gen.measuringpoint#//@measuringPoints.48"/>
-  </monitors>
-  <monitors id="_u5YPUP2cEem0KeOxAOGH_Q">
-    <measurementSpecifications id="_u5YPUf2cEem0KeOxAOGH_Q">
-      <metricDescription xsi:type="metricspec:NumericalBaseMetricDescription" href="pathmap://METRIC_SPEC_MODELS/commonMetrics.metricspec#_6rYmYs7nEeOX_4BzImuHbA"/>
-      <processingType xsi:type="monitorrepository:FeedThrough" id="_u5du4P2cEem0KeOxAOGH_Q"/>
-    </measurementSpecifications>
-    <measuringPoint xsi:type="pcmmeasuringpoint:AssemblyOperationMeasuringPoint" href="cocome_gen.measuringpoint#//@measuringPoints.49"/>
-  </monitors>
-  <monitors id="_u5du4f2cEem0KeOxAOGH_Q">
-    <measurementSpecifications id="_u5du4v2cEem0KeOxAOGH_Q">
-      <metricDescription xsi:type="metricspec:NumericalBaseMetricDescription" href="pathmap://METRIC_SPEC_MODELS/commonMetrics.metricspec#_6rYmYs7nEeOX_4BzImuHbA"/>
-      <processingType xsi:type="monitorrepository:FeedThrough" id="_u5jOcf2cEem0KeOxAOGH_Q"/>
-    </measurementSpecifications>
-    <measuringPoint xsi:type="pcmmeasuringpoint:AssemblyOperationMeasuringPoint" href="cocome_gen.measuringpoint#//@measuringPoints.50"/>
-  </monitors>
-  <monitors id="_u5jOcv2cEem0KeOxAOGH_Q">
-    <measurementSpecifications id="_u5jOc_2cEem0KeOxAOGH_Q">
-      <metricDescription xsi:type="metricspec:NumericalBaseMetricDescription" href="pathmap://METRIC_SPEC_MODELS/commonMetrics.metricspec#_6rYmYs7nEeOX_4BzImuHbA"/>
-      <processingType xsi:type="monitorrepository:FeedThrough" id="_u5rxUP2cEem0KeOxAOGH_Q"/>
-    </measurementSpecifications>
-    <measuringPoint xsi:type="pcmmeasuringpoint:AssemblyOperationMeasuringPoint" href="cocome_gen.measuringpoint#//@measuringPoints.51"/>
-  </monitors>
-  <monitors id="_u5rxUf2cEem0KeOxAOGH_Q">
-    <measurementSpecifications id="_u5rxUv2cEem0KeOxAOGH_Q">
-      <metricDescription xsi:type="metricspec:NumericalBaseMetricDescription" href="pathmap://METRIC_SPEC_MODELS/commonMetrics.metricspec#_6rYmYs7nEeOX_4BzImuHbA"/>
-      <processingType xsi:type="monitorrepository:FeedThrough" id="_u5yfAP2cEem0KeOxAOGH_Q"/>
-    </measurementSpecifications>
-    <measuringPoint xsi:type="pcmmeasuringpoint:AssemblyOperationMeasuringPoint" href="cocome_gen.measuringpoint#//@measuringPoints.52"/>
-  </monitors>
-  <monitors id="_u5yfAf2cEem0KeOxAOGH_Q">
-    <measurementSpecifications id="_u5yfAv2cEem0KeOxAOGH_Q">
-      <metricDescription xsi:type="metricspec:NumericalBaseMetricDescription" href="pathmap://METRIC_SPEC_MODELS/commonMetrics.metricspec#_6rYmYs7nEeOX_4BzImuHbA"/>
-      <processingType xsi:type="monitorrepository:FeedThrough" id="_u52weP2cEem0KeOxAOGH_Q"/>
-    </measurementSpecifications>
-    <measuringPoint xsi:type="pcmmeasuringpoint:AssemblyOperationMeasuringPoint" href="cocome_gen.measuringpoint#//@measuringPoints.53"/>
-  </monitors>
-  <monitors id="_u52wef2cEem0KeOxAOGH_Q">
-    <measurementSpecifications id="_u52wev2cEem0KeOxAOGH_Q">
-      <metricDescription xsi:type="metricspec:NumericalBaseMetricDescription" href="pathmap://METRIC_SPEC_MODELS/commonMetrics.metricspec#_6rYmYs7nEeOX_4BzImuHbA"/>
-      <processingType xsi:type="monitorrepository:FeedThrough" id="_u57B4P2cEem0KeOxAOGH_Q"/>
-    </measurementSpecifications>
-    <measuringPoint xsi:type="pcmmeasuringpoint:AssemblyOperationMeasuringPoint" href="cocome_gen.measuringpoint#//@measuringPoints.54"/>
-  </monitors>
-  <monitors id="_u57B4f2cEem0KeOxAOGH_Q">
-    <measurementSpecifications id="_u57B4v2cEem0KeOxAOGH_Q">
-      <metricDescription xsi:type="metricspec:NumericalBaseMetricDescription" href="pathmap://METRIC_SPEC_MODELS/commonMetrics.metricspec#_6rYmYs7nEeOX_4BzImuHbA"/>
-      <processingType xsi:type="monitorrepository:FeedThrough" id="_u5-FMf2cEem0KeOxAOGH_Q"/>
-    </measurementSpecifications>
-    <measuringPoint xsi:type="pcmmeasuringpoint:AssemblyOperationMeasuringPoint" href="cocome_gen.measuringpoint#//@measuringPoints.55"/>
-  </monitors>
-  <monitors id="_u5-FMv2cEem0KeOxAOGH_Q">
-    <measurementSpecifications id="_u5-FM_2cEem0KeOxAOGH_Q">
-      <metricDescription xsi:type="metricspec:NumericalBaseMetricDescription" href="pathmap://METRIC_SPEC_MODELS/commonMetrics.metricspec#_6rYmYs7nEeOX_4BzImuHbA"/>
-      <processingType xsi:type="monitorrepository:FeedThrough" id="_u6BIgP2cEem0KeOxAOGH_Q"/>
-    </measurementSpecifications>
-    <measuringPoint xsi:type="pcmmeasuringpoint:AssemblyOperationMeasuringPoint" href="cocome_gen.measuringpoint#//@measuringPoints.56"/>
-  </monitors>
-  <monitors id="_u6BIgf2cEem0KeOxAOGH_Q">
-    <measurementSpecifications id="_u6BIgv2cEem0KeOxAOGH_Q">
-      <metricDescription xsi:type="metricspec:NumericalBaseMetricDescription" href="pathmap://METRIC_SPEC_MODELS/commonMetrics.metricspec#_6rYmYs7nEeOX_4BzImuHbA"/>
-      <processingType xsi:type="monitorrepository:FeedThrough" id="_u6GBBP2cEem0KeOxAOGH_Q"/>
-    </measurementSpecifications>
-    <measuringPoint xsi:type="pcmmeasuringpoint:AssemblyOperationMeasuringPoint" href="cocome_gen.measuringpoint#//@measuringPoints.57"/>
-  </monitors>
-  <monitors id="_u6GBBf2cEem0KeOxAOGH_Q">
-    <measurementSpecifications id="_u6GBBv2cEem0KeOxAOGH_Q">
-      <metricDescription xsi:type="metricspec:NumericalBaseMetricDescription" href="pathmap://METRIC_SPEC_MODELS/commonMetrics.metricspec#_6rYmYs7nEeOX_4BzImuHbA"/>
-      <processingType xsi:type="monitorrepository:FeedThrough" id="_u6K5gf2cEem0KeOxAOGH_Q"/>
-    </measurementSpecifications>
-    <measuringPoint xsi:type="pcmmeasuringpoint:AssemblyOperationMeasuringPoint" href="cocome_gen.measuringpoint#//@measuringPoints.58"/>
-  </monitors>
-  <monitors id="_u6K5gv2cEem0KeOxAOGH_Q">
-    <measurementSpecifications id="_u6K5g_2cEem0KeOxAOGH_Q">
-      <metricDescription xsi:type="metricspec:NumericalBaseMetricDescription" href="pathmap://METRIC_SPEC_MODELS/commonMetrics.metricspec#_6rYmYs7nEeOX_4BzImuHbA"/>
-      <processingType xsi:type="monitorrepository:FeedThrough" id="_u6PK9f2cEem0KeOxAOGH_Q"/>
-    </measurementSpecifications>
-    <measuringPoint xsi:type="pcmmeasuringpoint:AssemblyOperationMeasuringPoint" href="cocome_gen.measuringpoint#//@measuringPoints.59"/>
-  </monitors>
-  <monitors id="_u6PK9v2cEem0KeOxAOGH_Q">
-    <measurementSpecifications id="_u6PK9_2cEem0KeOxAOGH_Q">
-      <metricDescription xsi:type="metricspec:NumericalBaseMetricDescription" href="pathmap://METRIC_SPEC_MODELS/commonMetrics.metricspec#_6rYmYs7nEeOX_4BzImuHbA"/>
-      <processingType xsi:type="monitorrepository:FeedThrough" id="_u6UqgP2cEem0KeOxAOGH_Q"/>
-    </measurementSpecifications>
-    <measuringPoint xsi:type="pcmmeasuringpoint:AssemblyOperationMeasuringPoint" href="cocome_gen.measuringpoint#//@measuringPoints.60"/>
-  </monitors>
-  <monitors id="_u6Uqgf2cEem0KeOxAOGH_Q">
-    <measurementSpecifications id="_u6Uqgv2cEem0KeOxAOGH_Q">
-      <metricDescription xsi:type="metricspec:NumericalBaseMetricDescription" href="pathmap://METRIC_SPEC_MODELS/commonMetrics.metricspec#_6rYmYs7nEeOX_4BzImuHbA"/>
-      <processingType xsi:type="monitorrepository:FeedThrough" id="_u6Y78P2cEem0KeOxAOGH_Q"/>
-    </measurementSpecifications>
-    <measuringPoint xsi:type="pcmmeasuringpoint:AssemblyOperationMeasuringPoint" href="cocome_gen.measuringpoint#//@measuringPoints.61"/>
-  </monitors>
-  <monitors id="_u6Y78f2cEem0KeOxAOGH_Q">
-    <measurementSpecifications id="_u6Y78v2cEem0KeOxAOGH_Q">
-      <metricDescription xsi:type="metricspec:NumericalBaseMetricDescription" href="pathmap://METRIC_SPEC_MODELS/commonMetrics.metricspec#_6rYmYs7nEeOX_4BzImuHbA"/>
-      <processingType xsi:type="monitorrepository:FeedThrough" id="_u6b_RP2cEem0KeOxAOGH_Q"/>
-    </measurementSpecifications>
-    <measuringPoint xsi:type="pcmmeasuringpoint:AssemblyOperationMeasuringPoint" href="cocome_gen.measuringpoint#//@measuringPoints.62"/>
-  </monitors>
-  <monitors id="_u6b_Rf2cEem0KeOxAOGH_Q">
-    <measurementSpecifications id="_u6b_Rv2cEem0KeOxAOGH_Q">
-      <metricDescription xsi:type="metricspec:NumericalBaseMetricDescription" href="pathmap://METRIC_SPEC_MODELS/commonMetrics.metricspec#_6rYmYs7nEeOX_4BzImuHbA"/>
-      <processingType xsi:type="monitorrepository:FeedThrough" id="_u6fpoP2cEem0KeOxAOGH_Q"/>
-    </measurementSpecifications>
-    <measuringPoint xsi:type="pcmmeasuringpoint:AssemblyOperationMeasuringPoint" href="cocome_gen.measuringpoint#//@measuringPoints.63"/>
-  </monitors>
-  <monitors id="_u6fpof2cEem0KeOxAOGH_Q">
-    <measurementSpecifications id="_u6fpov2cEem0KeOxAOGH_Q">
-      <metricDescription xsi:type="metricspec:NumericalBaseMetricDescription" href="pathmap://METRIC_SPEC_MODELS/commonMetrics.metricspec#_6rYmYs7nEeOX_4BzImuHbA"/>
-      <processingType xsi:type="monitorrepository:FeedThrough" id="_u6kiJP2cEem0KeOxAOGH_Q"/>
-    </measurementSpecifications>
-    <measuringPoint xsi:type="pcmmeasuringpoint:AssemblyOperationMeasuringPoint" href="cocome_gen.measuringpoint#//@measuringPoints.64"/>
-  </monitors>
-  <monitors id="_u6kiJf2cEem0KeOxAOGH_Q">
-    <measurementSpecifications id="_u6kiJv2cEem0KeOxAOGH_Q">
-      <metricDescription xsi:type="metricspec:NumericalBaseMetricDescription" href="pathmap://METRIC_SPEC_MODELS/commonMetrics.metricspec#_6rYmYs7nEeOX_4BzImuHbA"/>
-      <processingType xsi:type="monitorrepository:FeedThrough" id="_u6m-a_2cEem0KeOxAOGH_Q"/>
-    </measurementSpecifications>
-    <measuringPoint xsi:type="pcmmeasuringpoint:AssemblyOperationMeasuringPoint" href="cocome_gen.measuringpoint#//@measuringPoints.65"/>
-  </monitors>
-  <monitors id="_u6m-bP2cEem0KeOxAOGH_Q">
-    <measurementSpecifications id="_u6m-bf2cEem0KeOxAOGH_Q">
-      <metricDescription xsi:type="metricspec:NumericalBaseMetricDescription" href="pathmap://METRIC_SPEC_MODELS/commonMetrics.metricspec#_6rYmYs7nEeOX_4BzImuHbA"/>
-      <processingType xsi:type="monitorrepository:FeedThrough" id="_u6rP1P2cEem0KeOxAOGH_Q"/>
-    </measurementSpecifications>
-    <measuringPoint xsi:type="pcmmeasuringpoint:AssemblyOperationMeasuringPoint" href="cocome_gen.measuringpoint#//@measuringPoints.66"/>
-  </monitors>
-  <monitors id="_u6rP1f2cEem0KeOxAOGH_Q">
-    <measurementSpecifications id="_u6rP1v2cEem0KeOxAOGH_Q">
-      <metricDescription xsi:type="metricspec:NumericalBaseMetricDescription" href="pathmap://METRIC_SPEC_MODELS/commonMetrics.metricspec#_6rYmYs7nEeOX_4BzImuHbA"/>
-      <processingType xsi:type="monitorrepository:FeedThrough" id="_u6tFCv2cEem0KeOxAOGH_Q"/>
-    </measurementSpecifications>
-    <measuringPoint xsi:type="pcmmeasuringpoint:AssemblyOperationMeasuringPoint" href="cocome_gen.measuringpoint#//@measuringPoints.67"/>
-  </monitors>
-  <monitors id="_u6tFC_2cEem0KeOxAOGH_Q">
-    <measurementSpecifications id="_u6tFDP2cEem0KeOxAOGH_Q">
-      <metricDescription xsi:type="metricspec:NumericalBaseMetricDescription" href="pathmap://METRIC_SPEC_MODELS/commonMetrics.metricspec#_6rYmYs7nEeOX_4BzImuHbA"/>
-      <processingType xsi:type="monitorrepository:FeedThrough" id="_u6vhSf2cEem0KeOxAOGH_Q"/>
-    </measurementSpecifications>
-    <measuringPoint xsi:type="pcmmeasuringpoint:AssemblyOperationMeasuringPoint" href="cocome_gen.measuringpoint#//@measuringPoints.68"/>
-  </monitors>
-  <monitors id="_u6vhSv2cEem0KeOxAOGH_Q">
-    <measurementSpecifications id="_u6vhS_2cEem0KeOxAOGH_Q">
-      <metricDescription xsi:type="metricspec:NumericalBaseMetricDescription" href="pathmap://METRIC_SPEC_MODELS/commonMetrics.metricspec#_6rYmYs7nEeOX_4BzImuHbA"/>
-      <processingType xsi:type="monitorrepository:FeedThrough" id="_u6yklP2cEem0KeOxAOGH_Q"/>
-    </measurementSpecifications>
-    <measuringPoint xsi:type="pcmmeasuringpoint:AssemblyOperationMeasuringPoint" href="cocome_gen.measuringpoint#//@measuringPoints.69"/>
-  </monitors>
-  <monitors id="_u6yklf2cEem0KeOxAOGH_Q">
-    <measurementSpecifications id="_u6yklv2cEem0KeOxAOGH_Q">
-      <metricDescription xsi:type="metricspec:NumericalBaseMetricDescription" href="pathmap://METRIC_SPEC_MODELS/commonMetrics.metricspec#_6rYmYs7nEeOX_4BzImuHbA"/>
-      <processingType xsi:type="monitorrepository:FeedThrough" id="_u62O9v2cEem0KeOxAOGH_Q"/>
-    </measurementSpecifications>
-    <measuringPoint xsi:type="pcmmeasuringpoint:AssemblyOperationMeasuringPoint" href="cocome_gen.measuringpoint#//@measuringPoints.70"/>
-  </monitors>
-  <monitors id="_u62O9_2cEem0KeOxAOGH_Q">
-    <measurementSpecifications id="_u62O-P2cEem0KeOxAOGH_Q">
-      <metricDescription xsi:type="metricspec:NumericalBaseMetricDescription" href="pathmap://METRIC_SPEC_MODELS/commonMetrics.metricspec#_6rYmYs7nEeOX_4BzImuHbA"/>
-      <processingType xsi:type="monitorrepository:FeedThrough" id="_u65SSf2cEem0KeOxAOGH_Q"/>
-    </measurementSpecifications>
-    <measuringPoint xsi:type="pcmmeasuringpoint:AssemblyOperationMeasuringPoint" href="cocome_gen.measuringpoint#//@measuringPoints.71"/>
-  </monitors>
-  <monitors id="_u65SSv2cEem0KeOxAOGH_Q">
-    <measurementSpecifications id="_u65SS_2cEem0KeOxAOGH_Q">
-      <metricDescription xsi:type="metricspec:NumericalBaseMetricDescription" href="pathmap://METRIC_SPEC_MODELS/commonMetrics.metricspec#_6rYmYs7nEeOX_4BzImuHbA"/>
-      <processingType xsi:type="monitorrepository:FeedThrough" id="_u69jsP2cEem0KeOxAOGH_Q"/>
-    </measurementSpecifications>
-    <measuringPoint xsi:type="pcmmeasuringpoint:AssemblyOperationMeasuringPoint" href="cocome_gen.measuringpoint#//@measuringPoints.72"/>
-  </monitors>
-  <monitors id="_u6-KwP2cEem0KeOxAOGH_Q">
-    <measurementSpecifications id="_u6-Kwf2cEem0KeOxAOGH_Q">
-      <metricDescription xsi:type="metricspec:NumericalBaseMetricDescription" href="pathmap://METRIC_SPEC_MODELS/commonMetrics.metricspec#_6rYmYs7nEeOX_4BzImuHbA"/>
-      <processingType xsi:type="monitorrepository:FeedThrough" id="_u7AnDv2cEem0KeOxAOGH_Q"/>
-    </measurementSpecifications>
-    <measuringPoint xsi:type="pcmmeasuringpoint:UsageScenarioMeasuringPoint" href="cocome_gen.measuringpoint#//@measuringPoints.73"/>
+    <measuringPoint xsi:type="pcmmeasuringpoint:UsageScenarioMeasuringPoint" href="cocome_gen.measuringpoint#//@measuringPoints.11"/>
   </monitors>
 </monitorrepository:MonitorRepository>

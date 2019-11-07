@@ -9,6 +9,8 @@ repositories {
 dependencies {
 	compile project(":org.pcm.headless.shared")
 	
+	compile group: 'org.springframework', name: 'spring-core', version: '5.2.0.RELEASE'
+	
 	// gradle
 	compile group: 'org.gradle', name: 'gradle-tooling-api', version: '5.6.3'
 

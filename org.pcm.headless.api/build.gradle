@@ -6,6 +6,9 @@ repositories {
     jcenter()
 }
 
+archivesBaseName = 'headless-pcm-api'
+version = '0.1.0'
+
 dependencies {
 	compile project(":org.pcm.headless.shared")
 	

@@ -22,5 +22,6 @@ The Spring-Boot application that provides the REST interface also offers a very 
 ![Screenshot of the Web UI](https://user-images.githubusercontent.com/19149680/68165136-e2e24880-ff5e-11e9-8f93-e03b5f63ad14.png)
 
 # Future Work
+The current limitations, problems and future improvements are documented [here](https://github.com/dmonsch/PCM-Headless/issues).
 
 # Credits

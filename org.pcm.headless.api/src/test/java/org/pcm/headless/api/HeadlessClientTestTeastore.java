@@ -12,6 +12,8 @@ public class HeadlessClientTestTeastore {
 	public static void main(String[] args) {
 		PCMHeadlessClient client = new PCMHeadlessClient("http://127.0.0.1:8080/");
 		if (client.isReachable(3000)) {
+			System.out.println("Backend erreichbar.");
+
 			File allocationFile = new File("examples/teastore/teastore.allocation");
 			File repositoryFile = new File("examples/teastore/teastore.repository");
 			File monitorRepositoryFile = new File("examples/teastore/teastore.monitorrepository");
