@@ -3,6 +3,7 @@ package agent.main.mock;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.net.URL;
 import java.util.Map;
 
 import org.eclipse.emf.common.util.URI;
@@ -75,15 +76,22 @@ public class Initializer {
 	}
 
 	private static void initPathmaps() {
-		final String palladioResModel = "file:/Users/david/Desktop/SimulizarStandalone/workspace/SimulizarAutomizer/simucom/src/main/resources";
-		final String metricSpecModel = "file:/Users/david/Desktop/SimulizarStandalone/workspace/SimulizarAutomizer/simucom/src/main/resources";
+		final String palladioResModel = "models/Palladio.resourcetype";
+		final String metricSpecModel = "models/commonMetrics.metricspec";
+		final URL url = Initializer.class.getClassLoader().getResource(palladioResModel);
+		final URL url2 = Initializer.class.getClassLoader().getResource(metricSpecModel);
+		if (url == null || url2 == null) {
+			throw new RuntimeException("Error getting common definitions");
+		}
 
-		String urlString = palladioResModel;
+		String urlString = url.toString();
+		urlString = urlString.substring(0, urlString.length() - palladioResModel.length() - 1);
 		final URI uri = URI.createURI(urlString);
 		final URI target = uri.appendSegment("models").appendSegment("");
 		URIConverter.URI_MAP.put(URI.createURI("pathmap://PCM_MODELS/"), target);
 
-		urlString = metricSpecModel;
+		urlString = url2.toString();
+		urlString = urlString.substring(0, urlString.length() - metricSpecModel.length() - 1);
 		final URI uri2 = URI.createURI(urlString);
 		final URI target2 = uri2.appendSegment("models").appendSegment("");
 		URIConverter.URI_MAP.put(URI.createURI("pathmap://METRIC_SPEC_MODELS/"), target2);

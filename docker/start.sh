@@ -17,4 +17,5 @@ cd /etc/headless/PCM-Headless/org.pcm.headless.rest/build/libs/
 # var
 jarFile="$(find . -name "*.jar" -maxdepth 1 -type f)"
 
+java -version
 java -javaagent:/etc/headless/PCM-Headless/org.pcm.headless.agent/build/libs/agent.jar -jar $jarFile $1
