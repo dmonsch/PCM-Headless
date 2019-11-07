@@ -3,6 +3,7 @@ package org.pcm.headless.core.simulator.simucom;
 import java.io.File;
 
 import org.palladiosimulator.edp2.models.Repository.LocalMemoryRepository;
+import org.palladiosimulator.metricspec.MetricSpecPackage;
 import org.pcm.headless.core.simulator.AbstractHeadlessSimulator;
 import org.pcm.headless.core.simulator.RepetitionData;
 
@@ -40,6 +41,9 @@ public class SimuComHeadlessSimulator extends AbstractHeadlessSimulator {
 		if (simulationConfig.isParallelizeRepetitions()) {
 			log.warning("Parallelizing simulation repetitions are not supported by the SimuCom simulator!");
 		}
+
+		// 0.1. init classes
+		MetricSpecPackage.eINSTANCE.eClass();
 
 		// 1. build config
 		repository = super.pullNewInMemoryRepository();

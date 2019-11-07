@@ -48,7 +48,7 @@ public class ReflectiveSimulationInvoker {
 	private URLClassLoader prepareClassloader(File jar) {
 		try {
 			return new URLClassLoader(new URL[] { jar.toURI().toURL() },
-					ReflectiveSimulationInvoker.class.getClassLoader());
+					Thread.currentThread().getContextClassLoader());
 		} catch (MalformedURLException e) {
 			log.warning("Could not create a child classloader from the SimuCom jar.");
 			return null;
