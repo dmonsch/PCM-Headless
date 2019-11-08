@@ -30,7 +30,8 @@ public class HeadlessClientTestTeastore {
 			sim.setMonitorRepository(monitorRepositoryFile);
 
 			sim.setSimulationConfig(HeadlessSimulationConfig.builder().type(ESimulationType.SIMUCOM)
-					.experimentName("TeaStore Simulation").repetitions(10).build());
+					.experimentName("TeaStore Simulation").maximumMeasurementCount(50000).simulationTime(500000)
+					.repetitions(10).build());
 
 			sim.createTransitiveClosure();
 			sim.sync();
