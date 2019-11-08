@@ -47,6 +47,10 @@ dependencies {
 }
 
 jar {
+}
+
+task fatJar(type: Jar) {
+	classifier = 'all'
 	from {
 		configurations.runtime.collect({ it.isDirectory() ? it : zipTree(it) })
 	}
@@ -56,4 +60,5 @@ jar {
 		exclude 'META-INF/*.DSA'
 		exclude 'META-INF/*.RSA'
 	}
+	with jar
 }

@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.palladiosimulator.edp2.models.measuringpoint.MeasuringPoint;
 import org.palladiosimulator.edp2.models.measuringpoint.MeasuringPointRepository;
 import org.palladiosimulator.edp2.models.measuringpoint.MeasuringpointFactory;
 import org.palladiosimulator.monitorrepository.FeedThrough;
@@ -28,8 +29,6 @@ import org.pcm.headless.api.util.PCMUtil;
 
 import com.google.common.collect.Lists;
 
-// TODO own method for creation of the monitor
-// TODO support multiple repositories
 public class MonitorRepositoryBuilderUtil {
 	private static final String BASE_RESPONSE_TIME_METRIC_ID = "_6rYmYs7nEeOX_4BzImuHbA";
 
@@ -72,17 +71,7 @@ public class MonitorRepositoryBuilderUtil {
 			nPoint.setUsageScenario(scenario);
 			pRepo.getMeasuringPoints().add(nPoint);
 
-			// create monitor
-			Monitor nMonitor = MonitorRepositoryFactory.eINSTANCE.createMonitor();
-			MeasurementSpecification spec = MonitorRepositoryFactory.eINSTANCE.createMeasurementSpecification();
-			spec.setMetricDescription(PCMUtil.getMetricByID(BASE_RESPONSE_TIME_METRIC_ID).get());
-			nMonitor.setMeasuringPoint(nPoint);
-			nMonitor.getMeasurementSpecifications().add(spec);
-			mRepo.getMonitors().add(nMonitor);
-
-			// create feed through
-			FeedThrough ft = MonitorRepositoryFactory.eINSTANCE.createFeedThrough();
-			spec.setProcessingType(ft);
+			createMonitorForMeasuringPoint(nPoint);
 		});
 
 		return this;
@@ -96,17 +85,7 @@ public class MonitorRepositoryBuilderUtil {
 				nPoint.setExternalCall(action);
 				pRepo.getMeasuringPoints().add(nPoint);
 
-				// create monitor
-				Monitor nMonitor = MonitorRepositoryFactory.eINSTANCE.createMonitor();
-				MeasurementSpecification spec = MonitorRepositoryFactory.eINSTANCE.createMeasurementSpecification();
-				spec.setMetricDescription(PCMUtil.getMetricByID(BASE_RESPONSE_TIME_METRIC_ID).get());
-				nMonitor.setMeasuringPoint(nPoint);
-				nMonitor.getMeasurementSpecifications().add(spec);
-				mRepo.getMonitors().add(nMonitor);
-
-				// create feed through
-				FeedThrough ft = MonitorRepositoryFactory.eINSTANCE.createFeedThrough();
-				spec.setProcessingType(ft);
+				createMonitorForMeasuringPoint(nPoint);
 			});
 		});
 		return this;
@@ -140,23 +119,27 @@ public class MonitorRepositoryBuilderUtil {
 								pRepo.getMeasuringPoints().add(nPoint);
 
 								// create monitor
-								Monitor nMonitor = MonitorRepositoryFactory.eINSTANCE.createMonitor();
-								MeasurementSpecification spec = MonitorRepositoryFactory.eINSTANCE
-										.createMeasurementSpecification();
-								spec.setMetricDescription(PCMUtil.getMetricByID(BASE_RESPONSE_TIME_METRIC_ID).get());
-								nMonitor.setMeasuringPoint(nPoint);
-								nMonitor.getMeasurementSpecifications().add(spec);
-								mRepo.getMonitors().add(nMonitor);
-
-								// create feed through
-								FeedThrough ft = MonitorRepositoryFactory.eINSTANCE.createFeedThrough();
-								spec.setProcessingType(ft);
+								createMonitorForMeasuringPoint(nPoint);
 							});
 						});
 			});
 		});
 
 		return this;
+	}
+
+	private void createMonitorForMeasuringPoint(MeasuringPoint point) {
+		// create monitor
+		Monitor nMonitor = MonitorRepositoryFactory.eINSTANCE.createMonitor();
+		MeasurementSpecification spec = MonitorRepositoryFactory.eINSTANCE.createMeasurementSpecification();
+		spec.setMetricDescription(PCMUtil.getMetricByID(BASE_RESPONSE_TIME_METRIC_ID).get());
+		nMonitor.setMeasuringPoint(point);
+		nMonitor.getMeasurementSpecifications().add(spec);
+		mRepo.getMonitors().add(nMonitor);
+
+		// create feed through
+		FeedThrough ft = MonitorRepositoryFactory.eINSTANCE.createFeedThrough();
+		spec.setProcessingType(ft);
 	}
 
 }
