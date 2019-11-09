@@ -26,7 +26,7 @@ public class InMemoryResultRepository {
 	public void addMultipleDataSeries(PlainMetricMeasuringPointBundle bundle, List<PlainDataSeries> series) {
 		Optional<KeyValuePair<PlainMetricMeasuringPointBundle, List<PlainDataSeries>>> exPoint = this.values.stream()
 				.filter(val -> {
-					return val.getKex().equals(bundle);
+					return val.getKey().equals(bundle);
 				}).findFirst();
 		if (exPoint.isPresent()) {
 			exPoint.get().getValue().addAll(series);
@@ -37,7 +37,7 @@ public class InMemoryResultRepository {
 
 	public void merge(InMemoryResultRepository other) {
 		other.values.forEach(v -> {
-			addMultipleDataSeries(v.getKex(), v.getValue());
+			addMultipleDataSeries(v.getKey(), v.getValue());
 		});
 	}
 

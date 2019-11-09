@@ -1,4 +1,4 @@
-# Get state
+# Get Global State
 Get the states and information of all triggered simulations.
 
 URL : `/rest/state`

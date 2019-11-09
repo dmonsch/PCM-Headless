@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ASCII"?>
-<org.palladiosimulator.edp2.models:MeasuringPointRepository xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:org.palladiosimulator.edp2.models="http://palladiosimulator.org/EDP2/MeasuringPoint/1.0" xmlns:pcmmeasuringpoint="http://palladiosimulator.org/PCM/MeasuringPoint/1.0" id="_-meSwQJcEeqcxYxdypOwiw">
+<org.palladiosimulator.edp2.models:MeasuringPointRepository xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:org.palladiosimulator.edp2.models="http://palladiosimulator.org/EDP2/MeasuringPoint/1.0" xmlns:pcmmeasuringpoint="http://palladiosimulator.org/PCM/MeasuringPoint/1.0" id="_NOFNYQMCEeqhmqe2YjPoPw">
   <measuringPoints xsi:type="pcmmeasuringpoint:ExternalCallActionMeasuringPoint" stringRepresentation="ExternalCall getPersistenceContext from TradingSystem.Inventory.Application.ProductDispatcher to PersistenceIf->getPersistenceContext [_EJT-ANLyEduQ7qbNANXHPw]" resourceURIRepresentation="file:/Users/david/Desktop/PCM-Headless/git/org.pcm.headless.api/examples/cocome/cocome.repository#_EJT-ANLyEduQ7qbNANXHPw">
     <externalCall href="cocome.repository#_EJT-ANLyEduQ7qbNANXHPw"/>
   </measuringPoints>
