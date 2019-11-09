@@ -20,7 +20,7 @@ Example 1 (Failure)
 
 ```json
 {
-	success : false
+	"success" : false
 }
 ```
 
@@ -28,7 +28,7 @@ Example 2 (Success)
 
 ```json
 {
-	success : true
+	"success" : true
 }
 ```
 

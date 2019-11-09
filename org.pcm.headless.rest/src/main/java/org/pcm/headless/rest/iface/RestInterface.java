@@ -200,10 +200,10 @@ public class RestInterface implements InitializingBean {
 		if (stateMapping.containsKey(id)) {
 			boolean success = clearState(stateMapping.get(id));
 			if (success) {
-				return "{success : true}";
+				return "{\"success\" : true}";
 			}
 		}
-		return "{success : false}";
+		return "{\"success\" : false}";
 	}
 
 	@GetMapping("/{id}/start")
