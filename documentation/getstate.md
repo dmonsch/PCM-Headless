@@ -1,7 +1,7 @@
 # Get state
 Get the states and information of all triggered simulations.
 
-URL : `/rest/state/`
+URL : `/rest/state`
 
 Method : `GET`
 
