@@ -65,7 +65,7 @@ Look into the [Wiki](https://github.com/dmonsch/PCM-Headless/wiki) and see if it
 # Credits
 This repository is based on many other projects. The most important of them are:
 * [Palladio Component Model](https://sdqweb.ipd.kit.edu/wiki/Palladio_Component_Model) and several related projects
-* [Eclipse Modeling Framework](Eclipse Modeling Framework)
+* [Eclipse Modeling Framework (EMF)](https://www.eclipse.org/modeling/emf/)
 * [Docker](https://www.docker.com/)
 * [Spring Boot](https://spring.io/projects/spring-boot)
 * [Lombok](https://projectlombok.org/)
