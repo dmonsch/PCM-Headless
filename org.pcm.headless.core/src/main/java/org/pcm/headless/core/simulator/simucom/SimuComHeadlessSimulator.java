@@ -54,9 +54,8 @@ public class SimuComHeadlessSimulator extends AbstractHeadlessSimulator {
 
 		// 3. prepare & build gradle project
 		File projectBasePath = new File(simulationConfig.getSimuComStoragePath());
-		SimuComGradleProcessor gradleProcessor = new SimuComGradleProcessor(projectBasePath);
-		gradleProcessor.createMetadataFiles();
-		resultingJar = gradleProcessor.buildProject();
+		SimuComJarBuilder jarBuilder = new SimuComJarBuilder(projectBasePath);
+		resultingJar = jarBuilder.buildProject();
 	}
 
 	@Override
