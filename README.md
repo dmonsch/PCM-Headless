@@ -63,3 +63,9 @@ The current limitations, problems and future improvements are documented [here](
 Look into the [Wiki](https://github.com/dmonsch/PCM-Headless/wiki) and see if it addresses your question(s) or feel free to open an issue.
 
 # Credits
+This repository is based on many other projects. The most important of them are:
+* [Palladio Component Model](https://sdqweb.ipd.kit.edu/wiki/Palladio_Component_Model) and several related projects
+* [Eclipse Modeling Framework (EMF)](Eclipse Modeling Framework)
+* [Docker](https://www.docker.com/)
+* [Spring Boot](https://spring.io/projects/spring-boot)
+* [Lombok](https://projectlombok.org/)
