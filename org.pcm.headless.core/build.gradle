@@ -9,6 +9,9 @@ repositories {
 dependencies {
 	compile project(":org.pcm.headless.shared")
 	
+	// https://mvnrepository.com/artifact/commons-io/commons-io
+	compile group: 'commons-io', name: 'commons-io', version: '2.6'
+	
 	compile group: 'org.springframework', name: 'spring-core', version: '5.2.0.RELEASE'
 
 	compile group: 'extra', name: 'desmoj', version: '2.0+'
