@@ -11,11 +11,18 @@ version = '0.2.0'
 
 configurations {
     slim
+    notIncludedSlim
     compile.extendsFrom slim
 }
 
 dependencies {
 	slim project(":org.pcm.headless.shared")
+	
+	// https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind
+	notIncludedSlim group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.10.0'
+	
+	// https://mvnrepository.com/artifact/com.google.guava/guava
+	notIncludedSlim group: 'com.google.guava', name: 'guava-collections', version: 'r03'
 	
 	compile group: 'com.mashape.unirest', name: 'unirest-java', version: '1.4.9'
 	compile group: 'org.jscience', name: 'jscience', version: '4.3.1'
@@ -57,7 +64,7 @@ jar {
 task slimJar(type: Jar) {
 	classifier = 'slim'
 	from {
-		configurations.slim.collect({ it.isDirectory() ? it : zipTree(it) })
+		(configurations.slim - configurations.notIncludedSlim).collect({ it.isDirectory() ? it : zipTree(it) })
 	}
 	{
 		exclude 'META-INF/MANIFEST.MF'
