@@ -294,10 +294,11 @@ public class SimulationClient {
 		public void run() {
 			ESimulationState currentState = SimulationClient.this.getState();
 
-			if (currentState != ESimulationState.EXECUTED && this.trys * POLL_DELAY < MAX_TIMEOUT_RESULTS) {
+			if (currentState != ESimulationState.EXECUTED && this.trys * POLL_DELAY < MAX_TIMEOUT_RESULTS
+					&& currentState != ESimulationState.FAILED) {
 				this.trys++;
 				executorService.schedule(this, POLL_DELAY, TimeUnit.MILLISECONDS);
-			} else if (this.trys * POLL_DELAY >= MAX_TIMEOUT_RESULTS) {
+			} else if (this.trys * POLL_DELAY >= MAX_TIMEOUT_RESULTS || currentState == ESimulationState.FAILED) {
 				executorService.shutdown();
 				listener.onResult(null); // => timeout
 			} else if (currentState == ESimulationState.EXECUTED) {
