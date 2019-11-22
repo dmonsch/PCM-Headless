@@ -35,6 +35,7 @@ public class PCMUtil {
 	private static void initPathmaps() {
 		final String palladioResModel = "models/Palladio.resourcetype";
 		final String metricSpecModel = "models/commonMetrics.metricspec";
+
 		final URL url = PCMUtil.class.getClassLoader().getResource(palladioResModel);
 		final URL url2 = PCMUtil.class.getClassLoader().getResource(metricSpecModel);
 		if (url == null || url2 == null) {

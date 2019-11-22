@@ -1,6 +1,8 @@
 package org.pcm.headless.api.client.transform;
 
-import java.util.ArrayList;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -11,133 +13,177 @@ import java.util.stream.Stream;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.emf.ecore.util.EcoreUtil.EqualityHelper;
+import org.palladiosimulator.monitorrepository.MonitorRepository;
+import org.palladiosimulator.pcm.repository.PrimitiveDataType;
 import org.pcm.headless.api.util.ModelUtil;
+import org.pcm.headless.api.util.MonitorRepositoryTransformer;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
+
+import de.uka.ipd.sdq.stoex.Expression;
 
 public class TransitiveModelTransformer {
 	// base
 	private List<EObject> models;
 
-	// map resources to eobjects
-	private Map<URI, EObject> resourceMapping;
-
-	// transitive
-	private List<Resource> transitiveClosure;
-
-	// transitive resolved
-	private Set<URI> transitiveResolved;
+	// closure
+	private List<EObject> transitiveClosure;
 
 	public TransitiveModelTransformer(EObject... models) {
 		this.models = Stream.of(models).collect(Collectors.toList());
-		this.resourceMapping = new HashMap<>();
 	}
 
-	public EObject getModelByURI(URI uri) {
-		return resourceMapping.get(uri);
-	}
-
-	public Set<URI> getTransitives() {
-		return transitiveResolved;
-	}
-
-	public void transformURIs(IURITransformer transformer) {
-		if (transitiveClosure == null) {
+	public List<EObject> buildModels(IModelFileNameGenerator fileNameGenerator) {
+		if (transitiveClosure == null || transitiveClosure.size() == 0) {
 			this.buildTransitiveClosure();
 		}
 
-		// create rules before
-		transitiveClosure.forEach(r -> {
-			transformer.installRule(r.getURI());
-		});
+		// exit if empty
+		if (transitiveClosure.size() == 0) {
+			return Lists.newArrayList();
+		}
 
-		resourceMapping.entrySet().forEach(e -> {
-			// install rules for all crosses
-			filterResources(
-					allCrossReferences(e.getValue()).stream().map(ref -> ref.eResource()).collect(Collectors.toList()),
-					new HashSet<>()).forEach(cr -> {
-						transformer.installRule(cr.getURI());
-					});
+		// base path
+		File modelBasePath;
+		try {
+			modelBasePath = Files.createTempDirectory("temporaryModels").toFile();
+		} catch (IOException e) {
+			return Lists.newArrayList();
+		}
+
+		// generate file names
+		List<EObject> transitiveClosureCopy = transitiveClosure.stream().map(m -> EcoreUtil.copy(m))
+				.collect(Collectors.toList());
+		Map<EObject, File> resultingFileMap = createFileMappingAndInitializeResources(transitiveClosureCopy, modelBasePath,
+				fileNameGenerator);
+
+		// transform the links
+		Map<EObject, File> cacheFileMapping = new HashMap<>();
+		transitiveClosureCopy.forEach(m -> {
+			File resultingFile = resolveAndCache(m, resultingFileMap, cacheFileMapping);
 
 			// transform crosses
-			allCrossReferences(e.getValue()).forEach(cr -> {
-				cr.eResource().setURI(transformer.transform(cr.eResource().getURI()));
+			allCrossReferences(m).forEach(cr -> {
+				EObject rootContainer = getRootContainerOrNull(cr);
+				if (rootContainer != null) {
+					File resultingFileCrossReference = resolveAndCache(rootContainer, resultingFileMap,
+							cacheFileMapping);
+
+					cr.eResource().setURI(URI.createFileURI(resultingFileCrossReference.getName()));
+				}
 			});
 
-			// itself
-			e.getValue().eResource().setURI(transformer.transform(e.getKey()));
+			// transform itself
+			m.eResource().setURI(URI.createFileURI(resultingFile.getName()));
 		});
+
+		// remove temp folder
+		modelBasePath.delete();
+
+		return transitiveClosureCopy;
 	}
 
 	public void buildTransitiveClosure() {
-		Set<URI> resourcesClosure = new HashSet<>();
-		List<Resource> resourcesClosed = new ArrayList<>();
-		transitiveResolved = new HashSet<>();
+		transitiveClosure = Lists.newArrayList();
 
 		// add all ex models
 		for (EObject m : models) {
-			if (m != null) {
-				resourcesClosed.add(m.eResource());
-				resourceMapping.put(m.eResource().getURI(), m);
-			}
+			transitiveClosure.add(m);
 		}
-
-		// first filter
-		resourcesClosed = filterResources(resourcesClosed, resourcesClosure);
 
 		// build transitive closure
 		for (EObject model : models) {
-			closeTransitive(resourcesClosed, resourcesClosure, model);
+			closeTransitive(transitiveClosure, model);
 		}
 
-		// set closure
-		this.transitiveClosure = resourcesClosed;
+		List<EObject> transitiveClosureIdent = Lists.newArrayList();
+		for (EObject m : transitiveClosure) {
+			boolean contained = transitiveClosureIdent.stream().anyMatch(e -> {
+				EqualityHelper helper = new EqualityHelper();
+				return m == e || m.equals(e) || helper.equals(m, e);
+			});
+			if (!contained) {
+				transitiveClosureIdent.add(m);
+			}
+		}
+
+		// rewrite transitive closure
+		transitiveClosure = transitiveClosureIdent;
+
 	}
 
-	private void closeTransitive(List<Resource> container, Set<URI> uriContainer, EObject search) {
-		List<EObject> crossReferences = allCrossReferences(search);
-		List<Resource> toAdd = filterResources(
-				crossReferences.stream().map(t -> t.eResource()).collect(Collectors.toList()), uriContainer);
-		container.addAll(toAdd);
+	private Map<EObject, File> createFileMappingAndInitializeResources(List<EObject> transitiveClosure, File basePath,
+			IModelFileNameGenerator fileNameGenerator) {
+		Map<EObject, File> resultingFileMap = new HashMap<>();
+		for (EObject obj : transitiveClosure) {
+			// clone and put
+			resultingFileMap.put(obj, new File(basePath, fileNameGenerator.generateFileName(obj)));
+		}
+
+		// save them so all have a eresource
+		transitiveClosure.forEach(m -> {
+			File resultingFile = resultingFileMap.get(m);
+			if (m instanceof MonitorRepository) {
+				MonitorRepositoryTransformer.makePersistable(m);
+			}
+			ModelUtil.saveToFile(m, resultingFile);
+		});
+
+		return resultingFileMap;
+	}
+
+	private File resolveAndCache(EObject obj, Map<EObject, File> orgMap, Map<EObject, File> cache) {
+		if (cache.containsKey(obj)) {
+			return cache.get(obj);
+		} else {
+			File result = orgMap.entrySet().stream().filter(r -> {
+				EqualityHelper helper = new EqualityHelper();
+				return helper.equals(r.getKey(), obj);
+			}).map(r -> r.getValue()).findFirst().orElse(null);
+
+			cache.put(obj, result);
+
+			return result;
+		}
+	}
+
+	private void closeTransitive(List<EObject> container, EObject search) {
+		Set<EObject> crossReferences = allCrossReferences(search);
+
+		List<EObject> toAdd = Lists.newArrayList();
+		for (EObject crossRef : crossReferences) {
+			if (!container.contains(crossRef)) {
+				container.add(crossRef);
+				toAdd.add(crossRef);
+			}
+		}
 
 		if (toAdd.size() > 0) {
-			transitiveResolved.addAll(toAdd.stream().map(t -> t.getURI()).collect(Collectors.toSet()));
-			toAdd.forEach(cf -> {
-				EObject modelRead = ModelUtil.readFromFile(cf.getURI().toFileString(), EObject.class);
-				resourceMapping.put(cf.getURI(), modelRead);
-				closeTransitive(container, uriContainer, modelRead);
+			toAdd.forEach(modelRead -> {
+				closeTransitive(container, modelRead);
 			});
 		}
 	}
 
-	private List<Resource> filterResources(List<Resource> res, Set<URI> already) {
-		List<Resource> result = new ArrayList<>();
-		for (Resource r : res) {
-			if (!already.contains(r.getURI())) {
-				already.add(r.getURI());
-				result.add(r);
-			}
-		}
-		return result;
-	}
-
-	private List<EObject> allCrossReferences(EObject obj) {
+	private Set<EObject> allCrossReferences(EObject obj) {
 		if (obj == null) {
-			return Lists.newArrayList();
+			return Sets.newHashSet();
 		}
 		Set<EObject> references = new HashSet<>();
 
 		// direct ones
 		obj.eCrossReferences().forEach(cr -> {
-			references.add(cr);
+			references.add(getRootContainerOrNull(cr));
 		});
 
 		// of all child contents
 		obj.eAllContents().forEachRemaining(e -> {
 			if (e.eCrossReferences().size() > 0) {
 				e.eCrossReferences().forEach(cr -> {
-					references.add(cr);
+					references.add(getRootContainerOrNull(cr));
 				});
 			}
 		});
@@ -147,9 +193,18 @@ public class TransitiveModelTransformer {
 		references.remove(obj);
 
 		// remove pathmaps
-		return references.stream()
-				.filter(ref -> ref.eResource() != null && ref.eResource().getURI().toString().startsWith("file:"))
-				.collect(Collectors.toList());
+		return references;
+	}
+
+	private EObject getRootContainerOrNull(EObject obj) {
+		EObject easyRoot = EcoreUtil.getRootContainer(obj);
+		if (!(easyRoot instanceof Expression)
+				&& (easyRoot.eResource() == null || !easyRoot.eResource().getURI().scheme().equals("pathmap"))
+				&& !(easyRoot instanceof PrimitiveDataType)) {
+			return easyRoot;
+		}
+
+		return null;
 	}
 
 }

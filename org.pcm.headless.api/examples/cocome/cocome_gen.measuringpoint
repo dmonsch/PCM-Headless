@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ASCII"?>
-<org.palladiosimulator.edp2.models:MeasuringPointRepository xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:org.palladiosimulator.edp2.models="http://palladiosimulator.org/EDP2/MeasuringPoint/1.0" xmlns:pcmmeasuringpoint="http://palladiosimulator.org/PCM/MeasuringPoint/1.0" id="_NOFNYQMCEeqhmqe2YjPoPw">
+<org.palladiosimulator.edp2.models:MeasuringPointRepository xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:org.palladiosimulator.edp2.models="http://palladiosimulator.org/EDP2/MeasuringPoint/1.0" xmlns:pcmmeasuringpoint="http://palladiosimulator.org/PCM/MeasuringPoint/1.0" id="_YE51QA0vEeqiBKiXKuqcQQ">
   <measuringPoints xsi:type="pcmmeasuringpoint:ExternalCallActionMeasuringPoint" stringRepresentation="ExternalCall getPersistenceContext from TradingSystem.Inventory.Application.ProductDispatcher to PersistenceIf->getPersistenceContext [_EJT-ANLyEduQ7qbNANXHPw]" resourceURIRepresentation="file:/Users/david/Desktop/PCM-Headless/git/org.pcm.headless.api/examples/cocome/cocome.repository#_EJT-ANLyEduQ7qbNANXHPw">
     <externalCall href="cocome.repository#_EJT-ANLyEduQ7qbNANXHPw"/>
   </measuringPoints>
@@ -33,7 +33,7 @@
   <measuringPoints xsi:type="pcmmeasuringpoint:ExternalCallActionMeasuringPoint" stringRepresentation="ExternalCall queryStoreById from TradingSystem.Inventory.Application.Store to StoreQueryIf->queryStoreById [_1UJywNJQEduQ7qbNANXHPw]" resourceURIRepresentation="file:/Users/david/Desktop/PCM-Headless/git/org.pcm.headless.api/examples/cocome/cocome.repository#_1UJywNJQEduQ7qbNANXHPw">
     <externalCall href="cocome.repository#_1UJywNJQEduQ7qbNANXHPw"/>
   </measuringPoints>
-  <measuringPoints xsi:type="pcmmeasuringpoint:UsageScenarioMeasuringPoint" stringRepresentation="Usage Scenario: aName" resourceURIRepresentation="file:/Users/david/Desktop/PCM-Headless/git/org.pcm.headless.api/examples/cocome/cocome.usagemodel#_dMib8Hv8EemctrJRXI2ucg">
-    <usageScenario href="cocome.usagemodel#_dMib8Hv8EemctrJRXI2ucg"/>
+  <measuringPoints xsi:type="pcmmeasuringpoint:UsageScenarioMeasuringPoint" stringRepresentation="Usage Scenario: aName" resourceURIRepresentation="file:/Users/david/Desktop/PCM-Headless/git/org.pcm.headless.api/examples/cocome/cocome.usagemodel#_jJphMAsjEeqvBqh1fs4E1Q">
+    <usageScenario href="cocome.usagemodel#_jJphMAsjEeqvBqh1fs4E1Q"/>
   </measuringPoints>
 </org.palladiosimulator.edp2.models:MeasuringPointRepository>

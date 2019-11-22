@@ -3,12 +3,12 @@ package org.pcm.headless.api.client;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.http.entity.ContentType;
-import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.palladiosimulator.monitorrepository.MonitorRepository;
 import org.palladiosimulator.pcm.allocation.Allocation;
@@ -17,7 +17,7 @@ import org.palladiosimulator.pcm.resourceenvironment.ResourceEnvironment;
 import org.palladiosimulator.pcm.system.System;
 import org.palladiosimulator.pcm.usagemodel.UsageModel;
 import org.pcm.headless.api.client.data.InMemoryModelConfig;
-import org.pcm.headless.api.client.transform.DefaultURITransformer;
+import org.pcm.headless.api.client.transform.DefaultModelFileNameGenerator;
 import org.pcm.headless.api.client.transform.TransitiveModelTransformer;
 import org.pcm.headless.api.util.ModelUtil;
 import org.pcm.headless.api.util.MonitorRepositoryTransformer;
@@ -68,6 +68,10 @@ public class SimulationClient {
 		} catch (UnirestException | JsonProcessingException e) {
 			return null;
 		}
+	}
+
+	public void clearModels() {
+		this.models.clear();
 	}
 
 	public void sync() {
@@ -125,21 +129,17 @@ public class SimulationClient {
 		TransitiveModelTransformer transformer = new TransitiveModelTransformer(loadedModels);
 
 		// create uri transformer
-		DefaultURITransformer uriTransformer = new DefaultURITransformer();
+		DefaultModelFileNameGenerator fileNameGenerator = new DefaultModelFileNameGenerator();
 
 		// transform everything
-		transformer.transformURIs(uriTransformer);
+		List<EObject> resultingModels = transformer.buildModels(fileNameGenerator);
 
-		// add additionals
-		for (URI additional : transformer.getTransitives()) {
-			EObject model = transformer.getModelByURI(additional);
-			if (model instanceof Repository) {
-				// add a repository
-				setModel(model, ESimulationPart.REPOSITORY);
-			} else {
-				// it is something else
-				setModel(model, ESimulationPart.ADDITIONAL);
-			}
+		// clear existing models
+		clearModels();
+
+		// write modified models
+		for (EObject obj : resultingModels) {
+			setModelGeneric(obj);
 		}
 	}
 
@@ -277,6 +277,38 @@ public class SimulationClient {
 
 	public SimulationClient setMonitorRepository(File repo) {
 		return this.setMonitorRepository(ModelUtil.readFromFile(repo.getAbsolutePath(), MonitorRepository.class));
+	}
+
+	public SimulationClient setAdditional(File model) {
+		return this.setAdditional(ModelUtil.readFromFile(model.getAbsolutePath(), EObject.class));
+	}
+
+	public SimulationClient setAdditional(EObject obj) {
+		synced = false;
+		setModel(obj, ESimulationPart.ADDITIONAL);
+		return this;
+	}
+
+	public SimulationClient setModelGeneric(File modelFile) {
+		return this.setModelGeneric(ModelUtil.readFromFile(modelFile.getAbsolutePath(), EObject.class));
+	}
+
+	public SimulationClient setModelGeneric(EObject readFromFile) {
+		if (readFromFile instanceof Repository) {
+			return setRepository((Repository) readFromFile);
+		} else if (readFromFile instanceof System) {
+			return setSystem((System) readFromFile);
+		} else if (readFromFile instanceof UsageModel) {
+			return setUsageModel((UsageModel) readFromFile);
+		} else if (readFromFile instanceof ResourceEnvironment) {
+			return setResourceEnvironment((ResourceEnvironment) readFromFile);
+		} else if (readFromFile instanceof Allocation) {
+			return setAllocation((Allocation) readFromFile);
+		} else if (readFromFile instanceof MonitorRepository) {
+			return setMonitorRepository((MonitorRepository) readFromFile);
+		} else {
+			return setAdditional(readFromFile);
+		}
 	}
 
 	private class ResultListenerTask implements Runnable {

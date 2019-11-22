@@ -28,4 +28,14 @@ public class InMemoryModelConfig {
 		return res;
 	}
 
+	public void clear() {
+		this.repositorys.clear();
+		system = null;
+		allocation = null;
+		usage = null;
+		resourceEnvironment = null;
+		monitorRepository = null;
+		additionals.clear();
+	}
+
 }
