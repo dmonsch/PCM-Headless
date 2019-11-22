@@ -57,8 +57,8 @@ public class TransitiveModelTransformer {
 		// generate file names
 		List<EObject> transitiveClosureCopy = transitiveClosure.stream().map(m -> EcoreUtil.copy(m))
 				.collect(Collectors.toList());
-		Map<EObject, File> resultingFileMap = createFileMappingAndInitializeResources(transitiveClosureCopy, modelBasePath,
-				fileNameGenerator);
+		Map<EObject, File> resultingFileMap = createFileMappingAndInitializeResources(transitiveClosureCopy,
+				modelBasePath, fileNameGenerator);
 
 		// transform the links
 		Map<EObject, File> cacheFileMapping = new HashMap<>();
@@ -91,7 +91,9 @@ public class TransitiveModelTransformer {
 
 		// add all ex models
 		for (EObject m : models) {
-			transitiveClosure.add(m);
+			if (m != null) {
+				transitiveClosure.add(m);
+			}
 		}
 
 		// build transitive closure
