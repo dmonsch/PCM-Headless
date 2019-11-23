@@ -13,17 +13,13 @@ import java.util.stream.Stream;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.util.EcoreUtil.EqualityHelper;
 import org.palladiosimulator.monitorrepository.MonitorRepository;
-import org.palladiosimulator.pcm.repository.PrimitiveDataType;
 import org.pcm.headless.api.util.ModelUtil;
 import org.pcm.headless.api.util.MonitorRepositoryTransformer;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
-
-import de.uka.ipd.sdq.stoex.Expression;
 
 public class TransitiveModelTransformer {
 	// base
@@ -32,8 +28,12 @@ public class TransitiveModelTransformer {
 	// closure
 	private List<EObject> transitiveClosure;
 
+	// util
+	private TransitiveModelTransformerUtil transformerUtil;
+
 	public TransitiveModelTransformer(EObject... models) {
 		this.models = Stream.of(models).collect(Collectors.toList());
+		this.transformerUtil = new TransitiveModelTransformerUtil();
 	}
 
 	public List<EObject> buildModels(IModelFileNameGenerator fileNameGenerator) {
@@ -54,11 +54,15 @@ public class TransitiveModelTransformer {
 			return Lists.newArrayList();
 		}
 
+		// create copies
+		List<EObject> transitiveClosureCopy = transformerUtil.copyObjects(transitiveClosure);
+
 		// generate file names
-		List<EObject> transitiveClosureCopy = transitiveClosure.stream().map(m -> EcoreUtil.copy(m))
-				.collect(Collectors.toList());
 		Map<EObject, File> resultingFileMap = createFileMappingAndInitializeResources(transitiveClosureCopy,
 				modelBasePath, fileNameGenerator);
+
+		// relink the copies
+		transformerUtil.relinkObjects(transitiveClosureCopy);
 
 		// transform the links
 		Map<EObject, File> cacheFileMapping = new HashMap<>();
@@ -67,7 +71,7 @@ public class TransitiveModelTransformer {
 
 			// transform crosses
 			allCrossReferences(m).forEach(cr -> {
-				EObject rootContainer = getRootContainerOrNull(cr);
+				EObject rootContainer = transformerUtil.getRootContainerOrNull(cr);
 				if (rootContainer != null) {
 					File resultingFileCrossReference = resolveAndCache(rootContainer, resultingFileMap,
 							cacheFileMapping);
@@ -178,14 +182,14 @@ public class TransitiveModelTransformer {
 
 		// direct ones
 		obj.eCrossReferences().forEach(cr -> {
-			references.add(getRootContainerOrNull(cr));
+			references.add(transformerUtil.getRootContainerOrNull(cr));
 		});
 
 		// of all child contents
 		obj.eAllContents().forEachRemaining(e -> {
 			if (e.eCrossReferences().size() > 0) {
 				e.eCrossReferences().forEach(cr -> {
-					references.add(getRootContainerOrNull(cr));
+					references.add(transformerUtil.getRootContainerOrNull(cr));
 				});
 			}
 		});
@@ -196,17 +200,6 @@ public class TransitiveModelTransformer {
 
 		// remove pathmaps
 		return references;
-	}
-
-	private EObject getRootContainerOrNull(EObject obj) {
-		EObject easyRoot = EcoreUtil.getRootContainer(obj);
-		if (!(easyRoot instanceof Expression)
-				&& (easyRoot.eResource() == null || !easyRoot.eResource().getURI().scheme().equals("pathmap"))
-				&& !(easyRoot instanceof PrimitiveDataType)) {
-			return easyRoot;
-		}
-
-		return null;
 	}
 
 }

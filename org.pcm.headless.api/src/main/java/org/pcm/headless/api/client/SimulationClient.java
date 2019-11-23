@@ -10,6 +10,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.apache.http.entity.ContentType;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.palladiosimulator.monitorrepository.MonitorRepository;
 import org.palladiosimulator.pcm.allocation.Allocation;
 import org.palladiosimulator.pcm.repository.Repository;
@@ -203,7 +204,12 @@ public class SimulationClient {
 
 		try {
 			File tempFile = File.createTempFile("pcm_repo", ".model");
-			ModelUtil.saveToFile(obj, tempFile.getAbsolutePath());
+
+			EObject copy = EcoreUtil.copy(obj);
+			if (copy instanceof MonitorRepository) {
+				MonitorRepositoryTransformer.makePersistable(copy);
+			}
+			ModelUtil.saveToFile(copy, tempFile.getAbsolutePath());
 
 			Unirest.post(this.baseUrl + integrateId(SET_URL) + part.toString())
 					.field("file", new FileInputStream(tempFile), ContentType.APPLICATION_OCTET_STREAM, orgFileName)

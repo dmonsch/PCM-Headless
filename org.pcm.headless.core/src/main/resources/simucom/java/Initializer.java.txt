@@ -106,7 +106,7 @@ public class Initializer {
 
 		@Override
 		public void updateStatus(int arg0, double arg1, long arg2) {
-			System.out.println(arg0 + ";" + arg1 + ";" + arg2);
+			// do nothing
 		}
 	}
 

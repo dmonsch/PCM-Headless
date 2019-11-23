@@ -5,6 +5,7 @@ import java.io.File;
 import org.pcm.headless.api.client.PCMHeadlessClient;
 import org.pcm.headless.api.client.SimulationClient;
 import org.pcm.headless.api.client.measure.MonitorRepositoryBuilderUtil;
+import org.pcm.headless.api.util.ModelUtil;
 import org.pcm.headless.shared.data.ESimulationType;
 import org.pcm.headless.shared.data.config.HeadlessSimulationConfig;
 
@@ -27,10 +28,13 @@ public class HeadlessClientTestCoCoME {
 			monitorBuilder.monitorExternalCalls().monitorUsageScenarios();
 			monitorBuilder.saveToFile(monitorRepositoryFile, new File("examples/cocome/cocome_gen.measuringpoint"));
 
+			org.palladiosimulator.pcm.system.System system = ModelUtil.readFromFile(systemFile.getAbsolutePath(),
+					org.palladiosimulator.pcm.system.System.class);
+
 			SimulationClient sim = client.prepareSimulation();
 			sim.setAllocation(allocationFile);
 			sim.setRepository(repositoryFile);
-			sim.setSystem(systemFile);
+			sim.setSystem(system);
 			sim.setUsageModel(usageFile);
 			sim.setResourceEnvironment(resourceEnvironmentFile);
 			sim.setMonitorRepository(monitorRepositoryFile);
@@ -46,6 +50,8 @@ public class HeadlessClientTestCoCoME {
 				System.out.println(res.getValues().size());
 				System.out.println("Simulation needed " + (System.currentTimeMillis() - simStart) + "ms");
 			});
+
+			ModelUtil.saveToFile(system, systemFile);
 		}
 	}
 

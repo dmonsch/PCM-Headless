@@ -3,6 +3,7 @@ package org.pcm.headless.api.util;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -106,6 +107,28 @@ public class ModelUtil {
 			EObject eo = it.next();
 			if (type.isInstance(eo)) {
 				results.add((T) eo);
+			}
+		}
+		return results;
+	}
+
+	public static List<EObject> getAllObjects(final EObject parent) {
+		List<EObject> results = new ArrayList<>();
+		TreeIterator<EObject> it = parent.eAllContents();
+		while (it.hasNext()) {
+			EObject eo = it.next();
+			results.add(eo);
+		}
+		return results;
+	}
+
+	public static Collection<EObject> getObjectsExactType(EObject parent, Class<? extends EObject> class1) {
+		List<EObject> results = new ArrayList<>();
+		TreeIterator<EObject> it = parent.eAllContents();
+		while (it.hasNext()) {
+			EObject eo = it.next();
+			if (eo.getClass().equals(class1)) {
+				results.add(eo);
 			}
 		}
 		return results;
