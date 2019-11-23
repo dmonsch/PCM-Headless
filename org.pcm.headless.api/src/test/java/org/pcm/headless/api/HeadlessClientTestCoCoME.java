@@ -2,6 +2,7 @@ package org.pcm.headless.api;
 
 import java.io.File;
 
+import org.palladiosimulator.pcm.allocation.Allocation;
 import org.pcm.headless.api.client.PCMHeadlessClient;
 import org.pcm.headless.api.client.SimulationClient;
 import org.pcm.headless.api.client.measure.MonitorRepositoryBuilderUtil;
@@ -32,12 +33,15 @@ public class HeadlessClientTestCoCoME {
 					org.palladiosimulator.pcm.system.System.class);
 
 			SimulationClient sim = client.prepareSimulation();
-			sim.setAllocation(allocationFile);
+
+			Allocation alloc = ModelUtil.readFromFile(allocationFile.getAbsolutePath(), Allocation.class);
+			sim.setAllocation(alloc);
+
 			sim.setRepository(repositoryFile);
 			sim.setSystem(system);
 			sim.setUsageModel(usageFile);
 			sim.setResourceEnvironment(resourceEnvironmentFile);
-			sim.setMonitorRepository(monitorRepositoryFile);
+			// sim.setMonitorRepository(monitorRepositoryFile);
 
 			sim.setSimulationConfig(HeadlessSimulationConfig.builder().type(ESimulationType.SIMUCOM).repetitions(1)
 					.simulationTime(500000).maximumMeasurementCount(30000).experimentName("CoCoME Simulation").build());
@@ -52,6 +56,7 @@ public class HeadlessClientTestCoCoME {
 			});
 
 			ModelUtil.saveToFile(system, systemFile);
+			ModelUtil.saveToFile(alloc, allocationFile);
 		}
 	}
 

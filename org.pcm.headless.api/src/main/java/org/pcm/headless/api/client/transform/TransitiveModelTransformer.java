@@ -15,6 +15,7 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil.EqualityHelper;
 import org.palladiosimulator.monitorrepository.MonitorRepository;
+import org.palladiosimulator.pcm.allocation.Allocation;
 import org.pcm.headless.api.util.ModelUtil;
 import org.pcm.headless.api.util.MonitorRepositoryTransformer;
 
@@ -45,6 +46,9 @@ public class TransitiveModelTransformer {
 		if (transitiveClosure.size() == 0) {
 			return Lists.newArrayList();
 		}
+
+		Allocation sm = (Allocation) transitiveClosure.stream().filter(m -> m instanceof Allocation).findFirst()
+				.orElse(null);
 
 		// base path
 		File modelBasePath;

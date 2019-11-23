@@ -31,7 +31,6 @@ public class TransitiveModelTransformerUtil {
 
 	public EObject getRootContainerOrNull(EObject obj) {
 		EObject easyRoot = EcoreUtil.getRootContainer(obj);
-
 		if (!(easyRoot instanceof Expression)
 				&& (easyRoot.eResource() == null || easyRoot.eResource().getURI().scheme() == null
 						|| !easyRoot.eResource().getURI().scheme().equals("pathmap"))
@@ -51,6 +50,7 @@ public class TransitiveModelTransformerUtil {
 		obj.eClass().getEAllStructuralFeatures().forEach(feature -> {
 			if (feature instanceof EReference) {
 				Object result = obj.eGet(feature);
+
 				if (result instanceof EObject) {
 					EObject eResult = (EObject) result;
 					EObject rootContainer = getRootContainerOrNull(eResult);

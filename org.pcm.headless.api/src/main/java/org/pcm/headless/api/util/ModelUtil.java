@@ -15,6 +15,8 @@ import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
 
+import com.google.common.collect.Lists;
+
 public class ModelUtil {
 
 	public static URI createFileURI(String string) {
@@ -113,7 +115,7 @@ public class ModelUtil {
 	}
 
 	public static List<EObject> getAllObjects(final EObject parent) {
-		List<EObject> results = new ArrayList<>();
+		List<EObject> results = Lists.newArrayList(parent);
 		TreeIterator<EObject> it = parent.eAllContents();
 		while (it.hasNext()) {
 			EObject eo = it.next();
@@ -131,6 +133,11 @@ public class ModelUtil {
 				results.add(eo);
 			}
 		}
+
+		if (parent.getClass().equals(class1)) {
+			results.add(parent);
+		}
+
 		return results;
 	}
 
