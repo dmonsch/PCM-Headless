@@ -3,6 +3,9 @@ package org.pcm.headless.api;
 import java.io.File;
 
 import org.palladiosimulator.pcm.allocation.Allocation;
+import org.palladiosimulator.pcm.repository.Repository;
+import org.palladiosimulator.pcm.resourceenvironment.ResourceEnvironment;
+import org.palladiosimulator.pcm.usagemodel.UsageModel;
 import org.pcm.headless.api.client.PCMHeadlessClient;
 import org.pcm.headless.api.client.SimulationClient;
 import org.pcm.headless.api.client.measure.MonitorRepositoryBuilderUtil;
@@ -35,13 +38,19 @@ public class HeadlessClientTestCoCoME {
 			SimulationClient sim = client.prepareSimulation();
 
 			Allocation alloc = ModelUtil.readFromFile(allocationFile.getAbsolutePath(), Allocation.class);
-			sim.setAllocation(alloc);
+			Repository repo = ModelUtil.readFromFile(repositoryFile.getAbsolutePath(), Repository.class);
+			org.palladiosimulator.pcm.system.System sys = ModelUtil.readFromFile(systemFile.getAbsolutePath(),
+					org.palladiosimulator.pcm.system.System.class);
+			UsageModel usage = ModelUtil.readFromFile(usageFile.getAbsolutePath(), UsageModel.class);
+			ResourceEnvironment env = ModelUtil.readFromFile(resourceEnvironmentFile.getAbsolutePath(),
+					ResourceEnvironment.class);
 
-			sim.setRepository(repositoryFile);
-			sim.setSystem(system);
-			sim.setUsageModel(usageFile);
-			sim.setResourceEnvironment(resourceEnvironmentFile);
-			// sim.setMonitorRepository(monitorRepositoryFile);
+			sim.setAllocation(alloc);
+			sim.setRepository(repo);
+			sim.setSystem(sys);
+			sim.setUsageModel(usage);
+			sim.setResourceEnvironment(env);
+			sim.setMonitorRepository(monitorBuilder.getModel());
 
 			sim.setSimulationConfig(HeadlessSimulationConfig.builder().type(ESimulationType.SIMUCOM).repetitions(1)
 					.simulationTime(500000).maximumMeasurementCount(30000).experimentName("CoCoME Simulation").build());
@@ -57,6 +66,9 @@ public class HeadlessClientTestCoCoME {
 
 			ModelUtil.saveToFile(system, systemFile);
 			ModelUtil.saveToFile(alloc, allocationFile);
+			ModelUtil.saveToFile(repo, repositoryFile);
+			ModelUtil.saveToFile(usage, usageFile);
+			ModelUtil.saveToFile(env, resourceEnvironmentFile);
 		}
 	}
 

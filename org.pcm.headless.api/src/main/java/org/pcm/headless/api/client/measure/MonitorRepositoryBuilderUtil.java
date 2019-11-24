@@ -58,6 +58,10 @@ public class MonitorRepositoryBuilderUtil {
 		this.pRepo = MeasuringpointFactory.eINSTANCE.createMeasuringPointRepository();
 	}
 
+	public MonitorRepository getModel() {
+		return mRepo;
+	}
+
 	public void saveToFile(File monitorRepositoryFile, File measuringPointRepositoryFile) {
 		MonitorRepositoryTransformer.makePersistable(mRepo);
 
