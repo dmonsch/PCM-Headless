@@ -13,7 +13,6 @@ import java.util.stream.Stream;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.util.EcoreUtil.EqualityHelper;
 import org.palladiosimulator.monitorrepository.MonitorRepository;
 import org.pcm.headless.api.util.ModelUtil;
 import org.pcm.headless.api.util.MonitorRepositoryTransformer;
@@ -108,8 +107,7 @@ public class TransitiveModelTransformer {
 		List<EObject> transitiveClosureIdent = Lists.newArrayList();
 		for (EObject m : transitiveClosure) {
 			boolean contained = transitiveClosureIdent.stream().anyMatch(e -> {
-				EqualityHelper helper = new EqualityHelper();
-				return m == e || m.equals(e) || helper.equals(m, e);
+				return m == e || m.equals(e) || transformerUtil.equalProxy(m, e);
 			});
 			if (!contained) {
 				transitiveClosureIdent.add(m);
@@ -146,8 +144,7 @@ public class TransitiveModelTransformer {
 			return cache.get(obj);
 		} else {
 			File result = orgMap.entrySet().stream().filter(r -> {
-				EqualityHelper helper = new EqualityHelper();
-				return helper.equals(r.getKey(), obj);
+				return transformerUtil.equalProxy(r.getKey(), obj);
 			}).map(r -> r.getValue()).findFirst().orElse(null);
 
 			cache.put(obj, result);

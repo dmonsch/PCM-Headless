@@ -6,16 +6,18 @@ import java.util.stream.Collectors;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.eclipse.emf.ecore.util.EcoreUtil.EqualityHelper;
 import org.palladiosimulator.pcm.repository.PrimitiveDataType;
 import org.pcm.headless.api.util.ModelUtil;
 
+import com.google.common.collect.Sets;
+
 import de.uka.ipd.sdq.stoex.Expression;
+import lombok.NoArgsConstructor;
+import lombok.extern.java.Log;
 
+@Log
+@NoArgsConstructor
 public class TransitiveModelTransformerUtil {
-
-	public TransitiveModelTransformerUtil() {
-	}
 
 	public List<EObject> copyObjects(List<EObject> obj) {
 		return obj.stream().map(m -> EcoreUtil.copy(m)).collect(Collectors.toList());
@@ -42,8 +44,7 @@ public class TransitiveModelTransformerUtil {
 	}
 
 	public boolean equalProxy(EObject o1, EObject o2) {
-		EqualityHelper eq = new EqualityHelper();
-		return eq.equals(o1, o2);
+		return new ExtendedEqualityHelper().equals(o1, o2, Sets.newHashSet());
 	}
 
 	private void linkingProcessObject(EObject obj, EObject root, ModelLinkingResolver resolver) {
@@ -60,6 +61,8 @@ public class TransitiveModelTransformerUtil {
 						EObject correspondingObject = resolver.resolveCorrespondingObject(eResult, rootContainer);
 						if (correspondingObject != null) {
 							obj.eSet(feature, correspondingObject);
+						} else {
+							log.warning("Corresponding object for '" + eResult + "' could not be found.");
 						}
 					}
 				}
@@ -88,6 +91,7 @@ public class TransitiveModelTransformerUtil {
 				}).findFirst().orElse(null);
 				return copiedRef;
 			}
+
 			return null;
 		}
 	}

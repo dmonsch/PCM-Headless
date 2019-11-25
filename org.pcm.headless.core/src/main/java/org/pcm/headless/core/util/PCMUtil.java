@@ -4,6 +4,7 @@ import java.net.URL;
 import java.util.Map;
 
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.URIConverter;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
@@ -13,6 +14,8 @@ import org.palladiosimulator.pcm.PcmPackage;
 import org.palladiosimulator.pcm.repository.RepositoryPackage;
 import org.palladiosimulator.pcm.resourcetype.ResourcetypePackage;
 import org.palladiosimulator.pcmmeasuringpoint.PcmmeasuringpointPackage;
+
+import de.uka.ipd.sdq.identifier.Identifier;
 
 public class PCMUtil {
 
@@ -30,6 +33,10 @@ public class PCMUtil {
 		PcmmeasuringpointPackage.eINSTANCE.eClass();
 
 		initPathmaps();
+	}
+
+	public static <T extends Identifier> T getElementById(EObject obj, Class<T> clazz, String id) {
+		return ModelUtil.getObjects(obj, clazz).stream().filter(t -> t.getId().equals(id)).findFirst().orElse(null);
 	}
 
 	private static void initPathmaps() {

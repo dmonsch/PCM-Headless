@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.URIConverter;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
@@ -12,11 +13,12 @@ import org.palladiosimulator.edp2.models.measuringpoint.MeasuringpointPackage;
 import org.palladiosimulator.metricspec.MetricDescription;
 import org.palladiosimulator.metricspec.MetricDescriptionRepository;
 import org.palladiosimulator.monitorrepository.MonitorRepositoryPackage;
-import org.palladiosimulator.monitorrepository.impl.MonitorRepositoryPackageImpl;
 import org.palladiosimulator.pcm.PcmPackage;
 import org.palladiosimulator.pcm.repository.RepositoryPackage;
 import org.palladiosimulator.pcm.resourcetype.ResourcetypePackage;
 import org.palladiosimulator.pcmmeasuringpoint.PcmmeasuringpointPackage;
+
+import de.uka.ipd.sdq.identifier.Identifier;
 
 public class PCMUtil {
 	private static final String METRIC_DESC_PATHMAP = "pathmap://METRIC_SPEC_MODELS/commonMetrics.metricspec";
@@ -30,12 +32,7 @@ public class PCMUtil {
 		RepositoryPackage.eINSTANCE.eClass();
 		PcmPackage.eINSTANCE.eClass();
 		ResourcetypePackage.eINSTANCE.eClass();
-
 		MonitorRepositoryPackage.eINSTANCE.eClass();
-		MonitorRepositoryPackageImpl.init();
-		((MonitorRepositoryPackageImpl) MonitorRepositoryPackage.eINSTANCE).createPackageContents();
-		((MonitorRepositoryPackageImpl) MonitorRepositoryPackage.eINSTANCE).initializePackageContents();
-
 		MeasuringpointPackage.eINSTANCE.eClass();
 		PcmmeasuringpointPackage.eINSTANCE.eClass();
 
@@ -47,9 +44,14 @@ public class PCMUtil {
 				.stream().filter(d -> d.getId().equals(id)).findFirst();
 	}
 
+	public static <T extends Identifier> T getElementById(EObject obj, Class<T> clazz, String id) {
+		return ModelUtil.getObjects(obj, clazz).stream().filter(t -> t.getId().equals(id)).findFirst().orElse(null);
+	}
+
 	private static void initPathmaps() {
 		final String palladioResModel = "models/Palladio.resourcetype";
 		final String metricSpecModel = "models/commonMetrics.metricspec";
+
 		final URL url = PCMUtil.class.getClassLoader().getResource(palladioResModel);
 		final URL url2 = PCMUtil.class.getClassLoader().getResource(metricSpecModel);
 		if (url == null || url2 == null) {
