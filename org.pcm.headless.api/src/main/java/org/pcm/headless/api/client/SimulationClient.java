@@ -34,8 +34,8 @@ import com.mashape.unirest.http.exceptions.UnirestException;
 
 public class SimulationClient {
 	// STATICS
-	private static final long POLL_DELAY = 250;
-	private static final long MAX_TIMEOUT_RESULTS = 60000;
+	private static final long DEFAULT_TIMEOUT = 60000;
+	private static final long DEFAULT_POLL_DELAY = 250;
 
 	// URLS
 	private static final String SET_URL = "/rest/{id}/set/";
@@ -108,12 +108,20 @@ public class SimulationClient {
 	}
 
 	public boolean executeSimulation(ISimulationResultListener resultListener) {
+		return this.executeSimulation(resultListener, DEFAULT_TIMEOUT, DEFAULT_POLL_DELAY);
+	}
+
+	public boolean executeSimulation(ISimulationResultListener resultListener, long timeout) {
+		return this.executeSimulation(resultListener, timeout, DEFAULT_POLL_DELAY);
+	}
+
+	public boolean executeSimulation(ISimulationResultListener resultListener, long timeout, long delay) {
 		ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
 
 		if (synced) {
 			try {
 				Unirest.get(this.baseUrl + integrateId(START_URL)).asString().getBody();
-				executorService.submit(new ResultListenerTask(resultListener, executorService));
+				executorService.submit(new ResultListenerTask(resultListener, executorService, timeout, delay));
 				return true;
 			} catch (UnirestException e) {
 				return false;
@@ -321,22 +329,27 @@ public class SimulationClient {
 		private ISimulationResultListener listener;
 		private int trys;
 		private ScheduledExecutorService executorService;
+		private long timeout;
+		private long delay;
 
-		public ResultListenerTask(ISimulationResultListener listener, ScheduledExecutorService executorService) {
+		public ResultListenerTask(ISimulationResultListener listener, ScheduledExecutorService executorService,
+				long timeout, long delay) {
 			this.listener = listener;
 			this.trys = 0;
 			this.executorService = executorService;
+			this.timeout = timeout;
+			this.delay = delay;
 		}
 
 		@Override
 		public void run() {
 			ESimulationState currentState = SimulationClient.this.getState();
 
-			if (currentState != ESimulationState.EXECUTED && this.trys * POLL_DELAY < MAX_TIMEOUT_RESULTS
+			if (currentState != ESimulationState.EXECUTED && this.trys * delay < timeout
 					&& currentState != ESimulationState.FAILED) {
 				this.trys++;
-				executorService.schedule(this, POLL_DELAY, TimeUnit.MILLISECONDS);
-			} else if (this.trys * POLL_DELAY >= MAX_TIMEOUT_RESULTS || currentState == ESimulationState.FAILED) {
+				executorService.schedule(this, delay, TimeUnit.MILLISECONDS);
+			} else if (this.trys * delay >= timeout || currentState == ESimulationState.FAILED) {
 				executorService.shutdown();
 				listener.onResult(null); // => timeout
 			} else if (currentState == ESimulationState.EXECUTED) {
