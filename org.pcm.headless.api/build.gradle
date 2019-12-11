@@ -24,7 +24,9 @@ dependencies {
 	// https://mvnrepository.com/artifact/com.google.guava/guava
 	notIncludedSlim group: 'com.google.guava', name: 'guava-collections', version: 'r03'
 	
-	slim group: 'com.mashape.unirest', name: 'unirest-java', version: '1.4.9'
+	// https://mvnrepository.com/artifact/com.squareup.okhttp3/okhttp
+	slim group: 'com.squareup.okhttp3', name: 'okhttp', version: '4.2.2'
+	
 	compile group: 'org.jscience', name: 'jscience', version: '4.3.1'
 	compile group: 'lpg.runtime', name: 'java', version: '2.0.17-v201004271640'
 	

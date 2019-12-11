@@ -1,14 +1,12 @@
 package org.pcm.headless.api.client;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import org.apache.http.entity.ContentType;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.palladiosimulator.monitorrepository.MonitorRepository;
@@ -29,8 +27,14 @@ import org.pcm.headless.shared.data.results.InMemoryResultRepository;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mashape.unirest.http.Unirest;
-import com.mashape.unirest.http.exceptions.UnirestException;
+
+import okhttp3.FormBody;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 public class SimulationClient {
 	// STATICS
@@ -53,20 +57,23 @@ public class SimulationClient {
 
 	private InMemoryModelConfig models;
 
+	private OkHttpClient client;
+
 	private boolean synced = false;
 
-	public SimulationClient(String baseUrl, String id) {
+	public SimulationClient(String baseUrl, String id, OkHttpClient client) {
 		this.baseUrl = baseUrl;
 		this.id = id;
+		this.client = client;
 
 		this.models = new InMemoryModelConfig();
 	}
 
 	public InMemoryResultRepository getResults() {
-		try {
-			String resultBody = Unirest.get(this.baseUrl + integrateId(RESULTS_URL)).asString().getBody();
-			return JSON_MAPPER.readValue(resultBody, InMemoryResultRepository.class);
-		} catch (UnirestException | JsonProcessingException e) {
+		Request request = new Request.Builder().url(this.baseUrl + integrateId(RESULTS_URL)).build();
+		try (Response response = client.newCall(request).execute()) {
+			return JSON_MAPPER.readValue(response.body().string(), InMemoryResultRepository.class);
+		} catch (IOException e) {
 			return null;
 		}
 	}
@@ -119,11 +126,10 @@ public class SimulationClient {
 		ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
 
 		if (synced) {
-			try {
-				Unirest.get(this.baseUrl + integrateId(START_URL)).asString().getBody();
+			Request request = new Request.Builder().url(this.baseUrl + integrateId(START_URL)).build();
+			try (Response response = client.newCall(request).execute()) {
 				executorService.submit(new ResultListenerTask(resultListener, executorService, timeout, delay));
-				return true;
-			} catch (UnirestException e) {
+			} catch (IOException e) {
 				return false;
 			}
 		}
@@ -153,28 +159,36 @@ public class SimulationClient {
 	}
 
 	public boolean clear() {
-		try {
-			Unirest.get(this.baseUrl + integrateId(CLEAR_URL)).asString().getBody();
-		} catch (UnirestException e) {
+		Request request = new Request.Builder().url(this.baseUrl + integrateId(CLEAR_URL)).build();
+		try (Response response = client.newCall(request).execute()) {
+			response.body().string();
+		} catch (IOException e) {
 			return false;
 		}
 		return true;
 	}
 
 	public ESimulationState getState() {
-		try {
-			return ESimulationState
-					.fromString(Unirest.get(this.baseUrl + integrateId(GET_STATE_URL)).asString().getBody());
-		} catch (UnirestException e) {
+		Request request = new Request.Builder().url(this.baseUrl + integrateId(GET_STATE_URL)).build();
+		try (Response response = client.newCall(request).execute()) {
+			return ESimulationState.fromString(response.body().string());
+		} catch (IOException e) {
 			return null;
 		}
 	}
 
 	public void setSimulationConfig(HeadlessSimulationConfig config) {
+		RequestBody formBody;
 		try {
-			Unirest.post(this.baseUrl + integrateId(SET_CONFIG_URL))
-					.field("configJson", JSON_MAPPER.writeValueAsString(config)).asString().getBody();
-		} catch (JsonProcessingException | UnirestException e) {
+			formBody = new FormBody.Builder().add("configJson", JSON_MAPPER.writeValueAsString(config)).build();
+		} catch (JsonProcessingException e1) {
+			return;
+		}
+
+		Request request = new Request.Builder().url(this.baseUrl + integrateId(SET_CONFIG_URL)).post(formBody).build();
+		try (Response response = client.newCall(request).execute()) {
+			response.body().string();
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
@@ -219,11 +233,14 @@ public class SimulationClient {
 			}
 			ModelUtil.saveToFile(copy, tempFile.getAbsolutePath());
 
-			Unirest.post(this.baseUrl + integrateId(SET_URL) + part.toString())
-					.field("file", new FileInputStream(tempFile), ContentType.APPLICATION_OCTET_STREAM, orgFileName)
-					.asString().getBody();
+			RequestBody requestBody = new MultipartBody.Builder().setType(MultipartBody.FORM).addFormDataPart("file",
+					orgFileName, RequestBody.create(tempFile, MediaType.parse("application/octet-stream"))).build();
+			Request request = new Request.Builder().url(this.baseUrl + integrateId(SET_URL) + part.toString())
+					.post(requestBody).build();
+			client.newCall(request).execute();
+
 			tempFile.delete();
-		} catch (IOException | UnirestException e) {
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
