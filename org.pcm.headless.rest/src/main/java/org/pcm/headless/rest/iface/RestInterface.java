@@ -87,6 +87,8 @@ public class RestInterface implements InitializingBean {
 	public synchronized String clear() {
 		if (clearEnabled) {
 			this.stateMapping.clear();
+			this.resultMapping.clear();
+
 			try {
 				FileUtils.deleteDirectory(SIM_DATA_FOLDER);
 			} catch (IOException e) {
