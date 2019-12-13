@@ -264,6 +264,7 @@ public class RestInterface implements InitializingBean {
 
 					removeFromQueue.setState(ESimulationState.FINISHED);
 					resultMapping.put(removeFromQueue.getId(), results.getConvertedRepository());
+					results.close();
 					removeFromQueue.setState(ESimulationState.EXECUTED);
 
 					finishedSimulations.add(removeFromQueue);
