@@ -52,11 +52,12 @@ public class ModelUtil {
 		return clazz.cast(resource.getContents().get(0));
 	}
 
-	public static <T extends EObject> void saveToFile(T model, File path) {
+	public static <T extends EObject> boolean saveToFile(T model, File path) {
 		if (path != null) {
 			path.getParentFile().mkdirs();
-			saveToFile(model, path.getAbsolutePath());
+			return saveToFile(model, path.getAbsolutePath());
 		}
+		return false;
 	}
 
 	/**
@@ -65,7 +66,7 @@ public class ModelUtil {
 	 * @param model model to save
 	 * @param path  path for the file
 	 */
-	public static <T extends EObject> void saveToFile(T model, String path) {
+	public static <T extends EObject> boolean saveToFile(T model, String path) {
 		URI writeModelURI = URI.createFileURI(path);
 
 		final Resource.Factory.Registry resourceRegistry = Resource.Factory.Registry.INSTANCE;
@@ -80,8 +81,9 @@ public class ModelUtil {
 		try {
 			resource.save(null);
 		} catch (final IOException e) {
-			e.printStackTrace();
+			return false;
 		}
+		return true;
 	}
 
 	public static boolean validateModelPath(String path, Class<? extends EObject> type) {

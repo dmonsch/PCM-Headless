@@ -20,6 +20,9 @@ import org.pcm.headless.api.util.MonitorRepositoryTransformer;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
+import lombok.extern.java.Log;
+
+@Log
 public class TransitiveModelTransformer {
 	// base
 	private List<EObject> models;
@@ -135,6 +138,33 @@ public class TransitiveModelTransformer {
 			}
 			ModelUtil.saveToFile(m, resultingFile);
 		});
+
+		// normally we could build a graph and determine a sequence for the models to
+		// save, so that all have a resource
+		// but we do it "bruteforce" like
+		// we save until all have reference; but at maximum n times
+		// where n is the number of models
+		// otherwise it is not deterministic
+		boolean corrected = false;
+		for (int i = 0; i < transitiveClosure.size(); i++) {
+			boolean any = false;
+			for (EObject m : transitiveClosure) {
+				File resultingFile = resultingFileMap.get(m);
+				boolean success = ModelUtil.saveToFile(m, resultingFile);
+				if (!success) {
+					any = true;
+				}
+			}
+
+			if (!any) {
+				corrected = true;
+				break;
+			}
+		}
+
+		if (!corrected) {
+			log.warning("Could not save all models successfully.");
+		}
 
 		return resultingFileMap;
 	}
