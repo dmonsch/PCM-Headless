@@ -18,7 +18,4 @@ allprojects {
     	annotationProcessor 'org.projectlombok:lombok:1.18.4'
     	compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.9'
 	}
-	
-	sourceCompatibility = 1.11
-	targetCompatibility = 1.11
 }

@@ -59,12 +59,12 @@ public class TransitiveModelTransformer {
 		// create copies
 		List<EObject> transitiveClosureCopy = transformerUtil.copyObjects(transitiveClosure);
 
+		// relink the copies
+		transformerUtil.relinkObjects(transitiveClosureCopy);
+
 		// generate file names
 		Map<EObject, File> resultingFileMap = createFileMappingAndInitializeResources(transitiveClosureCopy,
 				modelBasePath, fileNameGenerator);
-
-		// relink the copies
-		transformerUtil.relinkObjects(transitiveClosureCopy);
 
 		// transform the links
 		Map<EObject, File> cacheFileMapping = new HashMap<>();

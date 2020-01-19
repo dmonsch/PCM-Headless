@@ -62,7 +62,7 @@ public class TransitiveModelTransformerUtil {
 						if (correspondingObject != null) {
 							obj.eSet(feature, correspondingObject);
 						} else {
-							log.warning("Corresponding object for '" + eResult + "' could not be found.");
+							log.fine("Corresponding object for '" + eResult + "' could not be found.");
 						}
 					}
 				}
