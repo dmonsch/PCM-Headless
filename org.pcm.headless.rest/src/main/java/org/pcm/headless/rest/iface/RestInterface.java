@@ -176,6 +176,19 @@ public class RestInterface implements InitializingBean {
 		}
 	}
 
+	@GetMapping("/{id}/error")
+	public String getErrorStack(@PathVariable String id) {
+		if (stateMapping.containsKey(id)) {
+			PCMSimulationState state = stateMapping.get(id);
+			if (state.getState() == ESimulationState.FAILED) {
+				return state.getErrorStack().toString();
+			} else {
+				return "{}";
+			}
+		}
+		return "{}";
+	}
+
 	@GetMapping("/{id}/results")
 	public String getResults(@PathVariable String id) {
 		if (resultMapping.containsKey(id)) {
@@ -283,6 +296,7 @@ public class RestInterface implements InitializingBean {
 					runningSimulations.remove(removeFromQueue);
 					finishedSimulations.add(removeFromQueue);
 					removeFromQueue.setState(ESimulationState.FAILED);
+					removeFromQueue.setErrorStack(e);
 					clearHTMLFiles();
 				}
 			});

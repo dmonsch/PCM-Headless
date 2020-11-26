@@ -3,13 +3,11 @@ package org.pcm.headless.core.simulator.simucom;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URI;
-import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
@@ -28,19 +26,18 @@ import javax.tools.StandardJavaFileManager;
 import javax.tools.StandardLocation;
 import javax.tools.ToolProvider;
 
-import org.apache.commons.io.FileUtils;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 
 import com.google.common.collect.Lists;
 
 public class SimuComJarBuilder {
 	private static final Pattern PACKAGE_PATTERN = Pattern.compile("package (.*);");
-	private static final String DOWNLOAD_URL_SIMUCOM_DEPENDENCIES = "https://github.com/dmonsch/PCM-Headless/releases/download/0.1.0/simucom_dependencies.zip";
 
 	private static final String SOURCES_PATH = "src";
 	private static final String COMPILE_OUTPUT_PATH = "output";
 	private static final String JAVA_AGENT_RESOURCES = "/simucom/java/*";
 	private static final String MODELS_RESOURCE = "/simucom/models.zip";
+	private static final String SIMUCOM_DEPENDENCIES_RESOURCE = "/simucom/dependencies.zip";
 	private static final String SIMUCON_DEPENDENCY_PATH = "simucomDependencies";
 
 	private File projectBasePath;
@@ -81,9 +78,9 @@ public class SimuComJarBuilder {
 			depsFolder.mkdirs();
 			try {
 				File tempFile = File.createTempFile("simucomDeps", ".zip");
-				FileUtils.copyURLToFile(new URL(DOWNLOAD_URL_SIMUCOM_DEPENDENCIES), tempFile);
 
-				extractRepository(new FileInputStream(tempFile), depsFolder);
+				extractRepository(SimuComHeadlessSimulator.class.getResourceAsStream(SIMUCOM_DEPENDENCIES_RESOURCE),
+						depsFolder);
 
 				tempFile.delete();
 			} catch (IOException e) {

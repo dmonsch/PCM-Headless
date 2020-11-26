@@ -60,12 +60,16 @@ public class PCMUtil {
 
 		String urlString = url.toString();
 		urlString = urlString.substring(0, urlString.length() - palladioResModel.length() - 1);
+		if (!urlString.endsWith("/"))
+			urlString += "/";
 		final URI uri = URI.createURI(urlString);
 		final URI target = uri.appendSegment("models").appendSegment("");
 		URIConverter.URI_MAP.put(URI.createURI("pathmap://PCM_MODELS/"), target);
 
 		urlString = url2.toString();
 		urlString = urlString.substring(0, urlString.length() - metricSpecModel.length() - 1);
+		if (!urlString.endsWith("/"))
+			urlString += "/";
 		final URI uri2 = URI.createURI(urlString);
 		final URI target2 = uri2.appendSegment("models").appendSegment("");
 		URIConverter.URI_MAP.put(URI.createURI("pathmap://METRIC_SPEC_MODELS/"), target2);

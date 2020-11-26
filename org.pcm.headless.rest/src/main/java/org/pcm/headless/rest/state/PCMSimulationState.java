@@ -29,6 +29,8 @@ public class PCMSimulationState implements ISimulationProgressListener {
 	private String id;
 	private File parentFolder;
 
+	private Exception errorStack;
+
 	public PCMSimulationState(String id, File parentFolder) {
 		this.id = id;
 		this.parentFolder = parentFolder;

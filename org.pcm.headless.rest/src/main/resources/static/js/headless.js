@@ -36,17 +36,18 @@ function executeSimulation(id) {
 	});
 }
 
+function showError(id) {
+	$.getJSON("/rest/" + id + "/error", function(data) {
+		
+	});
+}
+
 function showSimulationResults(id) {
 	$.getJSON("/rest/" + id + "/results", function(data) {
-		console.log(data);
-		$("#modal-1-content p").html(
+		$("#modal-2-content p").html(
 				"The results consist of <b>" + data.values.length
 						+ "</b> measurements.");
-		$("#modal-1-download").click(function() {
-			downloadJSONResults('/rest/' + id + '/results');
-		});
-
-		MicroModal.show('modal-1'); // [1]
+		MicroModal.show('modal-2'); // [1]
 	});
 }
 
@@ -81,6 +82,7 @@ function createRow(data) {
 	res += createTD(createClearButton(data.id, data.state));
 	res += createTD(createResultsButton(data.id, data.state));
 	res += createTD(createExecutionButton(data.id, data.state));
+	res += createTD(createErrorButton(data.id, data.state));
 	res += "</tr>";
 
 	return res;
@@ -97,6 +99,10 @@ function registerEvents(id) {
 
 	$("#execute-" + id).click(function() {
 		executeSimulation(id);
+	});
+	
+	$("#error-" + id).click(function() {
+		showError(id);
 	});
 }
 
@@ -116,6 +122,12 @@ function createExecutionButton(id, state) {
 	return '<input class="btn btn-sm btn-primary" type="button"'
 			+ (state !== "ready" ? ' disabled' : '') + ' id="execute-' + id
 			+ '" value="Execute">';
+}
+
+function createErrorButton(id, state) {
+	return '<input class="btn btn-sm btn-primary" type="button"'
+			+ (state !== "failed" ? ' disabled' : '') + ' id="error-' + id
+			+ '" value="View stack">';
 }
 
 function compressName(name) {
