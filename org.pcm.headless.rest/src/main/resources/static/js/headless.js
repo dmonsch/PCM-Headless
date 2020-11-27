@@ -38,16 +38,21 @@ function executeSimulation(id) {
 
 function showError(id) {
 	$.getJSON("/rest/" + id + "/error", function(data) {
-		
+		$("#modal-2-content p").text(data);
+		MicroModal.show('modal-2'); // [1]
 	});
 }
 
 function showSimulationResults(id) {
 	$.getJSON("/rest/" + id + "/results", function(data) {
-		$("#modal-2-content p").html(
+		$("#modal-1-content p").html(
 				"The results consist of <b>" + data.values.length
 						+ "</b> measurements.");
-		MicroModal.show('modal-2'); // [1]
+		$("#modal-1-download").click(function() {
+			downloadJSONResults('/rest/' + id + '/results');
+		});
+
+		MicroModal.show('modal-1'); // [1]
 	});
 }
 
