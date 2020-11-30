@@ -37,7 +37,7 @@ function executeSimulation(id) {
 }
 
 function showError(id) {
-	$.getJSON("/rest/" + id + "/error", function(data) {
+	$.get("/rest/" + id + "/error", function(data) {
 		$("#modal-2-content p").text(data);
 		MicroModal.show('modal-2'); // [1]
 	});

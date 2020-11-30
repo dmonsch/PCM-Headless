@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.pcm.headless.core.HeadlessPalladioSimulator;
 import org.pcm.headless.core.progress.ISimulationProgressListener;
 import org.pcm.headless.core.simulator.ISimulationResults;
@@ -181,7 +182,7 @@ public class RestInterface implements InitializingBean {
 		if (stateMapping.containsKey(id)) {
 			PCMSimulationState state = stateMapping.get(id);
 			if (state.getState() == ESimulationState.FAILED) {
-				return state.getErrorStack().toString();
+				return ExceptionUtils.getStackTrace(state.getErrorStack());
 			} else {
 				return "{}";
 			}
@@ -292,7 +293,6 @@ public class RestInterface implements InitializingBean {
 					this.executor.triggerSimulation(removeFromQueue.getModelConfig(), removeFromQueue.getSimConfig(),
 							Lists.newArrayList(removeFromQueue, list), repetitionService);
 				} catch (Exception e) {
-					e.printStackTrace();
 					runningSimulations.remove(removeFromQueue);
 					finishedSimulations.add(removeFromQueue);
 					removeFromQueue.setState(ESimulationState.FAILED);
